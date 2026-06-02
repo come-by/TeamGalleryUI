@@ -1,0 +1,92 @@
+# 依赖目录
+node_modules/
+.pnp
+.pnp.js
+.jest
+
+# 构建输出
+dist/
+dist-ssr/
+build/
+.vite/
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+pnpm-store-v3/
+
+# 编辑器配置和临时文件
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-*
+*.code-workspace
+
+# 系统文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.cache
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+
+# 测试覆盖率报告
+coverage/
+*.lcov
+.nyc_output/
+vitest.config.ts.timestamp-*
+
+# 临时文件和备份
+*.tmp
+*.temp
+*.swo
+*~
+.cache
+.temp
+.out
+
+# 操作系统特定
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Icon?
+.apdisk
+
+# 包管理器缓存
+.npm
+.eslintcache
+.stylelintcache
+.prettiercache
+.turbo
+.parcel-cache
+
+# 测试工具输出
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/
+
+# TypeScript 构建产物
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# 可选的锁定文件（根据项目需要选择）
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
