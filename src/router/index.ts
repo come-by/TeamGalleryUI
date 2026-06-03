@@ -89,6 +89,17 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  // 错误页面路由
+  {
+    path: '/error/:code(404|403|500|network)',
+    name: 'Error',
+    component: () => import('@/views/ErrorView.vue'),
+  },
+  // 404 通配符路由（必须放在最后）
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/error/404',
+  },
 ]
 
 declare module 'vue-router' {
