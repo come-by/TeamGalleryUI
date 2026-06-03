@@ -59,3 +59,13 @@ export const isForbidden = (error: ApiError | undefined): boolean => {
 export const isValidationError = (error: ApiError | undefined): boolean => {
   return error?.code === ErrorCode.VALIDATION_FAILED
 }
+
+export const isNotFound = (error: ApiError | undefined): boolean => {
+  return (
+    error?.code === ErrorCode.NOT_FOUND ||
+    error?.code === ErrorCode.USER_NOT_FOUND ||
+    error?.code === ErrorCode.ARTICLE_NOT_FOUND ||
+    error?.code === ErrorCode.COMMENT_NOT_FOUND ||
+    error?.code === ErrorCode.FILE_NOT_FOUND
+  )
+}
