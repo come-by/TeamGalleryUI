@@ -1,6 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 import { handleApiError, handleValidationError, isUnauthorized, isValidationError } from '@/utils/error'
+import { reportApiError } from '@/utils/error-report'
 import type { ApiResponse, PaginatedResponse, User, ApiError } from '@/types'
 
 export type { ApiResponse, PaginatedResponse, User }
@@ -167,6 +168,14 @@ axiosInstance.interceptors.response.use(
       } else if (!isUnauthorized(apiError)) {
         handleApiError(apiError)
       }
+
+      // 上报 API 错误到 Sentry
+      reportApiError(apiError, {
+        url: originalRequest?.url,
+        method: originalRequest?.method,
+        status,
+      })
+
       return Promise.reject(data || error.message)
     } else if (error.code === 'ECONNABORTED') {
       ElMessage.error('请求超时，请检查网络连接')
