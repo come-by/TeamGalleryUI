@@ -21,7 +21,9 @@ export interface RegisterParams {
 }
 
 export interface LoginResponse {
-  token: string
+  access_token: string
+  refresh_token: string
+  expires_in: number
   user: User
 }
 

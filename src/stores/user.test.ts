@@ -23,10 +23,12 @@ describe('useUserStore', () => {
   })
 
   it('should set token from localStorage on init', () => {
-    localStorage.setItem('token', 'existing-token')
+    localStorage.setItem('access_token', 'existing-token')
+    localStorage.setItem('refresh_token', 'existing-refresh-token')
     setActivePinia(createPinia())
     const store = useUserStore()
     expect(store.token).toBe('existing-token')
+    expect(store.refreshToken).toBe('existing-refresh-token')
   })
 
   it('should login successfully', async () => {
@@ -34,7 +36,9 @@ describe('useUserStore', () => {
     vi.mocked(login).mockResolvedValue({
       success: true,
       data: {
-        token: 'new-token',
+        access_token: 'new-token',
+        refresh_token: 'new-refresh-token',
+        expires_in: 3600,
         user: {
           id: 1,
           username: 'test',
@@ -51,15 +55,17 @@ describe('useUserStore', () => {
     await store.login({ username: 'test', password: '123456' })
 
     expect(store.token).toBe('new-token')
+    expect(store.refreshToken).toBe('new-refresh-token')
     expect(store.isLoggedIn).toBe(true)
-    expect(localStorage.getItem('token')).toBe('new-token')
+    expect(localStorage.getItem('access_token')).toBe('new-token')
+    expect(localStorage.getItem('refresh_token')).toBe('new-refresh-token')
   })
 
   it('should handle login failure', async () => {
     const { login } = await import('@/api/user')
     vi.mocked(login).mockResolvedValue({
       success: false,
-      error: { code: 401, message: 'Invalid credentials' },
+      error: { code: 'INVALID_CREDENTIALS', message: 'Invalid credentials' },
     })
 
     const store = useUserStore()
@@ -74,7 +80,9 @@ describe('useUserStore', () => {
     vi.mocked(login).mockResolvedValue({
       success: true,
       data: {
-        token: 'test-token',
+        access_token: 'test-token',
+        refresh_token: 'test-refresh-token',
+        expires_in: 3600,
         user: {
           id: 1,
           username: 'test',
@@ -93,9 +101,11 @@ describe('useUserStore', () => {
 
     store.logout()
     expect(store.token).toBe('')
+    expect(store.refreshToken).toBe('')
     expect(store.user).toBeNull()
     expect(store.isLoggedIn).toBe(false)
-    expect(localStorage.getItem('token')).toBeNull()
+    expect(localStorage.getItem('access_token')).toBeNull()
+    expect(localStorage.getItem('refresh_token')).toBeNull()
   })
 
   it('should identify admin user', () => {

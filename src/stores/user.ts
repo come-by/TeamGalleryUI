@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import { handleApiError } from '@/utils/error'
 import { login as loginApi, register as registerApi, getProfile } from '@/api/user'
 import type { User, LoginParams, RegisterParams, LoginResponse, ApiResponse } from '@/types'
 
 export const useUserStore = defineStore('user', () => {
-  const token = ref(localStorage.getItem('token') || '')
+  const token = ref(localStorage.getItem('access_token') || '')
+  const refreshToken = ref(localStorage.getItem('refresh_token') || '')
   const user = ref<User | null>(null)
 
   const isLoggedIn = computed(() => !!token.value)
@@ -12,18 +15,50 @@ export const useUserStore = defineStore('user', () => {
   const username = computed(() => user.value?.username || '')
   const nickname = computed(() => user.value?.nickname || user.value?.username || '')
 
+  const setTokens = (accessToken: string, newRefreshToken: string): void => {
+    token.value = accessToken
+    refreshToken.value = newRefreshToken
+    localStorage.setItem('access_token', accessToken)
+    localStorage.setItem('refresh_token', newRefreshToken)
+  }
+
+  const clearTokens = (): void => {
+    token.value = ''
+    refreshToken.value = ''
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+  }
+
   const login = async (credentials: LoginParams): Promise<ApiResponse<LoginResponse>> => {
-    const res = await loginApi(credentials)
-    if (res.success && res.data?.token) {
-      token.value = res.data.token
-      localStorage.setItem('token', res.data.token)
-      await fetchProfile()
+    try {
+      const res = await loginApi(credentials)
+      if (res.success && res.data?.access_token) {
+        setTokens(res.data.access_token, res.data.refresh_token)
+        await fetchProfile()
+        ElMessage.success('登录成功')
+      } else {
+        handleApiError(res.error)
+      }
+      return res
+    } catch (error) {
+      handleApiError(error)
+      throw error
     }
-    return res
   }
 
   const register = async (data: RegisterParams): Promise<ApiResponse> => {
-    return await registerApi(data)
+    try {
+      const res = await registerApi(data)
+      if (res.success) {
+        ElMessage.success('注册成功')
+      } else {
+        handleApiError(res.error)
+      }
+      return res
+    } catch (error) {
+      handleApiError(error)
+      throw error
+    }
   }
 
   const fetchProfile = async (): Promise<void> => {
@@ -32,20 +67,24 @@ export const useUserStore = defineStore('user', () => {
       const res = await getProfile()
       if (res.success) {
         user.value = res.data || null
+      } else {
+        handleApiError(res.error)
       }
     } catch (error) {
-      console.error('获取用户资料失败:', error)
+      handleApiError(error)
     }
   }
 
   const logout = (): void => {
     token.value = ''
+    refreshToken.value = ''
     user.value = null
-    localStorage.removeItem('token')
+    clearTokens()
   }
 
   return {
     token,
+    refreshToken,
     user,
     isLoggedIn,
     isAdmin,

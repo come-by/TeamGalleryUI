@@ -1,16 +1,90 @@
-import axios from 'axios'
-import type { ApiResponse, PaginatedResponse, User } from '@/types'
+import axios, { type AxiosRequestConfig } from 'axios'
+import { ElMessage } from 'element-plus'
+import { handleApiError, handleValidationError, isUnauthorized, isValidationError } from '@/utils/error'
+import type { ApiResponse, PaginatedResponse, User, ApiError } from '@/types'
 
 export type { ApiResponse, PaginatedResponse, User }
 
-const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+const API_VERSION = 'v1'
+
+const axiosInstance = axios.create({
+  baseURL: `${import.meta.env.VITE_API_BASE_URL || '/api'}/${API_VERSION}`,
   timeout: 10000,
 })
 
-request.interceptors.request.use(
+// 请求共享：相同请求共享同一个 Promise
+const pendingRequests = new Map<string, Promise<unknown>>()
+
+const generateRequestKey = (config: AxiosRequestConfig): string => {
+  return `${config.method || 'get'}:${config.url}:${JSON.stringify(config.params)}:${JSON.stringify(config.data)}`
+}
+
+// Token 刷新相关
+let isRefreshing = false
+let failedQueue: Array<{
+  resolve: (value?: unknown) => void
+  reject: (reason?: unknown) => void
+}> = []
+
+const processQueue = (error: unknown | null, token: string | null = null): void => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error)
+    } else {
+      prom.resolve(token)
+    }
+  })
+  failedQueue = []
+}
+
+const getRefreshToken = (): string | null => {
+  return localStorage.getItem('refresh_token')
+}
+
+const setAccessToken = (token: string): void => {
+  localStorage.setItem('access_token', token)
+}
+
+const clearTokens = (): void => {
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('refresh_token')
+}
+
+const refreshAccessToken = async (): Promise<string> => {
+  const refreshToken = getRefreshToken()
+  if (!refreshToken) {
+    throw new Error('No refresh token available')
+  }
+
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_BASE_URL || '/api'}/${API_VERSION}/token/refresh`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    }
+  )
+
+  if (response.data?.success && response.data.data?.access_token) {
+    const { access_token, refresh_token } = response.data.data
+    setAccessToken(access_token)
+    if (refresh_token) {
+      localStorage.setItem('refresh_token', refresh_token)
+    }
+    return access_token
+  }
+
+  throw new Error('Token refresh failed')
+}
+
+// 网络重试
+const MAX_RETRIES = 2
+const RETRY_DELAY = 1000
+
+axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('access_token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -21,21 +95,171 @@ request.interceptors.request.use(
   }
 )
 
-request.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     return response.data
   },
-  (error) => {
+  async (error) => {
+    if (axios.isCancel(error)) {
+      return Promise.reject(error)
+    }
+
+    const originalRequest = error.config
+
+    // 网络错误重试
+    if (originalRequest && !originalRequest._retry && originalRequest._retryCount < MAX_RETRIES) {
+      const isNetworkError =
+        !error.response || error.code === 'ECONNABORTED' || error.message === 'Network Error'
+
+      if (isNetworkError) {
+        originalRequest._retryCount = (originalRequest._retryCount || 0) + 1
+        originalRequest._retry = true
+
+        await new Promise((resolve) =>
+          setTimeout(resolve, RETRY_DELAY * originalRequest._retryCount)
+        )
+
+        return request(originalRequest)
+      }
+    }
+
     if (error.response) {
       const { status, data } = error.response
-      if (status === 401) {
-        localStorage.removeItem('token')
-        window.location.href = '/login'
+      const apiError: ApiError = data?.error || { code: 'UNKNOWN', message: '请求失败' }
+
+      // 401 尝试刷新 token
+      if (isUnauthorized(apiError) && !originalRequest._retry) {
+        if (!isRefreshing) {
+          isRefreshing = true
+          originalRequest._retry = true
+
+          try {
+            const newToken = await refreshAccessToken()
+            processQueue(null, newToken)
+            originalRequest.headers.Authorization = `Bearer ${newToken}`
+            return request(originalRequest)
+          } catch (refreshError) {
+            processQueue(refreshError, null)
+            clearTokens()
+            ElMessage.error('登录已过期，请重新登录')
+            window.location.href = '/login'
+            return Promise.reject(refreshError)
+          } finally {
+            isRefreshing = false
+          }
+        } else {
+          // 正在刷新 token，将请求加入队列
+          return new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject })
+          })
+            .then((token) => {
+              originalRequest.headers.Authorization = `Bearer ${token}`
+              return request(originalRequest)
+            })
+            .catch((err) => {
+              return Promise.reject(err)
+            })
+        }
+      }
+
+      if (isValidationError(apiError)) {
+        handleValidationError(apiError.details)
+      } else if (!isUnauthorized(apiError)) {
+        handleApiError(apiError)
       }
       return Promise.reject(data || error.message)
+    } else if (error.code === 'ECONNABORTED') {
+      ElMessage.error('请求超时，请检查网络连接')
+    } else {
+      ElMessage.error('网络连接失败')
     }
     return Promise.reject(error.message)
   }
 )
 
-export default request
+// 核心请求函数：处理请求共享
+const request = <T = unknown>(config: AxiosRequestConfig): Promise<T> => {
+  const requestKey = generateRequestKey(config)
+
+  // 如果已有相同请求在进行中，返回共享的 Promise
+  if (pendingRequests.has(requestKey)) {
+    return pendingRequests.get(requestKey) as Promise<T>
+  }
+
+  // 发起新请求
+  const promise = axiosInstance(config).finally(() => {
+    pendingRequests.delete(requestKey)
+  })
+
+  pendingRequests.set(requestKey, promise)
+  return promise as Promise<T>
+}
+
+// 定义请求方法类型
+interface RequestMethod {
+  <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>
+}
+
+interface ParamsMethod {
+  <T = unknown>(url: string, params?: unknown, config?: AxiosRequestConfig): Promise<T>
+}
+
+// 创建请求方法
+const createPostMethod = (): RequestMethod => {
+  return <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'post', data, ...config })
+  }
+}
+
+const createPutMethod = (): RequestMethod => {
+  return <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'put', data, ...config })
+  }
+}
+
+const createPatchMethod = (): RequestMethod => {
+  return <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'patch', data, ...config })
+  }
+}
+
+const createGetMethod = (): ParamsMethod => {
+  return <T = unknown>(url: string, params?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'get', params, ...config })
+  }
+}
+
+const createDeleteMethod = (): ParamsMethod => {
+  return <T = unknown>(url: string, params?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'delete', params, ...config })
+  }
+}
+
+const createHeadMethod = (): ParamsMethod => {
+  return <T = unknown>(url: string, params?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'head', params, ...config })
+  }
+}
+
+const createOptionsMethod = (): ParamsMethod => {
+  return <T = unknown>(url: string, params?: unknown, config?: AxiosRequestConfig): Promise<T> => {
+    return request<T>({ url, method: 'options', params, ...config })
+  }
+}
+
+// 扩展 request 对象
+const extendedRequest = Object.assign(request, {
+  get: createGetMethod(),
+  delete: createDeleteMethod(),
+  head: createHeadMethod(),
+  options: createOptionsMethod(),
+  post: createPostMethod(),
+  put: createPutMethod(),
+  patch: createPatchMethod(),
+})
+
+export const cancelAllRequests = (): void => {
+  pendingRequests.clear()
+}
+
+export default extendedRequest

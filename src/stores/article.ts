@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { handleApiError } from '@/utils/error'
 import {
   getArticles,
   getArticle,
@@ -23,9 +25,11 @@ export const useArticleStore = defineStore('article', () => {
       if (res.success) {
         articles.value = res.data?.list || []
         total.value = res.data?.total || 0
+      } else {
+        handleApiError(res.error)
       }
     } catch (error) {
-      console.error('获取文章列表失败:', error)
+      handleApiError(error)
     } finally {
       loading.value = false
     }
@@ -37,9 +41,11 @@ export const useArticleStore = defineStore('article', () => {
       const res = await getArticle(id)
       if (res.success) {
         currentArticle.value = res.data || null
+      } else {
+        handleApiError(res.error)
       }
     } catch (error) {
-      console.error('获取文章详情失败:', error)
+      handleApiError(error)
     } finally {
       loading.value = false
     }
@@ -50,30 +56,57 @@ export const useArticleStore = defineStore('article', () => {
       const res = await getLatestArticles(count)
       if (res.success) {
         articles.value = res.data || []
+      } else {
+        handleApiError(res.error)
       }
     } catch (error) {
-      console.error('获取最新文章失败:', error)
+      handleApiError(error)
     }
   }
 
   const createNewArticle = async (data: Partial<Article>): Promise<Article> => {
-    const res = await createArticle(data)
-    if (res.success && res.data) {
-      return res.data
+    try {
+      const res = await createArticle(data)
+      if (res.success && res.data) {
+        ElMessage.success('创建文章成功')
+        return res.data
+      }
+      handleApiError(res.error)
+      throw new Error(res.error?.message || '创建失败')
+    } catch (error) {
+      handleApiError(error)
+      throw error
     }
-    throw new Error(res.error?.message || '创建失败')
   }
 
   const updateExistingArticle = async (id: number, data: Partial<Article>): Promise<Article> => {
-    const res = await updateArticle(id, data)
-    if (res.success && res.data) {
-      return res.data
+    try {
+      const res = await updateArticle(id, data)
+      if (res.success && res.data) {
+        ElMessage.success('更新文章成功')
+        return res.data
+      }
+      handleApiError(res.error)
+      throw new Error(res.error?.message || '更新失败')
+    } catch (error) {
+      handleApiError(error)
+      throw error
     }
-    throw new Error(res.error?.message || '更新失败')
   }
 
   const removeArticle = async (id: number): Promise<void> => {
-    await deleteArticle(id)
+    try {
+      const res = await deleteArticle(id)
+      if (res.success) {
+        ElMessage.success('删除文章成功')
+      } else {
+        handleApiError(res.error)
+        throw new Error(res.error?.message || '删除失败')
+      }
+    } catch (error) {
+      handleApiError(error)
+      throw error
+    }
   }
 
   const clearCurrent = (): void => {
