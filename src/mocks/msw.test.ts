@@ -383,3 +383,163 @@ describe('MSW 动态 Handler 测试', () => {
     expect(response.data.success).toBe(true)
   })
 })
+
+describe('MSW 集成测试 - 搜索模块', () => {
+  it('应该搜索文章并返回结果', async () => {
+    const response = await axios.get(`${API_BASE}/search`, {
+      params: { q: 'Vue' },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data.list.length).toBeGreaterThan(0)
+    const titles = response.data.data.list.map((a: { title: string }) => a.title)
+    expect(titles.some((t: string) => t.includes('Vue'))).toBe(true)
+  })
+
+  it('空查询应该返回空结果', async () => {
+    const response = await axios.get(`${API_BASE}/search`, {
+      params: { q: '' },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data.list.length).toBe(0)
+    expect(response.data.data.total).toBe(0)
+  })
+
+  it('无匹配查询应该返回空结果', async () => {
+    const response = await axios.get(`${API_BASE}/search`, {
+      params: { q: 'xxxxxxNotFound' },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data.list.length).toBe(0)
+  })
+
+  it('应该返回搜索建议', async () => {
+    const response = await axios.get(`${API_BASE}/search/suggestions`, {
+      params: { q: 'Vue' },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data.length).toBeGreaterThan(0)
+    expect(response.data.data.every((s: string) => s.includes('Vue'))).toBe(true)
+  })
+
+  it('查询少于2个字符应该返回空建议', async () => {
+    const response = await axios.get(`${API_BASE}/search/suggestions`, {
+      params: { q: 'V' },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data).toEqual([])
+  })
+})
+
+describe('MSW 集成测试 - 上传模块', () => {
+  it('应该上传文件成功', async () => {
+    const file = new File(['test content'], 'test.jpg', { type: 'image/jpeg' })
+    const formData = new FormData()
+    formData.append('file', file)
+
+    // 先登录获取 token
+    const loginRes = await axios.post(`${API_BASE}/login`, {
+      username: 'admin',
+      password: 'admin123',
+    })
+    const token = loginRes.data.data.access_token
+    localStorage.setItem('access_token', token)
+
+    const response = await axios.post(`${API_BASE}/upload/file`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    expect(response.data.success).toBe(true)
+    expect(response.data.data.url).toBeTruthy()
+    expect(response.data.data.filename).toBe('test.jpg')
+  })
+
+  it('未登录上传应该返回 401', async () => {
+    const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      await axios.post(`${API_BASE}/upload/file`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      expect.fail('应该抛出错误')
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        expect(axiosError.response.status).toBe(401)
+        expect(axiosError.response.data.error.code).toBe('UNAUTHORIZED')
+      } else {
+        expect.fail('应该返回 AxiosError')
+      }
+    }
+  })
+
+  it('上传不允许的文件类型应该返回 400', async () => {
+    const loginRes = await axios.post(`${API_BASE}/login`, {
+      username: 'admin',
+      password: 'admin123',
+    })
+    const token = loginRes.data.data.access_token
+
+    const file = new File(['test'], 'malware.exe', { type: 'application/x-msdownload' })
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      await axios.post(`${API_BASE}/upload/file`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      expect.fail('应该抛出错误')
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        expect(axiosError.response.status).toBe(400)
+        expect(axiosError.response.data.error.code).toBe('FILE_TYPE_NOT_ALLOWED')
+      } else {
+        expect.fail('应该返回 AxiosError')
+      }
+    }
+  })
+
+  it('上传超过大小限制的文件应该返回 400', async () => {
+    const loginRes = await axios.post(`${API_BASE}/login`, {
+      username: 'admin',
+      password: 'admin123',
+    })
+    const token = loginRes.data.data.access_token
+
+    // 11MB 文件
+    const bigFile = new File(['x'.repeat(11 * 1024 * 1024)], 'big.jpg', { type: 'image/jpeg' })
+    const formData = new FormData()
+    formData.append('file', bigFile)
+
+    try {
+      await axios.post(`${API_BASE}/upload/file`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      expect.fail('应该抛出错误')
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        expect(axiosError.response.status).toBe(400)
+        expect(axiosError.response.data.error.code).toBe('FILE_TOO_LARGE')
+      } else {
+        expect.fail('应该返回 AxiosError')
+      }
+    }
+  })
+})
