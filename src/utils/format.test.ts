@@ -15,8 +15,8 @@ describe('formatDate', () => {
 
   it('should return empty string for empty input', () => {
     expect(formatDate('')).toBe('')
-    expect(formatDate(null as any)).toBe('')
-    expect(formatDate(undefined as any)).toBe('')
+    expect(formatDate(null as unknown as string)).toBe('')
+    expect(formatDate(undefined as unknown as string)).toBe('')
   })
 })
 
