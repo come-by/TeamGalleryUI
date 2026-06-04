@@ -1,5 +1,5 @@
 // MSW 通用类型和工具
-import { http, HttpResponse } from 'msw'
+import { HttpResponse } from 'msw'
 import type { ApiResponse, PaginatedResponse } from '@/types'
 
 // 模拟延迟
@@ -12,7 +12,12 @@ export const successResponse = <T>(data: T): HttpResponse => {
 }
 
 // 错误响应
-export const errorResponse = (code: string, message: string, status: number = 400, details?: Array<{ field: string; message: string }>): HttpResponse => {
+export const errorResponse = (
+  code: string,
+  message: string,
+  status: number = 400,
+  details?: Array<{ field: string; message: string }>
+): HttpResponse => {
   const response: ApiResponse<never> = {
     success: false,
     error: { code, message, details },
@@ -21,7 +26,12 @@ export const errorResponse = (code: string, message: string, status: number = 40
 }
 
 // 分页响应
-export const paginatedResponse = <T>(list: T[], total: number, page: number = 1, pageSize: number = 10): HttpResponse => {
+export const paginatedResponse = <T>(
+  list: T[],
+  total: number,
+  page: number = 1,
+  pageSize: number = 10
+): HttpResponse => {
   const data: PaginatedResponse<T> = { list, total, page, page_size: pageSize }
   return successResponse(data)
 }

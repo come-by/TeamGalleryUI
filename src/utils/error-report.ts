@@ -1,8 +1,16 @@
 import * as Sentry from '@sentry/vue'
 import type { App } from 'vue'
+import type { Router } from 'vue-router'
 
 // 敏感字段列表，上报时会被过滤
-const SENSITIVE_FIELDS = ['password', 'token', 'access_token', 'refresh_token', 'secret', 'authorization']
+const SENSITIVE_FIELDS = [
+  'password',
+  'token',
+  'access_token',
+  'refresh_token',
+  'secret',
+  'authorization',
+]
 
 // 错误上报是否已初始化
 let isInitialized = false
@@ -11,7 +19,7 @@ export interface SentryConfig {
   dsn: string
   environment: string
   app: App
-  router?: any
+  router?: Router
 }
 
 /**
@@ -159,7 +167,11 @@ export const clearUserContext = (): void => {
 /**
  * 添加面包屑（操作日志）
  */
-export const addBreadcrumb = (message: string, category: string, level: 'info' | 'warning' | 'error' = 'info'): void => {
+export const addBreadcrumb = (
+  message: string,
+  category: string,
+  level: 'info' | 'warning' | 'error' = 'info'
+): void => {
   if (!isInitialized) return
 
   Sentry.addBreadcrumb({
@@ -174,13 +186,13 @@ export const addBreadcrumb = (message: string, category: string, level: 'info' |
  * 错误分类
  */
 export enum ErrorCategory {
-  RENDER = 'render',           // 组件渲染错误
-  API = 'api',                 // API 请求错误
-  ROUTE = 'route',             // 路由错误
-  VALIDATION = 'validation',   // 表单验证错误
-  AUTH = 'auth',               // 认证/授权错误
-  NETWORK = 'network',         // 网络错误
-  UNKNOWN = 'unknown',         // 未知错误
+  RENDER = 'render', // 组件渲染错误
+  API = 'api', // API 请求错误
+  ROUTE = 'route', // 路由错误
+  VALIDATION = 'validation', // 表单验证错误
+  AUTH = 'auth', // 认证/授权错误
+  NETWORK = 'network', // 网络错误
+  UNKNOWN = 'unknown', // 未知错误
 }
 
 /**

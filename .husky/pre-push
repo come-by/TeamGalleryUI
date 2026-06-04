@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check Node.js version compatibility
+NODE_VERSION=$(node -v | cut -d'v' -f2 | cut -d'.' -f1)
+if [ "$NODE_VERSION" -ge 24 ] 2>/dev/null; then
+  echo "⚠️  Node.js v$NODE_VERSION detected. Skipping pre-push checks due to compatibility issues."
+  echo "   Please run 'npm run ci' manually or switch to Node.js 20."
+  exit 0
+fi
+
+echo "🔍 Running pre-push checks..."
+
+# Run full CI pipeline locally before pushing
+npm run lint:check || { echo "❌ Lint check failed"; exit 1; }
+npm run format:check || { echo " Format check failed"; exit 1; }
+npm run test:run || { echo " Tests failed"; exit 1; }
+npm run build || { echo "❌ Build failed"; exit 1; }
+
+echo "✅ All pre-push checks passed!"

@@ -31,7 +31,18 @@ export const uploadFileHandler = http.post('/api/v1/upload/file', async ({ reque
   }
 
   // 检查文件类型
-  const allowedTypes = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.pdf', '.doc', '.docx', '.zip']
+  const allowedTypes = [
+    '.jpg',
+    '.jpeg',
+    '.png',
+    '.gif',
+    '.webp',
+    '.svg',
+    '.pdf',
+    '.doc',
+    '.docx',
+    '.zip',
+  ]
   const ext = '.' + file.name.split('.').pop()?.toLowerCase()
   if (!allowedTypes.includes(ext)) {
     return errorResponse('FILE_TYPE_NOT_ALLOWED', `文件类型 ${ext} 不允许上传`, 400)
@@ -83,24 +94,23 @@ export const uploadImageHandler = http.post('/api/v1/upload/image', async ({ req
   })
 })
 
-export const deleteFileHandler = http.delete('/api/v1/upload/:path', async ({ request, params }) => {
-  await delay(200)
+export const deleteFileHandler = http.delete(
+  '/api/v1/upload/:path',
+  async ({ request, params }) => {
+    await delay(200)
 
-  const isValidToken = verifyToken(request)
-  if (!isValidToken) {
-    return errorResponse('UNAUTHORIZED', '未登录', 401)
+    const isValidToken = verifyToken(request)
+    if (!isValidToken) {
+      return errorResponse('UNAUTHORIZED', '未登录', 401)
+    }
+
+    // 404 模拟
+    if (params.path === 'not_found.txt') {
+      return errorResponse('FILE_NOT_FOUND', '文件不存在', 404)
+    }
+
+    return successResponse(null)
   }
+)
 
-  // 404 模拟
-  if (params.path === 'not_found.txt') {
-    return errorResponse('FILE_NOT_FOUND', '文件不存在', 404)
-  }
-
-  return successResponse(null)
-})
-
-export const uploadHandlers = [
-  uploadFileHandler,
-  uploadImageHandler,
-  deleteFileHandler,
-]
+export const uploadHandlers = [uploadFileHandler, uploadImageHandler, deleteFileHandler]

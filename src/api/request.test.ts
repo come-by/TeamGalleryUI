@@ -50,11 +50,15 @@ describe('请求拦截器', () => {
       vi.mocked(axios.create).mockReturnValue({
         interceptors: {
           request: { use: vi.fn() },
-          response: { use: vi.fn((successHandler) => { successHandler(mockResponse) }) },
+          response: {
+            use: vi.fn((successHandler: (response: unknown) => void) => {
+              successHandler(mockResponse)
+            }),
+          },
         },
         get: mockAxiosInstance,
         post: mockAxiosInstance,
-      } as any)
+      } as unknown as ReturnType<typeof axios.create>)
 
       // 这个测试需要重构 request.ts 以便更好地测试
       // 当前实现较复杂，这里主要验证接口存在

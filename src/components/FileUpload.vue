@@ -44,12 +44,7 @@
 
     <!-- 文件列表 -->
     <div v-if="fileList.length > 0" class="file-list">
-      <div
-        v-for="item in fileList"
-        :key="item.uid"
-        class="file-item"
-        :class="`is-${item.status}`"
-      >
+      <div v-for="item in fileList" :key="item.uid" class="file-item" :class="`is-${item.status}`">
         <!-- 文件缩略图 -->
         <div class="file-thumb">
           <img v-if="item.thumbUrl" :src="item.thumbUrl" :alt="item.name" />
@@ -86,7 +81,12 @@
         <!-- 状态文字 -->
         <div class="file-status">
           <el-tag v-if="item.status === 'success'" type="success" size="small">成功</el-tag>
-          <el-tag v-else-if="item.status === 'error'" type="danger" size="small" :title="item.error">
+          <el-tag
+            v-else-if="item.status === 'error'"
+            type="danger"
+            size="small"
+            :title="item.error"
+          >
             失败
           </el-tag>
           <el-tag v-else-if="item.status === 'cancelled'" size="small">已取消</el-tag>
@@ -125,16 +125,8 @@
       <el-button :disabled="uploading || pendingCount === 0" type="primary" @click="startUpload">
         开始上传
       </el-button>
-      <el-button v-if="uploading" type="warning" @click="cancelAllUploads">
-        取消全部
-      </el-button>
-      <el-button
-        v-if="hasError"
-        type="primary"
-        @click="retryAll"
-      >
-        重试全部
-      </el-button>
+      <el-button v-if="uploading" type="warning" @click="cancelAllUploads"> 取消全部 </el-button>
+      <el-button v-if="hasError" type="primary" @click="retryAll"> 重试全部 </el-button>
       <el-button @click="clearAll">清空列表</el-button>
     </div>
   </div>
@@ -166,7 +158,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits<{
+const _emit = defineEmits<{
   success: [files: Array<{ url: string; filename: string }>]
   error: [file: { name: string; error: string }]
   complete: []
@@ -216,8 +208,12 @@ const maxSizeHint = computed(() => {
   return `${size.toFixed(0)} ${units[i]}`
 })
 
-const pendingCount = computed(() => fileList.filter((f) => f.status === 'pending' || f.status === 'error').length)
-const hasError = computed(() => fileList.some((f) => f.status === 'error' || f.status === 'cancelled'))
+const pendingCount = computed(
+  () => fileList.filter((f) => f.status === 'pending' || f.status === 'error').length
+)
+const hasError = computed(() =>
+  fileList.some((f) => f.status === 'error' || f.status === 'cancelled')
+)
 
 function formatSize(bytes: number): string {
   if (bytes === 0) return '0 B'

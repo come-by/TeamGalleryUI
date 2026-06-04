@@ -3,6 +3,9 @@ import { http, HttpResponse } from 'msw'
 import { server } from '@/mocks/server'
 import axios from 'axios'
 
+// Ensure vi is recognized as used (vi.mock is hoisted)
+void vi
+
 const API_BASE = '/api/v1'
 
 // MSW 服务器生命周期管理
@@ -88,7 +91,9 @@ describe('MSW 集成测试 - 认证模块', () => {
           password: '123',
         })
       } catch (error: unknown) {
-        const err = error as { response: { data: { error: { details: Array<{ field: string }> } }; status: number } }
+        const err = error as {
+          response: { data: { error: { details: Array<{ field: string }> } }; status: number }
+        }
         expect(err.response.status).toBe(400)
         expect(err.response.data.error.details[0].field).toBe('password')
       }
@@ -111,9 +116,13 @@ describe('MSW 集成测试 - 认证模块', () => {
 
     it('应该返回错误当刷新令牌无效', async () => {
       try {
-        await axios.post(`${API_BASE}/token/refresh`, {}, {
-          headers: { Authorization: 'Bearer invalid-token' },
-        })
+        await axios.post(
+          `${API_BASE}/token/refresh`,
+          {},
+          {
+            headers: { Authorization: 'Bearer invalid-token' },
+          }
+        )
       } catch (error: unknown) {
         const err = error as { response: { status: number } }
         expect(err.response.status).toBe(401)
@@ -131,7 +140,9 @@ describe('MSW 集成测试 - 文章模块', () => {
       expect(response.data.data.list.length).toBeGreaterThan(0)
       expect(response.data.data.total).toBeGreaterThan(0)
       // 只返回 published 状态的文章
-      expect(response.data.data.list.every((a: { status: string }) => a.status === 'published')).toBe(true)
+      expect(
+        response.data.data.list.every((a: { status: string }) => a.status === 'published')
+      ).toBe(true)
     })
 
     it('应该支持分页', async () => {
@@ -149,7 +160,9 @@ describe('MSW 集成测试 - 文章模块', () => {
         params: { category: '前端' },
       })
 
-      expect(response.data.data.list.every((a: { category: string }) => a.category === '前端')).toBe(true)
+      expect(
+        response.data.data.list.every((a: { category: string }) => a.category === '前端')
+      ).toBe(true)
     })
 
     it('应该支持按标签筛选', async () => {
@@ -157,7 +170,9 @@ describe('MSW 集成测试 - 文章模块', () => {
         params: { tag: 'Vue' },
       })
 
-      expect(response.data.data.list.every((a: { tags: string[] }) => a.tags.includes('Vue'))).toBe(true)
+      expect(response.data.data.list.every((a: { tags: string[] }) => a.tags.includes('Vue'))).toBe(
+        true
+      )
     })
 
     it('应该支持关键词搜索', async () => {
@@ -226,7 +241,9 @@ describe('MSW 集成测试 - 文章模块', () => {
           { headers: { Authorization: 'Bearer test-token' } }
         )
       } catch (error: unknown) {
-        const err = error as { response: { data: { error: { details: Array<{ field: string }> } } } }
+        const err = error as {
+          response: { data: { error: { details: Array<{ field: string }> } } }
+        }
         expect(err.response.data.error.details[0].field).toBe('title')
       }
     })
@@ -473,7 +490,9 @@ describe('MSW 集成测试 - 上传模块', () => {
       expect.fail('应该抛出错误')
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        const axiosError = error as {
+          response: { status: number; data: { error: { code: string } } }
+        }
         expect(axiosError.response.status).toBe(401)
         expect(axiosError.response.data.error.code).toBe('UNAUTHORIZED')
       } else {
@@ -503,7 +522,9 @@ describe('MSW 集成测试 - 上传模块', () => {
       expect.fail('应该抛出错误')
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        const axiosError = error as {
+          response: { status: number; data: { error: { code: string } } }
+        }
         expect(axiosError.response.status).toBe(400)
         expect(axiosError.response.data.error.code).toBe('FILE_TYPE_NOT_ALLOWED')
       } else {
@@ -534,7 +555,9 @@ describe('MSW 集成测试 - 上传模块', () => {
       expect.fail('应该抛出错误')
     } catch (error: unknown) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response: { status: number; data: { error: { code: string } } } }
+        const axiosError = error as {
+          response: { status: number; data: { error: { code: string } } }
+        }
         expect(axiosError.response.status).toBe(400)
         expect(axiosError.response.data.error.code).toBe('FILE_TOO_LARGE')
       } else {

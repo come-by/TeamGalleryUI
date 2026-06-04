@@ -1,5 +1,5 @@
-import { http, HttpResponse } from 'msw'
-import { delay, successResponse, errorResponse, getRequestBody, getQueryParam } from '../utils'
+import { http } from 'msw'
+import { delay, successResponse, errorResponse, getRequestBody } from '../utils'
 
 // 模拟用户数据库
 const users = [
@@ -127,9 +127,4 @@ export const refreshTokenHandler = http.post('/api/v1/token/refresh', async ({ r
   })
 })
 
-export const authHandlers = [
-  loginHandler,
-  registerHandler,
-  getProfileHandler,
-  refreshTokenHandler,
-]
+export const authHandlers = [loginHandler, registerHandler, getProfileHandler, refreshTokenHandler]

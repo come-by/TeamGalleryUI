@@ -42,7 +42,7 @@ const errorConfig: Record<string, { title: string; description: string; action: 
     description: '服务器出了点问题，请稍后重试',
     action: '重新加载',
   },
-  'network': {
+  network: {
     title: '网络错误',
     description: '网络连接失败，请检查网络设置',
     action: '重新加载',

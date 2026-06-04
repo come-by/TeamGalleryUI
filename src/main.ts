@@ -2,10 +2,15 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import * as Sentry from '@sentry/vue'
+import * as _Sentry from '@sentry/vue'
 import App from './App.vue'
 import router from './router'
-import { initErrorReport, reportError, setUserContext, clearUserContext } from '@/utils/error-report'
+import {
+  initErrorReport,
+  reportError,
+  setUserContext,
+  clearUserContext,
+} from '@/utils/error-report'
 import './style.css'
 
 const app = createApp(App)

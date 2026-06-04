@@ -1,4 +1,4 @@
-﻿﻿<template>
+<template>
   <div class="comment-section">
     <div v-if="isLoggedIn" class="comment-form">
       <el-input

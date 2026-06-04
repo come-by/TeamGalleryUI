@@ -12,13 +12,17 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "lint:check": "eslint .",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "ci": "npm run lint:check && npm run format:check && npm run test:run && npm run build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@sentry/browser": "^10.55.0",
     "@sentry/vue": "^10.55.0",
     "axios": "^1.7.9",
-    "element-plus": "^2.9.1",
+    "element-plus": "^2.14.1",
     "pinia": "^2.3.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
@@ -26,6 +30,7 @@
   "devDependencies": {
     "@types/node": "^25.9.1",
     "@vitejs/plugin-vue": "^5.2.4",
+    "@vitest/coverage-v8": "^4.1.8",
     "@vitest/ui": "^4.1.8",
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/test-utils": "^2.4.10",
@@ -34,12 +39,23 @@
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-vue": "^10.9.1",
     "happy-dom": "^20.9.0",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
+    "lint-staged": "^17.0.7",
     "msw": "^2.14.6",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
     "vite": "^6.0.5",
     "vitest": "^4.1.8",
     "vue-tsc": "^2.2.12"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": [
+      "eslint --fix",
+      "vitest run related --passWithNoTests"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
   }
 }

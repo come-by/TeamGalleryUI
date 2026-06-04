@@ -25,7 +25,10 @@ describe('错误处理工具函数', () => {
 
   describe('getErrorMessage', () => {
     it('应该返回预定义的错误消息', () => {
-      const error: ApiError = { code: ErrorCode.INVALID_CREDENTIALS, message: 'Invalid credentials' }
+      const error: ApiError = {
+        code: ErrorCode.INVALID_CREDENTIALS,
+        message: 'Invalid credentials',
+      }
       expect(getErrorMessage(error)).toBe('用户名或密码错误')
     })
 
@@ -80,7 +83,9 @@ describe('错误处理工具函数', () => {
         { field: 'email', message: '邮箱格式不正确' },
       ]
       handleValidationError(details)
-      expect(ElMessage.error).toHaveBeenCalledWith('username: 用户名不能为空；email: 邮箱格式不正确')
+      expect(ElMessage.error).toHaveBeenCalledWith(
+        'username: 用户名不能为空；email: 邮箱格式不正确'
+      )
     })
 
     it('应该忽略空验证详情', () => {

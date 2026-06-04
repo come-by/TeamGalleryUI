@@ -39,7 +39,11 @@ onErrorCaptured((err, instance, info) => {
       component: instance?.$options?.name || 'Anonymous',
       info,
     })
-    addBreadcrumb(`组件错误: ${instance?.$options?.name || 'Anonymous'}`, 'vue.errorCaptured', 'error')
+    addBreadcrumb(
+      `组件错误: ${instance?.$options?.name || 'Anonymous'}`,
+      'vue.errorCaptured',
+      'error'
+    )
   }
 
   // 阻止错误继续向上传播

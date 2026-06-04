@@ -1,5 +1,13 @@
 import { http } from 'msw'
-import { delay, successResponse, errorResponse, getRequestBody, getQueryParam, paginatedResponse, verifyToken } from '../utils'
+import {
+  delay,
+  successResponse,
+  errorResponse,
+  getRequestBody,
+  getQueryParam,
+  paginatedResponse,
+  verifyToken,
+} from '../utils'
 
 // 模拟用户列表（与 auth 模块共享数据结构）
 const users = [

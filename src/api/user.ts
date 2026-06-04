@@ -1,5 +1,12 @@
 import request from './request'
-import type { ApiResponse, User, LoginParams, RegisterParams, LoginResponse, RefreshTokenResponse } from '@/types'
+import type {
+  ApiResponse,
+  User,
+  LoginParams,
+  RegisterParams,
+  LoginResponse,
+  RefreshTokenResponse,
+} from '@/types'
 
 export type { User, LoginParams, RegisterParams, LoginResponse }
 

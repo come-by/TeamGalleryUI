@@ -1,5 +1,4 @@
 import { ref, type Ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import {
   handleApiError as handleApiErrorUtil,
   isUnauthorized,

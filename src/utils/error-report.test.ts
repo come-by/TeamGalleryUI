@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import * as Sentry from '@sentry/vue'
-import {
-  initErrorReport,
-  reportError,
-  reportApiError,
-  setUserContext,
-  clearUserContext,
-  addBreadcrumb,
-  ErrorCategory,
-  reportCategorizedError,
-} from '@/utils/error-report'
+import type { App } from 'vue'
+import { ErrorCategory } from '@/utils/error-report'
+
+// Mock Vue App type
+const createMockApp = (): App => ({ config: { globalProperties: {} } }) as unknown as App
 
 // Mock Sentry
 vi.mock('@sentry/vue', () => ({
@@ -32,7 +27,7 @@ describe('错误上报工具', () => {
   describe('initErrorReport', () => {
     it('开发环境应该禁用上报', async () => {
       const { initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -45,7 +40,7 @@ describe('错误上报工具', () => {
 
     it('没有 DSN 应该禁用上报', async () => {
       const { initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: '',
@@ -58,7 +53,7 @@ describe('错误上报工具', () => {
 
     it('生产环境有 DSN 应该初始化 Sentry', async () => {
       const { initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -76,7 +71,7 @@ describe('错误上报工具', () => {
 
     it('多次调用应该只初始化一次', async () => {
       const { initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -96,7 +91,7 @@ describe('错误上报工具', () => {
   describe('reportError', () => {
     it('应该上报错误', async () => {
       const { reportError, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -130,7 +125,7 @@ describe('错误上报工具', () => {
   describe('reportApiError', () => {
     it('应该上报 API 错误', async () => {
       const { reportApiError, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -167,7 +162,7 @@ describe('错误上报工具', () => {
   describe('setUserContext', () => {
     it('应该设置用户上下文', async () => {
       const { setUserContext, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -188,7 +183,7 @@ describe('错误上报工具', () => {
   describe('clearUserContext', () => {
     it('应该清除用户上下文', async () => {
       const { clearUserContext, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -204,7 +199,7 @@ describe('错误上报工具', () => {
   describe('addBreadcrumb', () => {
     it('应该添加面包屑', async () => {
       const { addBreadcrumb, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',
@@ -239,7 +234,7 @@ describe('错误上报工具', () => {
   describe('reportCategorizedError', () => {
     it('应该根据分类设置不同级别', async () => {
       const { reportCategorizedError, initErrorReport } = await import('@/utils/error-report')
-      const mockApp = { config: { globalProperties: {} } } as any
+      const mockApp = createMockApp()
 
       initErrorReport({
         dsn: 'https://test@sentry.io/123',

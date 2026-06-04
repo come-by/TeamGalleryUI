@@ -1,6 +1,11 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
-import { handleApiError, handleValidationError, isUnauthorized, isValidationError } from '@/utils/error'
+import {
+  handleApiError,
+  handleValidationError,
+  isUnauthorized,
+  isValidationError,
+} from '@/utils/error'
 import { reportApiError } from '@/utils/error-report'
 import type { ApiResponse, PaginatedResponse, User, ApiError } from '@/types'
 

@@ -1,8 +1,16 @@
-import { http } from 'msw'
-import { delay, successResponse, errorResponse, getRequestBody, getQueryParam, paginatedResponse, verifyToken } from '../utils'
+﻿import { http } from 'msw'
+import {
+  delay,
+  successResponse,
+  errorResponse,
+  getRequestBody,
+  getQueryParam,
+  paginatedResponse,
+  verifyToken,
+} from '../utils'
 
 // 模拟文章数据库
-let articles = [
+const articles = [
   {
     id: 1,
     title: 'Vue 3 组合式 API 最佳实践',
@@ -95,7 +103,7 @@ export const getArticlesHandler = http.get('/api/v1/articles', async ({ request 
 })
 
 // 获取文章详情
-export const getArticleHandler = http.get('/api/v1/articles/:id', async ({ params, request }) => {
+export const getArticleHandler = http.get('/api/v1/articles/:id', async ({ params }) => {
   await delay()
 
   const id = parseInt(params.id as string, 10)
@@ -152,89 +160,101 @@ export const createArticleHandler = http.post('/api/v1/articles', async ({ reque
 })
 
 // 更新文章
-export const updateArticleHandler = http.put('/api/v1/articles/:id', async ({ params, request }) => {
-  await delay()
+export const updateArticleHandler = http.put(
+  '/api/v1/articles/:id',
+  async ({ params, request }) => {
+    await delay()
 
-  if (!verifyToken(request)) {
-    return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    if (!verifyToken(request)) {
+      return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    }
+
+    const id = parseInt(params.id as string, 10)
+    const index = articles.findIndex((a) => a.id === id)
+
+    if (index === -1) {
+      return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
+    }
+
+    const body = await getRequestBody(request)
+    articles[index] = { ...articles[index], ...body, updated_at: new Date().toISOString() }
+
+    return successResponse(articles[index])
   }
-
-  const id = parseInt(params.id as string, 10)
-  const index = articles.findIndex((a) => a.id === id)
-
-  if (index === -1) {
-    return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
-  }
-
-  const body = await getRequestBody(request)
-  articles[index] = { ...articles[index], ...body, updated_at: new Date().toISOString() }
-
-  return successResponse(articles[index])
-})
+)
 
 // 删除文章
-export const deleteArticleHandler = http.delete('/api/v1/articles/:id', async ({ params, request }) => {
-  await delay()
+export const deleteArticleHandler = http.delete(
+  '/api/v1/articles/:id',
+  async ({ params, request }) => {
+    await delay()
 
-  if (!verifyToken(request)) {
-    return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    if (!verifyToken(request)) {
+      return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    }
+
+    const id = parseInt(params.id as string, 10)
+    const index = articles.findIndex((a) => a.id === id)
+
+    if (index === -1) {
+      return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
+    }
+
+    articles.splice(index, 1)
+    return successResponse({ message: '删除成功' })
   }
-
-  const id = parseInt(params.id as string, 10)
-  const index = articles.findIndex((a) => a.id === id)
-
-  if (index === -1) {
-    return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
-  }
-
-  articles.splice(index, 1)
-  return successResponse({ message: '删除成功' })
-})
+)
 
 // 点赞文章
-export const likeArticleHandler = http.post('/api/v1/articles/:id/like', async ({ params, request }) => {
-  await delay()
+export const likeArticleHandler = http.post(
+  '/api/v1/articles/:id/like',
+  async ({ params, request }) => {
+    await delay()
 
-  if (!verifyToken(request)) {
-    return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    if (!verifyToken(request)) {
+      return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    }
+
+    const id = parseInt(params.id as string, 10)
+    const article = articles.find((a) => a.id === id)
+
+    if (!article) {
+      return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
+    }
+
+    if (article.is_liked) {
+      article.likes -= 1
+      article.is_liked = false
+    } else {
+      article.likes += 1
+      article.is_liked = true
+    }
+
+    return successResponse({ likes: article.likes, is_liked: article.is_liked })
   }
-
-  const id = parseInt(params.id as string, 10)
-  const article = articles.find((a) => a.id === id)
-
-  if (!article) {
-    return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
-  }
-
-  if (article.is_liked) {
-    article.likes -= 1
-    article.is_liked = false
-  } else {
-    article.likes += 1
-    article.is_liked = true
-  }
-
-  return successResponse({ likes: article.likes, is_liked: article.is_liked })
-})
+)
 
 // 收藏文章
-export const favoriteArticleHandler = http.post('/api/v1/articles/:id/favorite', async ({ params, request }) => {
-  await delay()
+export const favoriteArticleHandler = http.post(
+  '/api/v1/articles/:id/favorite',
+  async ({ params, request }) => {
+    await delay()
 
-  if (!verifyToken(request)) {
-    return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    if (!verifyToken(request)) {
+      return errorResponse('UNAUTHORIZED', '请先登录', 401)
+    }
+
+    const id = parseInt(params.id as string, 10)
+    const article = articles.find((a) => a.id === id)
+
+    if (!article) {
+      return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
+    }
+
+    article.is_favorited = !article.is_favorited
+    return successResponse({ is_favorited: article.is_favorited })
   }
-
-  const id = parseInt(params.id as string, 10)
-  const article = articles.find((a) => a.id === id)
-
-  if (!article) {
-    return errorResponse('ARTICLE_NOT_FOUND', '文章不存在', 404)
-  }
-
-  article.is_favorited = !article.is_favorited
-  return successResponse({ is_favorited: article.is_favorited })
-})
+)
 
 export const articleHandlers = [
   getArticlesHandler,

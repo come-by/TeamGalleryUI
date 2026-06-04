@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { useUpload, type UploadFileItem, type UploadOptions } from '@/composables/useUpload'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { useUpload, type UploadFileItem } from '@/composables/useUpload'
 
 // Mock ElMessage
 vi.mock('element-plus', () => ({
@@ -20,9 +20,15 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {}
   return {
     getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value }),
-    removeItem: vi.fn((key: string) => { delete store[key] }),
-    clear: vi.fn(() => { store = {} }),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
   }
 })()
 
@@ -166,10 +172,7 @@ describe('useUpload', () => {
 
     it('无参数时应重置所有失败为 pending', () => {
       const { fileList, addFiles, retry } = useUpload({ autoUpload: false })
-      addFiles([
-        createMockFile('file1.jpg', 100),
-        createMockFile('file2.jpg', 100),
-      ])
+      addFiles([createMockFile('file1.jpg', 100), createMockFile('file2.jpg', 100)])
 
       fileList[0].status = 'error'
       fileList[1].status = 'cancelled'
@@ -185,10 +188,7 @@ describe('useUpload', () => {
   describe('clearFiles', () => {
     it('应清空所有文件并重置状态', () => {
       const { fileList, addFiles, clearFiles } = useUpload({ autoUpload: false })
-      addFiles([
-        createMockFile('file1.jpg', 100),
-        createMockFile('file2.jpg', 100),
-      ])
+      addFiles([createMockFile('file1.jpg', 100), createMockFile('file2.jpg', 100)])
 
       clearFiles()
 
@@ -226,7 +226,13 @@ describe('UploadFileItem 数据结构', () => {
   })
 
   it('应支持所有状态值', () => {
-    const statuses: UploadFileItem['status'][] = ['pending', 'uploading', 'success', 'error', 'cancelled']
+    const statuses: UploadFileItem['status'][] = [
+      'pending',
+      'uploading',
+      'success',
+      'error',
+      'cancelled',
+    ]
     const file = createMockFile('test.jpg', 100)
 
     statuses.forEach((status) => {
