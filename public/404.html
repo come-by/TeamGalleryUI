@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeamGallery</title>
+  <script>
+    // 保存原始请求路径，供 index.html 恢复路由
+    sessionStorage.setItem('gh-pages-redirect', location.pathname + location.search + location.hash);
+    // 重定向到根路径，让 Vue Router 接管
+    location.replace('/TeamGalleryUI/');
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
