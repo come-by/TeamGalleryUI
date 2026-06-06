@@ -1,9 +1,10 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+
+import { getProfile, login as loginApi, register as registerApi } from '@/api/user'
+import type { ApiResponse, LoginParams, LoginResponse, RegisterParams, User } from '@/types'
 import { handleApiError } from '@/utils/error'
-import { login as loginApi, register as registerApi, getProfile } from '@/api/user'
-import type { User, LoginParams, RegisterParams, LoginResponse, ApiResponse } from '@/types'
 
 export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.getItem('access_token') || '')

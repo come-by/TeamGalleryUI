@@ -1,7 +1,15 @@
 import { ref, watch } from 'vue'
+
 import { getSuggestions } from '@/api/search'
 import { useDebounce } from '@/composables/useDebounce'
 
+/**
+ * 搜索组合式函数
+ * 提供搜索输入、防抖和搜索建议功能
+ *
+ * @param delay - 搜索防抖延迟时间（毫秒），默认 300ms
+ * @returns 搜索状态和方法
+ */
 export function useSearch(delay: number = 300) {
   const searchQuery = ref('')
   const suggestions = ref<string[]>([])

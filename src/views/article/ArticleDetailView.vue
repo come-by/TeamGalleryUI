@@ -56,21 +56,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { Calendar, ChatDotRound, Collection, Star, User } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { User, Calendar, Star, ChatDotRound, Collection } from '@element-plus/icons-vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import { deleteArticle } from '@/api/article'
+import {
+  favoriteArticle,
+  getInteractionStatus,
+  likeArticle,
+  unfavoriteArticle,
+  unlikeArticle,
+} from '@/api/interaction'
+import CommentSection from '@/components/comment/CommentSection.vue'
 import { useArticleStore } from '@/stores/article'
 import { useUserStore } from '@/stores/user'
-import {
-  likeArticle,
-  unlikeArticle,
-  favoriteArticle,
-  unfavoriteArticle,
-  getInteractionStatus,
-} from '@/api/interaction'
-import { deleteArticle } from '@/api/article'
-import CommentSection from '@/components/comment/CommentSection.vue'
 import { formatDate } from '@/utils/format'
 
 const route = useRoute()

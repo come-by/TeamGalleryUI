@@ -47,10 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 import { useArticleStore } from '@/stores/article'
 import type { Article } from '@/types'
 

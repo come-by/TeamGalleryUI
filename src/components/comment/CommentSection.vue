@@ -104,13 +104,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { Star } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { computed, onMounted, ref, watch } from 'vue'
+
 import {
-  getComments,
   createComment,
   deleteComment,
+  getComments,
   likeComment,
   reportComment,
 } from '@/api/comment'

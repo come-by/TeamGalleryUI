@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { useErrorHandler, useAsyncError } from '@/composables/useErrorHandler'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { useAsyncError, useErrorHandler } from '@/composables/useErrorHandler'
 
 // Mock dependencies
 vi.mock('@/utils/error', () => ({

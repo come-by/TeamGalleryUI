@@ -1,6 +1,13 @@
 import { computed } from 'vue'
+
 import { useUserStore } from '@/stores/user'
 
+/**
+ * 认证状态管理组合式函数
+ * 提供登录状态、管理员权限和路由守卫功能
+ *
+ * @returns 认证状态和路由守卫方法
+ */
 export function useAuth() {
   const userStore = useUserStore()
 

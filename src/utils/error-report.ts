@@ -25,6 +25,8 @@ export interface SentryConfig {
 /**
  * 初始化 Sentry 错误上报
  * 仅在 DSN 配置且非开发环境时启用
+ *
+ * @param config - Sentry 配置对象，包含 DSN、环境、Vue 应用实例和路由
  */
 export const initErrorReport = (config: SentryConfig): void => {
   if (isInitialized) return
@@ -33,6 +35,7 @@ export const initErrorReport = (config: SentryConfig): void => {
 
   // 开发环境不上报，仅 console 输出
   if (environment === 'development') {
+    // eslint-disable-next-line no-console
     console.log('[Sentry] 开发模式，错误上报已禁用')
     return
   }
@@ -71,12 +74,16 @@ export const initErrorReport = (config: SentryConfig): void => {
   })
 
   isInitialized = true
+  // eslint-disable-next-line no-console
   console.log('[Sentry] 错误上报已初始化')
 }
 
 /**
  * 过滤事件中的敏感数据
+ *
+ * @param event
  */
+
 const filterSensitiveData = (event: Sentry.ErrorEvent): Sentry.ErrorEvent => {
   // 过滤 request 中的敏感头
   const headers = event.request?.headers
@@ -108,6 +115,9 @@ const filterSensitiveData = (event: Sentry.ErrorEvent): Sentry.ErrorEvent => {
 
 /**
  * 手动上报错误
+ *
+ * @param error - 错误对象或错误信息
+ * @param context - 可选的上下文信息，用于追踪错误来源
  */
 export const reportError = (error: unknown, context?: Record<string, unknown>): void => {
   if (!isInitialized) {
@@ -122,6 +132,16 @@ export const reportError = (error: unknown, context?: Record<string, unknown>): 
 
 /**
  * 上报 API 错误
+ *
+ * @param error - API 错误对象
+ * @param error.code - 错误码
+ * @param error.message - 错误消息
+ * @param error.status - HTTP 状态码
+ * @param context - 请求上下文
+ * @param context.url - 请求 URL
+ * @param context.method - 请求方法
+ * @param context.params - 请求参数
+ * @param context.status - 响应状态码
  */
 export const reportApiError = (
   error: { code?: string; message?: string; status?: number },
@@ -144,6 +164,11 @@ export const reportApiError = (
 
 /**
  * 设置用户上下文
+ *
+ * @param user - 用户信息对象
+ * @param user.id - 用户 ID
+ * @param user.email - 用户邮箱
+ * @param user.username - 用户名
  */
 export const setUserContext = (user: { id?: string; email?: string; username?: string }): void => {
   if (!isInitialized) return
@@ -166,6 +191,10 @@ export const clearUserContext = (): void => {
 
 /**
  * 添加面包屑（操作日志）
+ *
+ * @param message - 日志消息
+ * @param category - 日志分类
+ * @param level - 日志级别，默认 info
  */
 export const addBreadcrumb = (
   message: string,
@@ -197,6 +226,10 @@ export enum ErrorCategory {
 
 /**
  * 根据错误类型分类上报
+ *
+ * @param error - 错误对象或错误信息
+ * @param category - 错误分类
+ * @param context - 可选的上下文信息
  */
 export const reportCategorizedError = (
   error: unknown,

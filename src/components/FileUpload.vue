@@ -133,9 +133,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { UploadFilled, Document } from '@element-plus/icons-vue'
-import { useUpload, type UploadOptions } from '@/composables/useUpload'
+import { Document, UploadFilled } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue'
+
+import { type UploadOptions, useUpload } from '@/composables/useUpload'
 
 const props = withDefaults(
   defineProps<{

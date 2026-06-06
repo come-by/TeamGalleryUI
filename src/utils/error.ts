@@ -1,5 +1,6 @@
 import { ElMessage } from 'element-plus'
-import { ErrorCode, type ApiError, type ErrorDetail } from '@/types'
+
+import { type ApiError, ErrorCode, type ErrorDetail } from '@/types'
 
 const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCode.NOT_FOUND]: '请求的资源不存在',

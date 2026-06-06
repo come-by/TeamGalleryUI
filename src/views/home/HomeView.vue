@@ -72,9 +72,10 @@
 </template>
 
 <script setup lang="ts">
+import { ChatDotRound, Star, User } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { User, Star, ChatDotRound } from '@element-plus/icons-vue'
+
 import { useArticleStore } from '@/stores/article'
 import { useUserStore } from '@/stores/user'
 import { formatDate } from '@/utils/format'

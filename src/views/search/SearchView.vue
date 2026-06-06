@@ -41,8 +41,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
 import { searchArticles } from '@/api/search'
 import type { Article } from '@/types'
 

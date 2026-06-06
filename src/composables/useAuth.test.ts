@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import { useAuth } from '@/composables/useAuth'
 import { useUserStore } from '@/stores/user'
 

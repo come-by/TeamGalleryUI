@@ -45,9 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getPendingComments, approveComment, rejectComment } from '@/api/comment'
+import { onMounted, ref } from 'vue'
+
+import { approveComment, getPendingComments, rejectComment } from '@/api/comment'
 import type { Comment } from '@/types'
 
 const comments = ref<Comment[]>([])

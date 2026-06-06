@@ -1,11 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
+
 import {
-  getToken,
-  setToken,
-  removeToken,
   getFromStorage,
-  setToStorage,
+  getToken,
   removeFromStorage,
+  removeToken,
+  setToken,
+  setToStorage,
 } from '@/utils/storage'
 
 describe('storage utils', () => {

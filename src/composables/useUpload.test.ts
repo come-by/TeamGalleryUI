@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { useUpload, type UploadFileItem } from '@/composables/useUpload'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { type UploadFileItem, useUpload } from '@/composables/useUpload'
 
 // Mock ElMessage
 vi.mock('element-plus', () => ({

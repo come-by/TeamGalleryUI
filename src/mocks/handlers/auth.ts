@@ -1,5 +1,6 @@
 import { http } from 'msw'
-import { delay, successResponse, errorResponse, getRequestBody } from '../utils'
+
+import { delay, errorResponse, getRequestBody, successResponse } from '../utils'
 
 // 模拟用户数据库
 const users = [

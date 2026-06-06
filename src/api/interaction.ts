@@ -1,13 +1,14 @@
-import request from './request'
 import type {
   ApiResponse,
-  PaginatedResponse,
   Article,
-  InteractionStatus,
   InteractionListParams,
+  InteractionStatus,
+  PaginatedResponse,
 } from '@/types'
 
-export type { InteractionStatus, InteractionListParams }
+import request from './request'
+
+export type { InteractionListParams, InteractionStatus }
 
 export const likeArticle = (articleId: number): Promise<ApiResponse> => {
   return request.post(`/articles/${articleId}/like`)

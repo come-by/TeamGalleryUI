@@ -1,5 +1,5 @@
+import type { ApiResponse, PaginatedResponse, User } from './request'
 import request from './request'
-import type { ApiResponse, User, PaginatedResponse } from './request'
 
 export interface AdminUserParams {
   page?: number

@@ -1,14 +1,15 @@
-import request from './request'
 import type {
   ApiResponse,
-  User,
   LoginParams,
-  RegisterParams,
   LoginResponse,
   RefreshTokenResponse,
+  RegisterParams,
+  User,
 } from '@/types'
 
-export type { User, LoginParams, RegisterParams, LoginResponse }
+import request from './request'
+
+export type { LoginParams, LoginResponse, RegisterParams, User }
 
 export const login = (data: LoginParams): Promise<ApiResponse<LoginResponse>> => {
   return request.post<ApiResponse<LoginResponse>>('/login', data)

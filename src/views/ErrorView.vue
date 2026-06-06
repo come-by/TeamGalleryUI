@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
 import { addBreadcrumb } from '@/utils/error-report'
 
 const route = useRoute()

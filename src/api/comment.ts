@@ -1,13 +1,14 @@
-import request from './request'
 import type {
   ApiResponse,
-  PaginatedResponse,
   Comment,
-  CreateCommentParams,
   CommentListParams,
+  CreateCommentParams,
+  PaginatedResponse,
 } from '@/types'
 
-export type { Comment, CreateCommentParams, CommentListParams }
+import request from './request'
+
+export type { Comment, CommentListParams, CreateCommentParams }
 
 export const getComments = (
   articleId: number,

@@ -1,7 +1,8 @@
-import { ref, reactive } from 'vue'
 import axios from 'axios'
-import type { ApiResponse } from '@/types'
 import { ElMessage } from 'element-plus'
+import { reactive, ref } from 'vue'
+
+import type { ApiResponse } from '@/types'
 import { reportApiError } from '@/utils/error-report'
 
 export interface UploadFileItem {
@@ -48,6 +49,13 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`
 }
 
+/**
+ * 文件上传组合式函数
+ * 提供文件选择、上传、进度跟踪和取消功能
+ *
+ * @param options - 上传配置选项
+ * @returns 上传状态对象和操作方法
+ */
 export function useUpload(options: UploadOptions = {}) {
   const opts = { ...DEFAULT_OPTIONS, ...options }
   const fileList = reactive<UploadFileItem[]>([])

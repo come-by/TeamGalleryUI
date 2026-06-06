@@ -41,7 +41,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
 import { getFavorites } from '@/api/interaction'
 import type { Article } from '@/types'
 

@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import * as Sentry from '@sentry/vue'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { App } from 'vue'
+
 import { ErrorCategory } from '@/utils/error-report'
 
 // Mock Vue App type

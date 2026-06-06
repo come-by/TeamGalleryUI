@@ -1,6 +1,7 @@
-import request from './request'
 import type { AxiosRequestConfig } from 'axios'
+
 import type { ApiResponse } from './request'
+import request from './request'
 
 export interface UploadResponse {
   url: string

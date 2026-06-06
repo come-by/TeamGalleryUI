@@ -1,15 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { ElMessage } from 'element-plus'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { type ApiError, ErrorCode } from '@/types'
 import {
   getErrorMessage,
   handleApiError,
   handleValidationError,
-  isUnauthorized,
   isForbidden,
   isNotFound,
+  isUnauthorized,
   isValidationError,
 } from '@/utils/error'
-import { ErrorCode, type ApiError } from '@/types'
-import { ElMessage } from 'element-plus'
 
 // Mock ElMessage
 vi.mock('element-plus', () => ({

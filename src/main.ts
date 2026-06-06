@@ -1,17 +1,26 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import './style.css'
+
 import * as _Sentry from '@sentry/vue'
-import App from './App.vue'
-import router from './router'
+import ElementPlus from 'element-plus'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+
 import {
+  clearUserContext,
   initErrorReport,
   reportError,
   setUserContext,
-  clearUserContext,
 } from '@/utils/error-report'
-import './style.css'
+
+import App from './App.vue'
+import router from './router'
+
+// 初始化 MSW Mock（开发环境）
+if (import.meta.env.VITE_ENABLE_MOCK === 'true') {
+  const { worker } = await import('./mocks/browser')
+  worker.start()
+}
 
 const app = createApp(App)
 
@@ -56,4 +65,4 @@ app.config.errorHandler = (error, instance, info) => {
 app.mount('#app')
 
 // 导出用户上下文方法供其他模块使用
-export { setUserContext, clearUserContext }
+export { clearUserContext, setUserContext }

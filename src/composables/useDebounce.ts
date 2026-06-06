@@ -1,10 +1,10 @@
-import { ref, watch, type Ref } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 
 /**
  * 通用防抖 Hook
  *
  * @param value - 需要防抖的响应式值
- * @param delay - 防抖延迟（毫秒），默认 300ms
+ * @param delay - 防抖延迟时间（毫秒），默认 300ms
  * @returns 防抖后的响应式值和是否正在等待
  */
 export function useDebounce<T>(value: Ref<T>, delay: number = 300) {

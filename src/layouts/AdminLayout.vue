@@ -28,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
+import { ChatDotRound, User } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { ChatDotRound, User } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const currentRoute = computed(() => route.path as string)

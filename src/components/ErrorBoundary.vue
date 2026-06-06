@@ -11,8 +11,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onErrorCaptured } from 'vue'
-import { reportError, addBreadcrumb } from '@/utils/error-report'
+import { computed, onErrorCaptured, ref } from 'vue'
+
+import { addBreadcrumb, reportError } from '@/utils/error-report'
 
 const props = defineProps<{
   // 自定义错误消息

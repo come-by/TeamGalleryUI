@@ -1,11 +1,19 @@
-import { ref, computed } from 'vue'
 import type { Ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface UsePaginationOptions {
   page?: number
   pageSize?: number
 }
 
+/**
+ * 分页数据加载组合式函数
+ * 自动管理分页状态、加载状态和数据列表
+ *
+ * @param fetchFn - 数据获取函数，接收 page 和 page_size 参数
+ * @param options - 分页配置选项（初始页码和每页数量）
+ * @returns 分页状态对象和操作方法
+ */
 export function usePagination<T>(
   fetchFn: (params: { page: number; page_size: number }) => Promise<T[]>,
   options: UsePaginationOptions = {}

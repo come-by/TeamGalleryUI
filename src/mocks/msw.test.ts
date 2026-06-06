@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeEach, beforeAll, afterAll, afterEach } from 'vitest'
-import { http, HttpResponse } from 'msw'
-import { server } from '@/mocks/server'
 import axios from 'axios'
+import { http, HttpResponse } from 'msw'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { server } from '@/mocks/server'
 
 // Ensure vi is recognized as used (vi.mock is hoisted)
 void vi

@@ -63,9 +63,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ChatDotRound, Star } from '@element-plus/icons-vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Star, ChatDotRound } from '@element-plus/icons-vue'
+
 import { useArticleStore } from '@/stores/article'
 import { useUserStore } from '@/stores/user'
 import { formatDate } from '@/utils/format'
@@ -148,6 +149,7 @@ const goToArticle = (id: number) => {
   font-size: 14px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

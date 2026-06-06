@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
+
 import AdminLayout from '@/layouts/AdminLayout.vue'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { useUserStore } from '@/stores/user'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -80,12 +81,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'users',
         name: 'AdminUsers',
-        component: () => import('@/views/admin/Users.vue'),
+        component: () => import('@/views/admin/UsersView.vue'),
       },
       {
         path: 'comments',
         name: 'AdminComments',
-        component: () => import('@/views/admin/Comments.vue'),
+        component: () => import('@/views/admin/CommentsView.vue'),
       },
     ],
   },
@@ -111,7 +112,7 @@ declare module 'vue-router' {
 }
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {

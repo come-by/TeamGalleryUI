@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import {
   formatDate,
   formatDateTime,
-  formatRelativeTime,
   formatNumber,
+  formatRelativeTime,
   truncateText,
 } from '@/utils/format'
 

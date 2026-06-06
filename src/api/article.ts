@@ -1,6 +1,7 @@
-import request from './request'
 import type { ApiResponse, PaginatedResponse } from '@/types'
 import type { Article, ArticleListParams } from '@/types'
+
+import request from './request'
 
 export type { Article, ArticleListParams }
 

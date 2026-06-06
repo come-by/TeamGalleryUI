@@ -43,7 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
 import { getUsers } from '@/api/admin'
 import type { User } from '@/types'
 

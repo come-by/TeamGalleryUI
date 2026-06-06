@@ -1,5 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
+
+import type { ApiError, ApiResponse, PaginatedResponse, User } from '@/types'
 import {
   handleApiError,
   handleValidationError,
@@ -7,7 +9,6 @@ import {
   isValidationError,
 } from '@/utils/error'
 import { reportApiError } from '@/utils/error-report'
-import type { ApiResponse, PaginatedResponse, User, ApiError } from '@/types'
 
 export type { ApiResponse, PaginatedResponse, User }
 
@@ -105,6 +106,7 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response.data
   },
+  // eslint-disable-next-line complexity
   async (error) => {
     if (axios.isCancel(error)) {
       return Promise.reject(error)

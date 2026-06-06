@@ -1,13 +1,14 @@
-import { ref, type Ref } from 'vue'
+import { type Ref, ref } from 'vue'
+
+import type { ApiError } from '@/types'
 import {
   handleApiError as handleApiErrorUtil,
-  isUnauthorized,
   isForbidden,
   isNotFound,
+  isUnauthorized,
   isValidationError,
 } from '@/utils/error'
-import { reportError, addBreadcrumb } from '@/utils/error-report'
-import type { ApiError } from '@/types'
+import { addBreadcrumb, reportError } from '@/utils/error-report'
 
 export interface ErrorState {
   error: Ref<Error | null>
@@ -19,6 +20,8 @@ export interface ErrorState {
 /**
  * 错误处理组合式函数
  * 提供统一的错误状态管理和展示
+ *
+ * @returns 错误状态对象和管理方法
  */
 export const useErrorHandler = (): ErrorState & {
   setError: (error: unknown, context?: Record<string, unknown>) => void
@@ -103,6 +106,9 @@ export const useErrorHandler = (): ErrorState & {
 /**
  * 异步操作错误处理
  * 自动管理 loading 和 error 状态
+ *
+ * @param asyncFn - 需要执行的异步函数
+ * @returns 包含 data、loading、error 状态和 execute 方法的对象
  */
 export const useAsyncError = <T>(
   asyncFn: () => Promise<T>
