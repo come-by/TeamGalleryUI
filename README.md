@@ -115,22 +115,14 @@ src/
 
 代码推送到 `main`/`master` 分支后触发 GitHub Actions 自动执行：
 
-| 步骤 | 说明 | Node.js 版本 |
-|------|------|-------------|
-| Type check | TypeScript 类型检查 | 18 / 20（矩阵） |
-| Style lint | Stylelint 样式检查 | 18 / 20 |
-| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建 | 18 / 20 |
+| 步骤 | 说明 | 触发条件 |
+|------|------|---------|
+| Type check | TypeScript 类型检查（Node 18/20 矩阵） | 所有推送到 main/master |
+| Style lint | Stylelint 样式检查（Node 18/20 矩阵） | 所有推送到 main/master |
+| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建（Node 18/20 矩阵） | 所有推送到 main/master |
+| Deploy | 自动部署到 GitHub Pages | 仅 master 分支推送后 |
 
-状态徽章：[![CI](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml/badge.svg)](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml)
-
-### GitHub Pages
-
-项目配置了 GitHub Pages 部署支持：
-- 构建产物输出到 `dist/` 目录
-- 自动处理 SPA 路由（`public/404.html` fallback）
-- 生产环境 `base` 路径为 `/TeamGalleryUI/`
-
-> 部署需在 GitHub 仓库 Settings → Pages 中配置 Source 为 `gh-pages` 分支。
+> **注意**：需在 GitHub 仓库 Settings → Pages 中配置 Source 为 **GitHub Actions**（而非 gh-pages 分支），部署由 `actions/deploy-pages@v4` 自动完成。
 
 ## 环境变量
 
