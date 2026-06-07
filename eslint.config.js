@@ -1,6 +1,7 @@
 import vueTsEslintConfig from '@vue/eslint-config-typescript'
 import pluginJsdoc from 'eslint-plugin-jsdoc'
 import prettierSkipFormatting from 'eslint-plugin-prettier/recommended'
+import pluginSecurity from 'eslint-plugin-security'
 import pluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import pluginVue from 'eslint-plugin-vue'
 
@@ -17,12 +18,14 @@ export default [
   ...vueTsEslintConfig(),
   pluginJsdoc.configs['flat/recommended-typescript'],
   prettierSkipFormatting,
+  pluginSecurity.configs.recommended,
   {
     rules: {
       // Vue 规则
       'vue/multi-word-component-names': ['error', { ignores: ['App'] }],
 
       // TypeScript 规则
+      '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { caughtErrors: 'none', argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
