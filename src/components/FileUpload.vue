@@ -160,7 +160,7 @@ const props = withDefaults(
   }
 )
 
-const _emit = defineEmits<{
+defineEmits<{
   success: [files: Array<{ url: string; filename: string }>]
   error: [file: { name: string; error: string }]
   complete: []

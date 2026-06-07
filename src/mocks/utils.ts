@@ -7,7 +7,7 @@ import type { ApiResponse, PaginatedResponse } from '@/types'
 export const delay = (ms: number = 200) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // 成功响应
-export const successResponse = <T>(data: T): HttpResponse => {
+export const successResponse = <T>(data: T) => {
   const response: ApiResponse<T> = { success: true, data }
   return HttpResponse.json(response)
 }
@@ -18,7 +18,7 @@ export const errorResponse = (
   message: string,
   status: number = 400,
   details?: Array<{ field: string; message: string }>
-): HttpResponse => {
+) => {
   const response: ApiResponse<never> = {
     success: false,
     error: { code, message, details },
@@ -32,7 +32,7 @@ export const paginatedResponse = <T>(
   total: number,
   page: number = 1,
   pageSize: number = 10
-): HttpResponse => {
+) => {
   const data: PaginatedResponse<T> = { list, total, page, page_size: pageSize }
   return successResponse(data)
 }

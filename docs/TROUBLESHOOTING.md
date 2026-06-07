@@ -51,6 +51,14 @@ rm -rf node_modules/.vite
 npm run dev
 ```
 
+### 1.4 常见类型错误
+
+| 错误 | 原因 | 修复 |
+|------|------|------|
+| `'_emit' is declared but its value is never read` | `defineEmits()` 返回值赋给变量但未使用 | 改为 `defineEmits()` 直接调用，不赋值 |
+| `Generic type 'HttpResponse<BodyType>' requires 1 type argument(s)` | MSW v2 `HttpResponse` 需要泛型参数 | 移除显式返回类型注解，让 TypeScript 自动推断 |
+| 组件导入路径报错 | 路径别名未配置或 tsconfig 未更新 | 检查 `@/` 别名在 `tsconfig.json` 中是否配置 |
+
 ## 2. 构建问题
 
 ### 2.1 构建失败

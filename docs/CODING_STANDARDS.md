@@ -76,8 +76,21 @@ import { useAuth } from '@/composables'
 
 - 使用 `<script setup lang="ts">` 语法
 - Props 必须定义类型
-- 事件使用 `defineEmits` 声明
+- 事件使用 `defineEmits` 声明（不赋值给变量，直接调用）
 - 样式必须使用 `scoped`
+
+```vue
+<script setup lang="ts">
+// 正确：直接调用 defineEmits，不赋给变量
+defineEmits<{
+  submit: [data: FormData]
+  cancel: []
+}>()
+
+// 错误：赋给未使用的变量
+// const _emit = defineEmits<{ submit: [data: FormData] }>()
+</script>
+```
 
 ### 2.4 JSDoc 注释
 

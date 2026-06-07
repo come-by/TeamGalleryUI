@@ -1,6 +1,8 @@
 # TeamGallery UI
 
-企业级团队协作平台前端项目，基于 Vue 3 + TypeScript + Vite 构建。
+[![CI](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml/badge.svg)](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml)
+
+团队协作平台前端项目，基于 Vue 3 + TypeScript + Vite 构建。
 
 ## 快速开始
 
@@ -109,7 +111,26 @@ src/
 
 提交前自动检查（lint-staged），推送前运行 pre-push hook。
 
-CI 流程包含：类型检查、样式检查、lint 检查、测试、构建。
+### CI/CD 流程
+
+代码推送到 `main`/`master` 分支后触发 GitHub Actions 自动执行：
+
+| 步骤 | 说明 | Node.js 版本 |
+|------|------|-------------|
+| Type check | TypeScript 类型检查 | 18 / 20（矩阵） |
+| Style lint | Stylelint 样式检查 | 18 / 20 |
+| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建 | 18 / 20 |
+
+状态徽章：[![CI](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml/badge.svg)](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml)
+
+### GitHub Pages
+
+项目配置了 GitHub Pages 部署支持：
+- 构建产物输出到 `dist/` 目录
+- 自动处理 SPA 路由（`public/404.html` fallback）
+- 生产环境 `base` 路径为 `/TeamGalleryUI/`
+
+> 部署需在 GitHub 仓库 Settings → Pages 中配置 Source 为 `gh-pages` 分支。
 
 ## 环境变量
 
@@ -136,7 +157,7 @@ npm run build
 ## 安全说明
 
 - 所有 `v-html` 内容已使用 `DOMPurify` 清洗，防止 XSS
-- Token 存储使用 `localStorage`（前端项目标准做法）
+- Token 存储使用 `sessionStorage`（页面关闭后自动清除安全性更高）
 - 后续可升级为 httpOnly Cookie（需后端配合，详见代码规范）
 
 ## License
