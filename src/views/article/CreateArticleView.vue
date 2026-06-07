@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'CreateArticleView' })
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'

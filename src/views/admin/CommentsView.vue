@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'CommentsView' })
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
 

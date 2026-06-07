@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ErrorBoundary' })
 import { computed, onErrorCaptured, ref } from 'vue'
 
 import { addBreadcrumb, reportError } from '@/utils/error-report'
@@ -73,16 +74,16 @@ const reset = () => {
 }
 
 .error-message {
-  color: #666;
+  color: var(--color-text-regular);
   margin-bottom: 16px;
 }
 
 .retry-btn {
   padding: 8px 24px;
-  border: 1px solid #409eff;
+  border: 1px solid var(--color-primary);
   border-radius: 4px;
-  background: #409eff;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-bg-white);
   cursor: pointer;
   transition: opacity 0.2s;
 }

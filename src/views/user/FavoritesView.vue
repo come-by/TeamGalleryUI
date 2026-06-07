@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'FavoritesView' })
 import { onMounted, ref } from 'vue'
 
 import { getFavorites } from '@/api/interaction'

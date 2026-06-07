@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'LikesView' })
 import { onMounted, ref } from 'vue'
 
 import { getLikes } from '@/api/interaction'

@@ -72,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'HomeView' })
 import { ChatDotRound, Star, User } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'

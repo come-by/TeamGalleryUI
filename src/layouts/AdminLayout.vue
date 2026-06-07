@@ -20,7 +20,11 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <slot />
+          <router-view v-slot="{ Component }">
+            <keep-alive :include="cachedViews">
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -28,12 +32,16 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'AdminLayout' })
 import { ChatDotRound, User } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const currentRoute = computed(() => route.path as string)
+
+// 需要缓存的组件名称列表（与 defineOptions 中的 name 一致）
+const cachedViews = ['UsersView', 'CommentsView']
 </script>
 
 <style scoped>
@@ -46,8 +54,8 @@ const currentRoute = computed(() => route.path as string)
   align-items: center;
   gap: 16px;
   padding: 0 24px;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: var(--color-bg-white);
+  box-shadow: var(--shadow-light);
 }
 
 .logo {
@@ -59,17 +67,17 @@ const currentRoute = computed(() => route.path as string)
 
 .admin-title {
   font-size: 16px;
-  color: #666;
+  color: var(--color-text-regular);
 }
 
 .el-aside {
-  background-color: #fff;
-  border-right: 1px solid #e4e7ed;
+  background-color: var(--color-bg-white);
+  border-right: 1px solid var(--color-border-light);
   min-height: calc(100vh - 60px);
 }
 
 .el-main {
   padding: 24px;
-  background-color: #f5f7fa;
+  background-color: var(--color-bg-page);
 }
 </style>

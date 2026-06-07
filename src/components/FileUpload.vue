@@ -47,7 +47,7 @@
       <div v-for="item in fileList" :key="item.uid" class="file-item" :class="`is-${item.status}`">
         <!-- 文件缩略图 -->
         <div class="file-thumb">
-          <img v-if="item.thumbUrl" :src="item.thumbUrl" :alt="item.name" />
+          <img v-if="item.thumbUrl" :src="item.thumbUrl" :alt="item.name" loading="lazy" />
           <el-icon v-else :size="28"><Document /></el-icon>
         </div>
 
@@ -133,7 +133,8 @@
 </template>
 
 <script setup lang="ts">
-import { Document, UploadFilled } from '@element-plus/icons-vue'
+defineOptions({ name: 'FileUpload' })
+import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 
 import { type UploadOptions, useUpload } from '@/composables/useUpload'
@@ -277,13 +278,13 @@ function clearAll() {
   text-align: center;
   cursor: pointer;
   transition: all 0.3s;
-  background: #fafafa;
+  background: var(--color-bg-light);
 }
 
 .upload-dropzone:hover,
 .upload-dropzone.is-dragover {
-  border-color: #409eff;
-  background: #ecf5ff;
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 
 .upload-dropzone.is-disabled {

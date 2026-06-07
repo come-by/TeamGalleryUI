@@ -5,7 +5,11 @@
         <AppHeader />
       </el-header>
       <el-main>
-        <slot />
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="cachedViews">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </el-main>
       <el-footer>
         <p>TeamGallery &copy; 2026</p>
@@ -15,7 +19,11 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'DefaultLayout' })
 import AppHeader from '@/components/layout/AppHeader.vue'
+
+// 需要缓存的组件名称列表（与 defineOptions 中的 name 一致）
+const cachedViews = ['ArticleListView', 'SearchView', 'FavoritesView', 'LikesView']
 </script>
 
 <style scoped>
@@ -40,7 +48,7 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 
 .el-footer {
   text-align: center;
-  color: #999;
+  color: var(--color-text-secondary);
   font-size: 12px;
   padding: 16px;
 }

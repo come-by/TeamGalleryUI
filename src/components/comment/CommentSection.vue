@@ -104,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'CommentSection' })
 import { Star } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -266,7 +267,7 @@ const isOwner = (comment: Comment) => {
 
 .comment-item {
   padding: 16px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-lighter);
 }
 
 .comment-header {
@@ -278,11 +279,11 @@ const isOwner = (comment: Comment) => {
 
 .username {
   font-weight: bold;
-  color: #409eff;
+  color: var(--color-primary);
 }
 
 .time {
-  color: #999;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
@@ -306,7 +307,7 @@ const isOwner = (comment: Comment) => {
 .replies {
   margin-top: 12px;
   padding-left: 20px;
-  border-left: 2px solid #eee;
+  border-left: 2px solid var(--color-border-lighter);
 }
 
 .reply-item {

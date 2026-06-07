@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowDown } from '@element-plus/icons-vue'
+defineOptions({ name: 'AppHeader' })
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -105,8 +105,8 @@ const handleCommand = (command: DropdownCommand) => {
   align-items: center;
   height: 60px;
   padding: 0 24px;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: var(--color-bg-white);
+  box-shadow: var(--shadow-light);
 }
 
 .nav-left,
@@ -125,7 +125,7 @@ const handleCommand = (command: DropdownCommand) => {
 
 .nav-link {
   text-decoration: none;
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 14px;
 }
 
@@ -148,6 +148,6 @@ const handleCommand = (command: DropdownCommand) => {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #333;
+  color: var(--color-text-primary);
 }
 </style>

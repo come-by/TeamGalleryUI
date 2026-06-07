@@ -43,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'UsersView' })
 import { onMounted, ref } from 'vue'
 
 import { getUsers } from '@/api/admin'

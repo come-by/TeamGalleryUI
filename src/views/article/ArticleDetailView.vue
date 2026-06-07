@@ -56,6 +56,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ArticleDetailView' })
 import { Calendar, ChatDotRound, Collection, Star, User } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
@@ -167,8 +168,10 @@ const handleDelete = async () => {
   }
 }
 
+import { sanitizeHtml } from '@/utils/sanitize'
+
 const renderContent = (content: string) => {
-  return content
+  return sanitizeHtml(content)
 }
 </script>
 

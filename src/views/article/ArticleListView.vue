@@ -25,29 +25,31 @@
         <el-empty description="暂无文章" />
       </div>
       <div v-else class="article-list">
-        <el-card
-          v-for="article in articles"
-          :key="article.id"
-          class="article-item"
-          shadow="hover"
-          @click="goToArticle(article.id)"
+        <RecycleScroller
+          class="scroller"
+          :items="articles"
+          :item-size="120"
+          key-field="id"
+          v-slot="{ item: article }"
         >
-          <h3>{{ article.title }}</h3>
-          <p class="summary">{{ article.summary || '暂无摘要' }}</p>
-          <div class="meta">
-            <span>作者: {{ article.user?.nickname || article.user?.username || '未知' }}</span>
-            <span
-              ><el-icon><view /></el-icon> {{ article.view_count }}</span
-            >
-            <span
-              ><el-icon><star /></el-icon> {{ article.like_count }}</span
-            >
-            <span
-              ><el-icon><chat-dot-round /></el-icon> {{ article.comment_count }}</span
-            >
-            <span>{{ formatDate(article.published_at || article.created_at) }}</span>
-          </div>
-        </el-card>
+          <el-card class="article-item" shadow="hover" @click="goToArticle(article.id)">
+            <h3>{{ article.title }}</h3>
+            <p class="summary">{{ article.summary || '暂无摘要' }}</p>
+            <div class="meta">
+              <span>作者: {{ article.user?.nickname || article.user?.username || '未知' }}</span>
+              <span
+                ><el-icon><view /></el-icon> {{ article.view_count }}</span
+              >
+              <span
+                ><el-icon><star /></el-icon> {{ article.like_count }}</span
+              >
+              <span
+                ><el-icon><chat-dot-round /></el-icon> {{ article.comment_count }}</span
+              >
+              <span>{{ formatDate(article.published_at || article.created_at) }}</span>
+            </div>
+          </el-card>
+        </RecycleScroller>
       </div>
       <div class="pagination">
         <el-pagination
@@ -63,6 +65,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ArticleListView' })
 import { ChatDotRound, Star } from '@element-plus/icons-vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -126,6 +129,14 @@ const goToArticle = (id: number) => {
 .actions {
   display: flex;
   align-items: center;
+}
+
+.article-list {
+  height: 600px;
+}
+
+.scroller {
+  height: 100%;
 }
 
 .article-item {

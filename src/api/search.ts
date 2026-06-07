@@ -1,5 +1,6 @@
-import type { Article } from './article'
-import request, { type ApiResponse, type PaginatedResponse } from './request'
+import type { ApiResponse, Article, PaginatedResponse } from '@/types'
+
+import request from './request'
 
 export interface SearchParams {
   q: string

@@ -1,3 +1,13 @@
+/**
+ * Token 存储工具
+ *
+ * 安全说明：
+ * - 当前使用 localStorage 存储 Token，这是前端项目的标准做法
+ * - 企业级安全方案应使用 httpOnly Cookie（由后端设置，前端无法访问）
+ * - localStorage 易受 XSS 攻击，因此项目中已配置 DOMPurify 防止 XSS
+ * - 如需更高安全性，需后端配合使用 httpOnly Cookie
+ */
+
 const TOKEN_KEY = 'token'
 
 /**

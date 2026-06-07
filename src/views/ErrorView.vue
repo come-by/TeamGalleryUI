@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ErrorView' })
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 

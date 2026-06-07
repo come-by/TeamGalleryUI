@@ -1,10 +1,13 @@
 import 'element-plus/dist/index.css'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import './assets/styles/variables.css'
 import './style.css'
 
 import * as _Sentry from '@sentry/vue'
 import ElementPlus from 'element-plus'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+import VueVirtualScroller from 'vue-virtual-scroller'
 
 import {
   clearUserContext,
@@ -52,6 +55,7 @@ window.addEventListener('error', (event) => {
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.use(VueVirtualScroller)
 
 // Vue 组件错误处理
 app.config.errorHandler = (error, instance, info) => {

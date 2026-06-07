@@ -41,11 +41,13 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'SearchView' })
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { searchArticles } from '@/api/search'
 import type { Article } from '@/types'
+import { sanitizeHtml } from '@/utils/sanitize'
 
 const route = useRoute()
 const articles = ref<Article[]>([])
@@ -86,15 +88,17 @@ const handlePageChange = (page: number) => {
 
 const highlightKeyword = (text: string): string => {
   if (!keyword.value || !text) return text
-  const regex = new RegExp(`(${keyword.value})`, 'gi')
-  return text.replace(regex, '<span class="highlight">$1</span>')
+  const escaped = keyword.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(${escaped})`, 'gi')
+  const highlighted = text.replace(regex, '<span class="highlight">$1</span>')
+  return sanitizeHtml(highlighted)
 }
 </script>
 
 <style scoped>
 .search-page h2 {
   font-size: 18px;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .article-item {
@@ -104,11 +108,11 @@ const highlightKeyword = (text: string): string => {
 
 .article-item h3 {
   margin-bottom: 8px;
-  color: #409eff;
+  color: var(--color-primary);
 }
 
 .summary {
-  color: #666;
+  color: var(--color-text-regular);
   margin-bottom: 12px;
   font-size: 14px;
 }
@@ -121,7 +125,7 @@ const highlightKeyword = (text: string): string => {
 .meta {
   display: flex;
   gap: 16px;
-  color: #999;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 

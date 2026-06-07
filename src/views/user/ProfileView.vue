@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'ProfileView' })
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
