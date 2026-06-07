@@ -8,7 +8,7 @@
 
 ### 环境要求
 
-- Node.js >= 18
+- Node.js >= 20
 - npm >= 9
 
 ### 安装与启动
@@ -117,9 +117,9 @@ src/
 
 | 步骤 | 说明 | 触发条件 |
 |------|------|---------|
-| Type check | TypeScript 类型检查（Node 18/20 矩阵） | 所有推送到 main/master |
-| Style lint | Stylelint 样式检查（Node 18/20 矩阵） | 所有推送到 main/master |
-| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建（Node 18/20 矩阵） | 所有推送到 main/master |
+| Type check | TypeScript 类型检查 | 所有推送到 main/master |
+| Style lint | Stylelint 样式检查 | 所有推送到 main/master |
+| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建 | 所有推送到 main/master |
 | Deploy | 自动部署到 GitHub Pages | 仅 master 分支推送后 |
 
 > **注意**：需在 GitHub 仓库 Settings → Pages 中配置 Source 为 **GitHub Actions**（而非 gh-pages 分支），部署由 `actions/deploy-pages@v4` 自动完成。
