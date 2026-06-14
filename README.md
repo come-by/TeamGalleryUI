@@ -1,66 +1,86 @@
 # TeamGallery UI
 
 [![CI](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml/badge.svg)](https://github.com/come-by/TeamGalleryUI/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-团队协作平台前端项目，基于 Vue 3 + TypeScript + Vite 构建。
+团队协作平台前端项目，基于 **Vue 3 + TypeScript + Vite** 构建，提供文章浏览、评论互动、用户管理、全文搜索等功能。
+
+## 功能特性
+
+- ✅ 用户系统 — 注册、登录、Token 自动管理
+- ✅ 文章浏览 — 列表分页、详情渲染、Markdown 展示
+- ✅ 评论互动 — 嵌套回复、点赞举报、评论统计
+- ✅ 文章互动 — 点赞收藏、状态同步
+- ✅ 全文搜索 — 关键词搜索、搜索建议
+- ✅ 文件上传 — 图片上传、进度显示
+- ✅ 管理后台 — 用户管理、评论审核
+
+## 技术栈
+
+| 组件 | 技术 |
+|------|------|
+| 框架 | [Vue 3](https://vuejs.org/) + TypeScript |
+| 构建 | [Vite](https://vitejs.dev/) |
+| 状态管理 | [Pinia](https://pinia.vuejs.org/) |
+| 路由 | [Vue Router](https://router.vuejs.org/) |
+| UI 组件 | [Element Plus](https://element-plus.org/) |
+| HTTP | [Axios](https://axios-http.com/) |
+| 测试 | [Vitest](https://vitest.dev/) |
+| 错误监控 | [Sentry](https://sentry.io/) |
 
 ## 快速开始
 
 ### 环境要求
 
-- Node.js >= 20
-- npm >= 9
+| 工具 | 版本 | 说明 |
+|------|------|------|
+| Node.js | >= 20 | 从 [nodejs.org](https://nodejs.org/) 安装 |
+| npm | >= 9 | 随 Node.js 一起安装 |
 
-### 安装与启动
+### 安装与运行
 
 ```bash
-# 安装依赖
+# 1. 克隆仓库
+git clone <repo-url>
+cd TeamGalleryUI
+
+# 2. 安装依赖
 npm install
 
-# 复制环境变量
+# 3. 复制环境变量
 cp .env.example .env.development
 
-# 启动开发服务器
+# 4. 启动开发服务器
 npm run dev
 ```
 
 访问 `http://localhost:5173`
 
-## 项目文档
+## 文档索引
 
 | 文档 | 说明 |
 |------|------|
-| [代码规范](./docs/CODING_STANDARDS.md) | 开发规范、工具配置、最佳实践 |
-| [架构文档](./docs/ARCHITECTURE.md) | 技术栈、目录结构、架构设计 |
-| [接口文档](./docs/API_DOCUMENTATION.md) | API 接口定义、数据模型 |
-| [部署文档](./docs/DEPLOYMENT.md) | 构建配置、部署方式、监控 |
-| [测试指南](./docs/TESTING.md) | 测试编写规范、示例 |
-| [安全策略](./docs/SECURITY.md) | 安全措施、最佳实践 |
-| [常见问题](./docs/TROUBLESHOOTING.md) | 问题排查、解决方案 |
-| [开发路线图](./docs/ROADMAP.md) | 任务规划、优先级 |
-
-## 技术栈
-
-| 类别 | 技术 |
-|------|------|
-| 框架 | Vue 3 + TypeScript |
-| 构建 | Vite |
-| 状态管理 | Pinia |
-| 路由 | Vue Router |
-| UI 组件 | Element Plus |
-| HTTP | Axios |
-| 测试 | Vitest |
-| 错误监控 | Sentry |
+| [架构设计](docs/ARCHITECTURE.md) | 技术栈、目录结构、架构分层、数据流 |
+| [API 参考](docs/API.md) | API 接口定义、数据模型 |
+| [开发指南](docs/DEVELOPMENT.md) | 环境搭建、启动调试、新增功能流程 |
+| [代码规范](docs/CODING_STANDARDS.md) | 工具链配置、代码风格、提交规范 |
+| [测试指南](docs/TESTING.md) | 测试框架、Mock 策略、覆盖率 |
+| [安全策略](docs/SECURITY.md) | XSS 防护、Token 安全、依赖安全 |
+| [部署运维](docs/DEPLOYMENT.md) | 构建配置、Nginx、Docker、CI/CD |
+| [常见问题](docs/TROUBLESHOOTING.md) | 环境/构建/运行时问题排查 |
+| [更新日志](docs/CHANGELOG.md) | 版本变更记录 |
+| [开发路线图](docs/ROADMAP.md) | 任务规划、优先级 |
 
 ## 项目结构
 
 ```
 src/
-├── api/              # API 请求层
-├── assets/           # 静态资源
+├── api/              # API 请求层（Axios 封装）
+├── assets/           # 静态资源（样式、图片）
 ├── components/       # 公共组件
-├── composables/      # 组合式函数
+├── composables/      # 组合式函数（业务逻辑）
 ├── layouts/          # 布局组件
+├── mocks/            # Mock 数据（MSW）
 ├── router/           # 路由配置
 ├── stores/           # Pinia 状态管理
 ├── types/            # TypeScript 类型定义
@@ -68,89 +88,25 @@ src/
 └── views/            # 页面组件
 ```
 
-详见 [架构文档](./docs/ARCHITECTURE.md)
+详见 [架构设计](docs/ARCHITECTURE.md)
 
-## 开发指南
+## 配置
 
-### 常用命令
+环境变量文件 `.env.development`：
 
-| 命令 | 说明 |
-|------|------|
-| `npm run dev` | 启动开发服务器 |
-| `npm run build` | 构建生产版本 |
-| `npm run preview` | 预览生产构建 |
-| `npm run lint` | ESLint 检查并修复 |
-| `npm run lint:check` | ESLint 仅检查 |
-| `npm run lint:style` | Stylelint 检查并修复 |
-| `npm run format` | Prettier 格式化 |
-| `npm run test` | 运行测试（监听模式） |
-| `npm run test:run` | 运行测试（一次） |
-| `npm run test:coverage` | 生成覆盖率报告 |
-| `npm run changelog` | 生成 CHANGELOG |
-
-### 提交规范
-
-使用 [Conventional Commits](https://www.conventionalcommits.org/) 规范：
-
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+VITE_APP_TITLE=TeamGallery
 ```
-<type>: <subject>
-```
-
-| type | 说明 |
-|------|------|
-| `feat` | 新功能 |
-| `fix` | 修复 bug |
-| `docs` | 文档变更 |
-| `style` | 代码格式 |
-| `refactor` | 重构 |
-| `perf` | 性能优化 |
-| `test` | 测试 |
-| `chore` | 其他修改 |
-
-### 代码检查
-
-提交前自动检查（lint-staged），推送前运行 pre-push hook。
-
-### CI/CD 流程
-
-代码推送到 `main`/`master` 分支后触发 GitHub Actions 自动执行：
-
-| 步骤 | 说明 | 触发条件 |
-|------|------|---------|
-| Type check | TypeScript 类型检查 | 所有推送到 main/master |
-| Style lint | Stylelint 样式检查 | 所有推送到 main/master |
-| CI check | ESLint + Prettier + 测试 + 覆盖率 + 构建 | 所有推送到 main/master |
-| Deploy | 自动部署到 GitHub Pages | 仅 master 分支推送后 |
-
-> **注意**：需在 GitHub 仓库 Settings → Pages 中配置 Source 为 **GitHub Actions**（而非 gh-pages 分支），部署由 `actions/deploy-pages@v4` 自动完成。
-
-## 环境变量
 
 | 变量 | 说明 | 默认值 |
 |------|------|--------|
 | `VITE_API_BASE_URL` | 后端 API 地址 | `http://localhost:8080/api` |
 | `VITE_APP_TITLE` | 应用标题 | `TeamGallery` |
 
-## 部署
+## 相关项目
 
-详见 [部署文档](./docs/DEPLOYMENT.md)
-
-### 快速部署
-
-```bash
-# 构建
-npm run build
-
-# 部署 dist/ 目录到服务器
-```
-
-支持 Nginx、Docker、Vercel、Netlify 等部署方式。
-
-## 安全说明
-
-- 所有 `v-html` 内容已使用 `DOMPurify` 清洗，防止 XSS
-- Token 存储使用 `sessionStorage`（页面关闭后自动清除安全性更高）
-- 后续可升级为 httpOnly Cookie（需后端配合，详见代码规范）
+- [TeamGalleryGo](https://github.com/come-by/TeamGalleryGo) — 后端项目（Go + Hertz）
 
 ## License
 
