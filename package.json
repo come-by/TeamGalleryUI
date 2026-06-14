@@ -23,7 +23,8 @@
     "ci": "npm run lint:check && npm run format:check && npm run test:run && npm run build",
     "ci:coverage": "npm run lint:check && npm run format:check && npm run test:coverage && npm run build",
     "prepare": "husky",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "gen:api": "tsx scripts/gen-api.ts"
   },
   "dependencies": {
     "@sentry/browser": "^10.55.0",
@@ -59,11 +60,15 @@
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.7",
     "msw": "^2.14.6",
+    "openapi-typescript": "^7.13.0",
+    "postcss-html": "^1.8.1",
     "prettier": "^3.8.3",
     "stylelint": "^17.13.0",
     "stylelint-config-recommended-vue": "^1.6.1",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-prettier": "^5.0.3",
+    "swagger2openapi": "^7.0.8",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vite": "^6.0.5",
     "vitest": "^4.1.8",

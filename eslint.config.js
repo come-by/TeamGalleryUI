@@ -99,4 +99,14 @@ export default [
       'simple-import-sort': pluginSimpleImportSort,
     },
   },
+  // Test/Mock 文件禁用安全规则（误报，不涉及真实安全风险）
+  {
+    name: 'app/test-mock-security-override',
+    files: ['**/mocks/**', '**/*.test.*', '**/test/**'],
+    rules: {
+      'security/detect-object-injection': 'off',
+      'security/detect-possible-timing-attacks': 'off',
+      'security/detect-non-literal-regexp': 'off',
+    },
+  },
 ]

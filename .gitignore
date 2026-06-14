@@ -48,6 +48,9 @@ Desktop.ini
 
 # 测试覆盖率报告
 coverage/
+
+# 自动生成的 API 类型（可重新生成）
+src/types/generated/openapi3.json
 *.lcov
 .nyc_output/
 vitest.config.ts.timestamp-*
