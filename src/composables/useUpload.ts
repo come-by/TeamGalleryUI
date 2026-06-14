@@ -46,6 +46,8 @@ function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 B'
   const units = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  // i computed from Math.log, safe array access
+  // eslint-disable-next-line security/detect-object-injection
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`
 }
 
@@ -126,6 +128,8 @@ export function useUpload(options: UploadOptions = {}) {
     }
     const index = fileList.findIndex((f) => f.uid === uid)
     if (index !== -1) {
+      // index from findIndex on known array, safe access
+      // eslint-disable-next-line security/detect-object-injection
       const item = fileList[index]
       if (item.thumbUrl) URL.revokeObjectURL(item.thumbUrl)
       fileList.splice(index, 1)

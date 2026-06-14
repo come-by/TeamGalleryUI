@@ -90,6 +90,8 @@ const filterSensitiveData = (event: Sentry.ErrorEvent): Sentry.ErrorEvent => {
   if (headers) {
     Object.keys(headers).forEach((key) => {
       if (SENSITIVE_FIELDS.some((field) => key.toLowerCase().includes(field))) {
+        // Iterating known Object.keys, safe bracket access
+        // eslint-disable-next-line security/detect-object-injection
         headers[key] = '[Filtered]'
       }
     })
@@ -102,6 +104,8 @@ const filterSensitiveData = (event: Sentry.ErrorEvent): Sentry.ErrorEvent => {
       if (data) {
         Object.keys(data).forEach((key) => {
           if (SENSITIVE_FIELDS.some((field) => key.toLowerCase().includes(field))) {
+            // Iterating known Object.keys, safe bracket access
+            // eslint-disable-next-line security/detect-object-injection
             data[key] = '[Filtered]'
           }
         })

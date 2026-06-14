@@ -12,10 +12,8 @@ import { reportApiError } from '@/utils/error-report'
 
 export type { ApiResponse, PaginatedResponse, User }
 
-const API_VERSION = 'v1'
-
 const axiosInstance = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL || '/api'}/${API_VERSION}`,
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 10000,
 })
 
@@ -64,7 +62,7 @@ const refreshAccessToken = async (): Promise<string> => {
   }
 
   const response = await axios.post(
-    `${import.meta.env.VITE_API_BASE_URL || '/api'}/${API_VERSION}/token/refresh`,
+    `${import.meta.env.VITE_API_BASE_URL || '/api'}/token/refresh`,
     {},
     {
       headers: {

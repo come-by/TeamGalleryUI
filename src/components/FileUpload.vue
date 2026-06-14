@@ -207,6 +207,8 @@ const maxSizeHint = computed(() => {
     size /= 1024
     i++
   }
+  // i bounded by while loop and units.length, safe array access
+  // eslint-disable-next-line security/detect-object-injection
   return `${size.toFixed(0)} ${units[i]}`
 })
 
@@ -221,6 +223,8 @@ function formatSize(bytes: number): string {
   if (bytes === 0) return '0 B'
   const units = ['B', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  // i computed from Math.log, safe array access
+  // eslint-disable-next-line security/detect-object-injection
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`
 }
 

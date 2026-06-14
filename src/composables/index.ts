@@ -1,3 +1,5 @@
 export * from './useAuth'
+export * from './useMilestone'
 export * from './usePagination'
+export * from './useProject'
 export * from './useSearch'

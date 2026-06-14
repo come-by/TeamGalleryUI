@@ -71,10 +71,28 @@ export const registerHandler = http.post('/api/v1/register', async ({ request })
     return errorResponse('USER_EXISTS', '邮箱已存在', 409)
   }
 
-  // 验证密码长度
-  if (!password || (password as string).length < 6) {
-    return errorResponse('VALIDATION_FAILED', '密码长度不能少于6位', 400, [
-      { field: 'password', message: '密码长度不能少于6位' },
+  // 验证密码强度
+  if (!password || (password as string).length < 8) {
+    return errorResponse('VALIDATION_FAILED', '密码长度不能少于8位', 400, [
+      { field: 'password', message: '密码长度不能少于8位' },
+    ])
+  }
+
+  // 验证密码复杂度
+  const pwd = password as string
+  if (!/[A-Z]/.test(pwd)) {
+    return errorResponse('VALIDATION_FAILED', '密码必须包含至少一个大写字母', 400, [
+      { field: 'password', message: '密码必须包含至少一个大写字母' },
+    ])
+  }
+  if (!/[a-z]/.test(pwd)) {
+    return errorResponse('VALIDATION_FAILED', '密码必须包含至少一个小写字母', 400, [
+      { field: 'password', message: '密码必须包含至少一个小写字母' },
+    ])
+  }
+  if (!/[0-9]/.test(pwd)) {
+    return errorResponse('VALIDATION_FAILED', '密码必须包含至少一个数字', 400, [
+      { field: 'password', message: '密码必须包含至少一个数字' },
     ])
   }
 

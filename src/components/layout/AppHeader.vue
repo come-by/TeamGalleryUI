@@ -3,6 +3,7 @@
     <div class="nav-left">
       <router-link to="/" class="logo">TeamGallery</router-link>
       <router-link to="/articles" class="nav-link">文章</router-link>
+      <router-link to="/projects" class="nav-link">项目</router-link>
     </div>
     <div class="nav-center">
       <el-select
