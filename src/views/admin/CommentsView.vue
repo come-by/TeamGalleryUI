@@ -70,8 +70,8 @@ const fetchComments = async () => {
       page_size: pageSize.value,
     })
     if (res.success) {
-      comments.value = res.data?.list || []
-      total.value = res.data?.total || 0
+      comments.value = res.data?.data || []
+      total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
     console.error('获取待审核评论失败:', error)

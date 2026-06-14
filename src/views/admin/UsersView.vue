@@ -67,8 +67,8 @@ const fetchUsers = async () => {
       page_size: pageSize.value,
     })
     if (res.success) {
-      users.value = res.data?.list || []
-      total.value = res.data?.total || 0
+      users.value = res.data?.data || []
+      total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
     console.error('获取用户列表失败:', error)

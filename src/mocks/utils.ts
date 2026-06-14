@@ -33,7 +33,11 @@ export const paginatedResponse = <T>(
   page: number = 1,
   pageSize: number = 10
 ) => {
-  const data: PaginatedResponse<T> = { list, total, page, page_size: pageSize }
+  const totalPages = Math.ceil(total / pageSize)
+  const data: PaginatedResponse<T> = {
+    data: list,
+    pagination: { total, page, page_size: pageSize, total_pages: totalPages },
+  }
   return successResponse(data)
 }
 

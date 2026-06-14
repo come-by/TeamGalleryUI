@@ -20,6 +20,10 @@ export enum ErrorCode {
   FILE_NOT_FOUND = 'FILE_NOT_FOUND',
   FILE_TOO_LARGE = 'FILE_TOO_LARGE',
   FILE_TYPE_NOT_ALLOWED = 'FILE_TYPE_NOT_ALLOWED',
+  MILESTONE_NOT_FOUND = 'MILESTONE_NOT_FOUND',
+  MILESTONE_PERMISSION = 'MILESTONE_PERMISSION',
+  MILESTONE_LIMIT_REACHED = 'MILESTONE_LIMIT_REACHED',
+  MILESTONE_INVALID_STATUS = 'MILESTONE_INVALID_STATUS',
   DATABASE_ERROR = 'DATABASE_ERROR',
 }
 
@@ -41,10 +45,13 @@ export interface ApiResponse<T = unknown> {
 }
 
 export interface PaginatedResponse<T> {
-  list: T[]
-  total: number
-  page: number
-  page_size: number
+  data: T[]
+  pagination: {
+    total: number
+    page: number
+    page_size: number
+    total_pages: number
+  }
 }
 
 export interface RefreshTokenResponse {

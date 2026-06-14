@@ -65,8 +65,8 @@ const fetchLikes = async () => {
       page_size: pageSize.value,
     })
     if (res.success) {
-      articles.value = res.data?.list || []
-      total.value = res.data?.total || 0
+      articles.value = res.data?.data || []
+      total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
     console.error('获取点赞列表失败:', error)

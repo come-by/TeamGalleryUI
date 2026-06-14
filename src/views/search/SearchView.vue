@@ -71,8 +71,8 @@ const fetchResults = async () => {
       highlight: true,
     })
     if (res.success) {
-      articles.value = res.data?.list || []
-      total.value = res.data?.total || 0
+      articles.value = res.data?.data || []
+      total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
     console.error('搜索失败:', error)
@@ -89,6 +89,8 @@ const handlePageChange = (page: number) => {
 const highlightKeyword = (text: string): string => {
   if (!keyword.value || !text) return text
   const escaped = keyword.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  // Input already escaped above, safe to construct regex for text highlighting
+  // eslint-disable-next-line security/detect-non-literal-regexp
   const regex = new RegExp(`(${escaped})`, 'gi')
   const highlighted = text.replace(regex, '<span class="highlight">$1</span>')
   return sanitizeHtml(highlighted)

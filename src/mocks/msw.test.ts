@@ -64,7 +64,7 @@ describe('MSW 集成测试 - 认证模块', () => {
       const response = await axios.post(`${API_BASE}/register`, {
         username: 'newuser',
         email: 'newuser@example.com',
-        password: 'newpass123',
+        password: 'Newpass123',
       })
 
       expect(response.data.success).toBe(true)
@@ -138,11 +138,11 @@ describe('MSW 集成测试 - 文章模块', () => {
       const response = await axios.get(`${API_BASE}/articles`)
 
       expect(response.data.success).toBe(true)
-      expect(response.data.data.list.length).toBeGreaterThan(0)
-      expect(response.data.data.total).toBeGreaterThan(0)
+      expect(response.data.data.data.length).toBeGreaterThan(0)
+      expect(response.data.data.pagination.total).toBeGreaterThan(0)
       // 只返回 published 状态的文章
       expect(
-        response.data.data.list.every((a: { status: string }) => a.status === 'published')
+        response.data.data.data.every((a: { status: string }) => a.status === 'published')
       ).toBe(true)
     })
 
@@ -151,9 +151,9 @@ describe('MSW 集成测试 - 文章模块', () => {
         params: { page: 1, page_size: 1 },
       })
 
-      expect(response.data.data.list.length).toBe(1)
-      expect(response.data.data.page).toBe(1)
-      expect(response.data.data.page_size).toBe(1)
+      expect(response.data.data.data.length).toBe(1)
+      expect(response.data.data.pagination.page).toBe(1)
+      expect(response.data.data.pagination.page_size).toBe(1)
     })
 
     it('应该支持按分类筛选', async () => {
@@ -162,7 +162,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       })
 
       expect(
-        response.data.data.list.every((a: { category: string }) => a.category === '前端')
+        response.data.data.data.every((a: { category: string }) => a.category === '前端')
       ).toBe(true)
     })
 
@@ -171,7 +171,7 @@ describe('MSW 集成测试 - 文章模块', () => {
         params: { tag: 'Vue' },
       })
 
-      expect(response.data.data.list.every((a: { tags: string[] }) => a.tags.includes('Vue'))).toBe(
+      expect(response.data.data.data.every((a: { tags: string[] }) => a.tags.includes('Vue'))).toBe(
         true
       )
     })
@@ -181,7 +181,7 @@ describe('MSW 集成测试 - 文章模块', () => {
         params: { keyword: 'Vue' },
       })
 
-      expect(response.data.data.list.length).toBeGreaterThan(0)
+      expect(response.data.data.data.length).toBeGreaterThan(0)
     })
   })
 
@@ -350,7 +350,7 @@ describe('MSW 集成测试 - 用户模块', () => {
       })
 
       expect(response.data.success).toBe(true)
-      expect(response.data.data.list.length).toBeGreaterThan(0)
+      expect(response.data.data.data.length).toBeGreaterThan(0)
     })
   })
 
@@ -361,7 +361,7 @@ describe('MSW 集成测试 - 用户模块', () => {
       })
 
       expect(response.data.success).toBe(true)
-      expect(response.data.data.list.length).toBeGreaterThan(0)
+      expect(response.data.data.data.length).toBeGreaterThan(0)
     })
   })
 })
@@ -409,8 +409,8 @@ describe('MSW 集成测试 - 搜索模块', () => {
     })
 
     expect(response.data.success).toBe(true)
-    expect(response.data.data.list.length).toBeGreaterThan(0)
-    const titles = response.data.data.list.map((a: { title: string }) => a.title)
+    expect(response.data.data.data.length).toBeGreaterThan(0)
+    const titles = response.data.data.data.map((a: { title: string }) => a.title)
     expect(titles.some((t: string) => t.includes('Vue'))).toBe(true)
   })
 
@@ -420,8 +420,8 @@ describe('MSW 集成测试 - 搜索模块', () => {
     })
 
     expect(response.data.success).toBe(true)
-    expect(response.data.data.list.length).toBe(0)
-    expect(response.data.data.total).toBe(0)
+    expect(response.data.data.data.length).toBe(0)
+    expect(response.data.data.pagination.total).toBe(0)
   })
 
   it('无匹配查询应该返回空结果', async () => {
@@ -430,7 +430,7 @@ describe('MSW 集成测试 - 搜索模块', () => {
     })
 
     expect(response.data.success).toBe(true)
-    expect(response.data.data.list.length).toBe(0)
+    expect(response.data.data.data.length).toBe(0)
   })
 
   it('应该返回搜索建议', async () => {
