@@ -63,6 +63,30 @@ const form = reactive({
   confirmPassword: '',
 })
 
+const validatePassword = (_rule: unknown, value: string, callback: (error?: Error) => void) => {
+  if (!value) {
+    callback(new Error('请输入密码'))
+    return
+  }
+  if (value.length < 8) {
+    callback(new Error('密码长度不能少于8位'))
+    return
+  }
+  if (!/[A-Z]/.test(value)) {
+    callback(new Error('密码必须包含至少一个大写字母'))
+    return
+  }
+  if (!/[a-z]/.test(value)) {
+    callback(new Error('密码必须包含至少一个小写字母'))
+    return
+  }
+  if (!/[0-9]/.test(value)) {
+    callback(new Error('密码必须包含至少一个数字'))
+    return
+  }
+  callback()
+}
+
 const validateConfirmPassword = (
   _rule: unknown,
   value: string,
@@ -81,7 +105,10 @@ const rules = reactive<FormRules<typeof form>>({
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' },
   ],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { validator: validatePassword, trigger: 'blur' },
+  ],
   confirmPassword: [
     { required: true, message: '请再次输入密码', trigger: 'blur' },
     { validator: validateConfirmPassword, trigger: 'blur' },
