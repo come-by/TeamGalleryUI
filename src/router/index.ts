@@ -50,6 +50,29 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true },
       },
       {
+        path: 'projects',
+        name: 'Projects',
+        component: () => import('@/views/project/ProjectListView.vue'),
+        meta: { keepAlive: true },
+      },
+      {
+        path: 'projects/create',
+        name: 'CreateProject',
+        component: () => import('@/views/project/CreateProjectView.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'projects/:id',
+        name: 'ProjectDetail',
+        component: () => import('@/views/project/ProjectDetailView.vue'),
+      },
+      {
+        path: 'projects/:id/edit',
+        name: 'EditProject',
+        component: () => import('@/views/project/EditProjectView.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
         path: 'search',
         name: 'Search',
         component: () => import('@/views/search/SearchView.vue'),
