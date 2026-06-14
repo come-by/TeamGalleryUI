@@ -274,4 +274,147 @@ describe('错误上报工具', () => {
       )
     })
   })
+
+  describe('敏感数据过滤', () => {
+    // Helper: 获取 beforeSend 并转换为便于测试的类型
+    function getBeforeSend(): (event: Record<string, unknown>) => Record<string, unknown> {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (vi.mocked(Sentry.init) as any).mock.calls[0][0].beforeSend as any
+    }
+
+    it('initErrorReport 应该配置 beforeSend 过滤敏感数据', async () => {
+      const { initErrorReport } = await import('@/utils/error-report')
+      const mockApp = createMockApp()
+
+      initErrorReport({
+        dsn: 'https://test@sentry.io/123',
+        environment: 'production',
+        app: mockApp,
+      })
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const initCallArgs = (vi.mocked(Sentry.init) as any).mock.calls[0][0]
+      expect(initCallArgs.beforeSend).toBeDefined()
+      expect(typeof initCallArgs.beforeSend).toBe('function')
+    })
+
+    it('应该过滤 headers 中的敏感字段', async () => {
+      const { initErrorReport } = await import('@/utils/error-report')
+      const mockApp = createMockApp()
+
+      initErrorReport({
+        dsn: 'https://test@sentry.io/123',
+        environment: 'production',
+        app: mockApp,
+      })
+
+      const beforeSend = getBeforeSend()
+
+      const event = {
+        request: {
+          headers: {
+            'content-type': 'application/json',
+            authorization: 'Bearer secret-token',
+            'x-access-token': 'sensitive-value',
+            'accept-language': 'zh-CN',
+          },
+        },
+        breadcrumbs: [],
+      }
+
+      const result = beforeSend(event)
+      const reqHeaders = (result.request as Record<string, unknown>).headers as Record<
+        string,
+        string
+      >
+
+      expect(reqHeaders['authorization']).toBe('[Filtered]')
+      expect(reqHeaders['x-access-token']).toBe('[Filtered]')
+      expect(reqHeaders['content-type']).toBe('application/json')
+      expect(reqHeaders['accept-language']).toBe('zh-CN')
+    })
+
+    it('应该过滤 breadcrumb 中的敏感字段', async () => {
+      const { initErrorReport } = await import('@/utils/error-report')
+      const mockApp = createMockApp()
+
+      initErrorReport({
+        dsn: 'https://test@sentry.io/123',
+        environment: 'production',
+        app: mockApp,
+      })
+
+      const beforeSend = getBeforeSend()
+
+      const event = {
+        request: { headers: {} },
+        breadcrumbs: [
+          {
+            message: 'test',
+            data: {
+              username: 'user1',
+              password: 'secret123',
+              access_token: 'token-abc',
+            },
+          },
+          {
+            message: 'clean',
+            data: {
+              username: 'user2',
+              action: 'click',
+            },
+          },
+        ],
+      }
+
+      const result = beforeSend(event)
+      const crumbs = result.breadcrumbs as Array<{ data?: Record<string, string> }>
+
+      expect(crumbs[0].data!.password).toBe('[Filtered]')
+      expect(crumbs[0].data!.access_token).toBe('[Filtered]')
+      expect(crumbs[0].data!.username).toBe('user1')
+      expect(crumbs[1].data!.username).toBe('user2')
+      expect(crumbs[1].data!.action).toBe('click')
+    })
+
+    it('应该处理无 headers 的事件', async () => {
+      const { initErrorReport } = await import('@/utils/error-report')
+      const mockApp = createMockApp()
+
+      initErrorReport({
+        dsn: 'https://test@sentry.io/123',
+        environment: 'production',
+        app: mockApp,
+      })
+
+      const beforeSend = getBeforeSend()
+
+      const event = { request: {}, breadcrumbs: [] }
+      const result = beforeSend(event)
+
+      expect(result).toBeDefined()
+    })
+
+    it('应该处理无 data 的 breadcrumb', async () => {
+      const { initErrorReport } = await import('@/utils/error-report')
+      const mockApp = createMockApp()
+
+      initErrorReport({
+        dsn: 'https://test@sentry.io/123',
+        environment: 'production',
+        app: mockApp,
+      })
+
+      const beforeSend = getBeforeSend()
+
+      const event = {
+        request: { headers: {} },
+        breadcrumbs: [{ message: 'test', data: undefined }],
+      }
+
+      const result = beforeSend(event)
+      const crumbs = result.breadcrumbs as Array<{ data?: Record<string, string> }>
+      expect(crumbs[0].data).toBeUndefined()
+    })
+  })
 })

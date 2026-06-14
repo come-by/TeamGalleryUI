@@ -189,4 +189,142 @@ describe('useUserStore', () => {
       expect(store.nickname).toBe('testuser')
     })
   })
+
+  describe('注册', () => {
+    it('应该成功注册', async () => {
+      const { register } = await import('@/api/user')
+      vi.mocked(register).mockResolvedValue({
+        success: true,
+        data: { message: '注册成功' },
+      })
+
+      const store = useUserStore()
+      const res = await store.register({
+        username: 'newuser',
+        email: 'new@example.com',
+        password: 'Password123',
+      })
+
+      expect(res.success).toBe(true)
+      expect(register).toHaveBeenCalledWith({
+        username: 'newuser',
+        email: 'new@example.com',
+        password: 'Password123',
+      })
+    })
+
+    it('应该处理注册失败', async () => {
+      const { register } = await import('@/api/user')
+      vi.mocked(register).mockResolvedValue({
+        success: false,
+        error: { code: 'USER_EXISTS', message: '用户名已存在' },
+      })
+
+      const store = useUserStore()
+      const res = await store.register({
+        username: 'existing',
+        email: 'existing@example.com',
+        password: 'Password123',
+      })
+
+      expect(res.success).toBe(false)
+      expect(res.error?.code).toBe('USER_EXISTS')
+    })
+
+    it('应该处理注册异常', async () => {
+      const { register } = await import('@/api/user')
+      vi.mocked(register).mockRejectedValue(new Error('Network error'))
+
+      const store = useUserStore()
+      await expect(
+        store.register({ username: 'test', email: 'test@example.com', password: 'Password123' })
+      ).rejects.toThrow('Network error')
+    })
+  })
+
+  describe('fetchProfile', () => {
+    it('应该成功获取用户资料', async () => {
+      const { getProfile } = await import('@/api/user')
+      vi.mocked(getProfile).mockResolvedValue({
+        success: true,
+        data: {
+          id: 1,
+          username: 'testuser',
+          email: 'test@example.com',
+          nickname: 'Test',
+          role: 'user',
+          status: 'active',
+          created_at: '2024-01-01T00:00:00Z',
+        },
+      })
+
+      const store = useUserStore()
+      store.token = 'valid-token'
+      await store.fetchProfile()
+
+      expect(store.user?.username).toBe('testuser')
+      expect(getProfile).toHaveBeenCalled()
+    })
+
+    it('无 token 时不应该请求', async () => {
+      const store = useUserStore()
+      await store.fetchProfile()
+
+      expect(store.user).toBeNull()
+    })
+
+    it('应该处理获取资料失败', async () => {
+      const { getProfile } = await import('@/api/user')
+      vi.mocked(getProfile).mockResolvedValue({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: '未授权' },
+      })
+
+      const store = useUserStore()
+      store.token = 'expired-token'
+      await store.fetchProfile()
+
+      expect(store.user).toBeNull()
+    })
+
+    it('应该处理获取资料异常', async () => {
+      const { getProfile } = await import('@/api/user')
+      vi.mocked(getProfile).mockRejectedValue(new Error('Network error'))
+
+      const store = useUserStore()
+      store.token = 'valid-token'
+      await store.fetchProfile()
+
+      // 异常不应抛出，静默处理
+      expect(store.user).toBeNull()
+    })
+
+    it('API 返回成功但无 data 时应保留 null', async () => {
+      const { getProfile } = await import('@/api/user')
+      vi.mocked(getProfile).mockResolvedValue({
+        success: true,
+        data: undefined,
+      })
+
+      const store = useUserStore()
+      store.token = 'valid-token'
+      await store.fetchProfile()
+
+      expect(store.user).toBeNull()
+    })
+  })
+
+  describe('login 错误处理', () => {
+    it('应该处理登录异常', async () => {
+      const { login } = await import('@/api/user')
+      vi.mocked(login).mockRejectedValue(new Error('Network error'))
+
+      const store = useUserStore()
+      await expect(store.login({ username: 'test', password: '123456' })).rejects.toThrow(
+        'Network error'
+      )
+      expect(store.token).toBe('')
+      expect(store.isLoggedIn).toBe(false)
+    })
+  })
 })
