@@ -1,3 +1,6 @@
 export * from './constants'
+export * from './error'
+export * from './error-report'
 export * from './format'
+export * from './sanitize'
 export * from './storage'

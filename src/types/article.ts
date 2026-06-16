@@ -5,6 +5,7 @@ export interface Article {
   title: string
   content: string
   summary?: string
+  type: 'article' | 'manual' | 'notification'
   status: 'draft' | 'published' | 'archived'
   user_id: number
   user?: User
@@ -28,6 +29,7 @@ export interface ArticleCreateParams {
   title: string
   content: string
   summary?: string
+  type?: 'article' | 'manual' | 'notification'
   status?: 'draft' | 'published'
   category_id?: number
 }

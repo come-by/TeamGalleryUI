@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar">
     <div class="nav-left">
-      <router-link to="/" class="logo">TeamGallery</router-link>
-      <router-link to="/articles" class="nav-link">文章</router-link>
+      <router-link to="/projects" class="logo">TeamGallery</router-link>
       <router-link to="/projects" class="nav-link">项目</router-link>
+      <router-link to="/manuals" class="nav-link">手册</router-link>
     </div>
     <div class="nav-right">
       <template v-if="!isLoggedIn">
@@ -11,6 +11,16 @@
         <el-button type="primary" size="small" @click="$router.push('/register')"> 注册 </el-button>
       </template>
       <template v-else>
+        <!-- 通知铃铛 -->
+        <div class="notification-bell" @click="handleBellClick">
+          <el-badge
+            :value="notificationStore.unreadCount"
+            :hidden="!notificationStore.hasUnread"
+            :max="99"
+          >
+            <el-icon :size="22"><Bell /></el-icon>
+          </el-badge>
+        </div>
         <el-dropdown @command="handleCommand">
           <span class="user-dropdown">
             <el-avatar :size="28" :src="avatar" class="user-avatar">
@@ -36,14 +46,18 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'AppHeader' })
-import { ArrowDown, UserFilled } from '@element-plus/icons-vue'
+import { ArrowDown, Bell, UserFilled } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { useNotification } from '@/composables/useNotification'
+import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
+const notificationStore = useNotificationStore()
+const { goToNotifications } = useNotification()
 
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 const isAdmin = computed(() => userStore.isAdmin)
@@ -53,8 +67,13 @@ const avatar = computed(() => userStore.avatar)
 onMounted(() => {
   if (userStore.isLoggedIn) {
     userStore.fetchProfile()
+    notificationStore.fetchUnreadCount()
   }
 })
+
+const handleBellClick = () => {
+  goToNotifications()
+}
 
 type DropdownCommand = 'profile' | 'favorites' | 'likes' | 'admin' | 'logout'
 
@@ -101,8 +120,9 @@ const handleCommand = (command: DropdownCommand) => {
 .logo {
   font-size: 20px;
   font-weight: bold;
-  color: #409eff;
+  color: var(--color-primary);
   text-decoration: none;
+  margin-right: 8px;
 }
 
 .nav-link {
@@ -112,6 +132,18 @@ const handleCommand = (command: DropdownCommand) => {
 }
 
 .nav-link:hover {
+  color: #409eff;
+}
+
+.notification-bell {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  color: var(--color-text-primary);
+}
+
+.notification-bell:hover {
   color: #409eff;
 }
 

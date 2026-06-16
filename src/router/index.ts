@@ -11,8 +11,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: 'Home',
-        component: () => import('@/views/home/HomeView.vue'),
+        redirect: '/projects',
       },
       {
         path: 'login',
@@ -70,6 +69,31 @@ const routes: RouteRecordRaw[] = [
         path: 'projects/:id/edit',
         name: 'EditProject',
         component: () => import('@/views/project/EditProjectView.vue'),
+        meta: { requiresAuth: true },
+      },
+      // 操作手册路由（公开）
+      {
+        path: 'manuals',
+        name: 'Manuals',
+        component: () => import('@/views/manual/ManualListView.vue'),
+        meta: { keepAlive: true },
+      },
+      {
+        path: 'manuals/:id',
+        name: 'ManualDetail',
+        component: () => import('@/views/manual/ManualDetailView.vue'),
+      },
+      // 通知路由（需登录）
+      {
+        path: 'notifications',
+        name: 'Notifications',
+        component: () => import('@/views/notification/NotificationListView.vue'),
+        meta: { requiresAuth: true, keepAlive: true },
+      },
+      {
+        path: 'notifications/:id',
+        name: 'NotificationDetail',
+        component: () => import('@/views/notification/NotificationDetailView.vue'),
         meta: { requiresAuth: true },
       },
       {
@@ -158,12 +182,12 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   if (to.meta.guest && userStore.isLoggedIn) {
-    next({ name: 'Home' })
+    next({ name: 'Projects' })
     return
   }
 
   if (to.meta.requiresAdmin && userStore.user?.role !== 'admin') {
-    next({ name: 'Home' })
+    next({ name: 'Projects' })
     return
   }
 
