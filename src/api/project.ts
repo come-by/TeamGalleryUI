@@ -16,7 +16,7 @@ import request from './request'
 export const getProjects = (
   params: ProjectListParams
 ): Promise<ApiResponse<PaginatedResponse<Project>>> => {
-  return request.get('/projects', { params })
+  return request.get('/projects', params)
 }
 
 export const getProject = (id: number): Promise<ApiResponse<Project>> => {

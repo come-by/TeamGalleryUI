@@ -133,8 +133,12 @@ axiosInstance.interceptors.response.use(
       const { status, data } = error.response
       const apiError: ApiError = data?.error || { code: 'UNKNOWN', message: '请求失败' }
 
-      // 401 尝试刷新 token
-      if (isUnauthorized(apiError) && !originalRequest._retry) {
+      // 登录/注册接口的 401 是认证失败，不需要刷新 token
+      const isAuthEndpoint =
+        originalRequest?.url?.endsWith('/login') || originalRequest?.url?.endsWith('/register')
+
+      // 401 尝试刷新 token（跳过登录和注册接口）
+      if (isUnauthorized(apiError) && !originalRequest._retry && !isAuthEndpoint) {
         if (!isRefreshing) {
           isRefreshing = true
           originalRequest._retry = true
@@ -170,7 +174,9 @@ axiosInstance.interceptors.response.use(
 
       if (isValidationError(apiError)) {
         handleValidationError(apiError.details)
-      } else if (!isUnauthorized(apiError)) {
+      } else if (!isUnauthorized(apiError) || isAuthEndpoint) {
+        // 非认证接口的 401 由 token 刷新处理，不显示错误
+        // 认证接口（登录/注册）的 401 需要显示错误
         handleApiError(apiError)
       }
 

@@ -23,7 +23,7 @@ describe('MSW 集成测试 - 认证模块', () => {
     it('应该成功登录并返回 token', async () => {
       const response = await axios.post(`${API_BASE}/login`, {
         username: 'admin',
-        password: 'admin123',
+        password: 'Admin@123',
       })
 
       expect(response.data.success).toBe(true)
@@ -381,7 +381,7 @@ describe('MSW 动态 Handler 测试', () => {
     try {
       await axios.post(`${API_BASE}/login`, {
         username: 'admin',
-        password: 'admin123',
+        password: 'Admin@123',
       })
     } catch (error: unknown) {
       const err = error as { response: { status: number; data: { error: { code: string } } } }
@@ -395,7 +395,7 @@ describe('MSW 动态 Handler 测试', () => {
 
     const response = await axios.post(`${API_BASE}/login`, {
       username: 'admin',
-      password: 'admin123',
+      password: 'Admin@123',
     })
 
     expect(response.data.success).toBe(true)
@@ -462,7 +462,7 @@ describe('MSW 集成测试 - 上传模块', () => {
     // 先登录获取 token
     const loginRes = await axios.post(`${API_BASE}/login`, {
       username: 'admin',
-      password: 'admin123',
+      password: 'Admin@123',
     })
     const token = loginRes.data.data.access_token
     localStorage.setItem('access_token', token)
@@ -505,7 +505,7 @@ describe('MSW 集成测试 - 上传模块', () => {
   it('上传不允许的文件类型应该返回 400', async () => {
     const loginRes = await axios.post(`${API_BASE}/login`, {
       username: 'admin',
-      password: 'admin123',
+      password: 'Admin@123',
     })
     const token = loginRes.data.data.access_token
 
@@ -537,7 +537,7 @@ describe('MSW 集成测试 - 上传模块', () => {
   it('上传超过大小限制的文件应该返回 400', async () => {
     const loginRes = await axios.post(`${API_BASE}/login`, {
       username: 'admin',
-      password: 'admin123',
+      password: 'Admin@123',
     })
     const token = loginRes.data.data.access_token
 

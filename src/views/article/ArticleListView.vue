@@ -79,7 +79,7 @@ const articleStore = useArticleStore()
 const userStore = useUserStore()
 
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(5)
 const keyword = ref('')
 
 const articles = computed(() => articleStore.articles)
@@ -96,6 +96,7 @@ const fetchArticles = async () => {
     page: currentPage.value,
     page_size: pageSize.value,
     keyword: keyword.value || undefined,
+    status: 'published',
   })
 }
 

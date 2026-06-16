@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="tabs">
-          <el-radio-group v-model="statusFilter" @change="handleSearch">
+          <el-radio-group v-model="statusFilter">
             <el-radio-button value="">全部</el-radio-button>
             <el-radio-button value="active">进行中</el-radio-button>
             <el-radio-button value="archived">已归档</el-radio-button>
@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'ProjectListView' })
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ProjectCard from '@/components/project/ProjectCard.vue'
@@ -82,6 +82,11 @@ const isLoggedIn = computed(() => userStore.isLoggedIn)
 
 onMounted(async () => {
   await fetchProjects()
+})
+
+// 监听 statusFilter 变化，自动重新搜索
+watch(statusFilter, () => {
+  handleSearch()
 })
 
 const fetchProjects = async () => {

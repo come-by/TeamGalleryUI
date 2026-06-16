@@ -29,6 +29,9 @@
       <template v-else>
         <el-dropdown @command="handleCommand">
           <span class="user-dropdown">
+            <el-avatar :size="28" :src="avatar" class="user-avatar">
+              <el-icon><UserFilled /></el-icon>
+            </el-avatar>
             {{ nickname }}
             <el-icon><ArrowDown /></el-icon>
           </span>
@@ -49,6 +52,7 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'AppHeader' })
+import { ArrowDown, UserFilled } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -62,6 +66,7 @@ const { searchQuery, suggestions, searchLoading, handleSearch } = useSearch()
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 const isAdmin = computed(() => userStore.isAdmin)
 const nickname = computed(() => userStore.nickname)
+const avatar = computed(() => userStore.avatar)
 
 onMounted(() => {
   if (userStore.isLoggedIn) {

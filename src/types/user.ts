@@ -3,6 +3,7 @@ export interface User {
   username: string
   email: string
   nickname?: string
+  avatar?: string
   role: 'admin' | 'user'
   status: 'active' | 'inactive'
   created_at: string

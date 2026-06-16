@@ -23,6 +23,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCode.FILE_TYPE_NOT_ALLOWED]: '文件类型不支持',
   [ErrorCode.DATABASE_ERROR]: '数据库操作失败',
   [ErrorCode.TOO_MANY_REQUESTS]: '请求过于频繁，请稍后重试',
+  [ErrorCode.LOGIN_LOCKED]: '',
+  [ErrorCode.LOGIN_DELAY]: '',
 }
 
 export const getErrorMessage = (error: ApiError | undefined): string => {

@@ -30,7 +30,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'LoginView' })
 import type { FormInstance } from 'element-plus'
-import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -59,13 +58,10 @@ const handleLogin = async () => {
   try {
     const res = await userStore.login(form)
     if (res.success) {
-      ElMessage.success('登录成功')
       router.push('/')
-    } else {
-      ElMessage.error(res.error?.message || '登录失败')
     }
-  } catch (error) {
-    ElMessage.error('登录失败')
+  } catch {
+    // 错误已由请求拦截器处理显示
   } finally {
     loading.value = false
   }

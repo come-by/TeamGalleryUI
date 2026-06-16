@@ -9,7 +9,7 @@ const users = [
     username: 'admin',
     email: 'admin@example.com',
     nickname: '管理员',
-    password: 'admin123',
+    password: 'Admin@123',
     role: 'admin',
     status: 'active',
     created_at: '2024-01-01T00:00:00Z',
