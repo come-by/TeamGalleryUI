@@ -46,6 +46,7 @@ import { onMounted, ref } from 'vue'
 
 import { getLikes } from '@/api/interaction'
 import type { Article } from '@/types'
+import { reportError } from '@/utils/error-report'
 
 const articles = ref<Article[]>([])
 const loading = ref(true)
@@ -69,7 +70,7 @@ const fetchLikes = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('获取点赞列表失败:', error)
+    reportError(error, { type: 'fetch-likes' })
   } finally {
     loading.value = false
   }

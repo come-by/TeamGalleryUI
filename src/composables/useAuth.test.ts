@@ -25,7 +25,6 @@ describe('useAuth', () => {
       email: 'test@example.com',
       nickname: 'Test User',
       role: 'user',
-      status: 'active',
       created_at: '2024-01-01T00:00:00Z',
     }
     userStore.token = 'test-token'
@@ -45,7 +44,6 @@ describe('useAuth', () => {
       email: 'admin@example.com',
       nickname: 'Admin',
       role: 'admin',
-      status: 'active',
       created_at: '2024-01-01T00:00:00Z',
     }
     userStore.token = 'admin-token'
@@ -70,7 +68,6 @@ describe('useAuth', () => {
       email: 'test@example.com',
       nickname: 'Test',
       role: 'user',
-      status: 'active',
       created_at: '2024-01-01T00:00:00Z',
     }
     userStore.token = 'token'
@@ -87,7 +84,6 @@ describe('useAuth', () => {
       email: 'user@example.com',
       nickname: 'User',
       role: 'user',
-      status: 'active',
       created_at: '2024-01-01T00:00:00Z',
     }
     userStore.token = 'token'
@@ -106,7 +102,6 @@ describe('useAuth', () => {
       email: 'admin@example.com',
       nickname: 'Admin',
       role: 'admin',
-      status: 'active',
       created_at: '2024-01-01T00:00:00Z',
     }
     userStore.token = 'token'

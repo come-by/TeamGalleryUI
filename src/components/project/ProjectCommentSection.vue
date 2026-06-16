@@ -104,7 +104,6 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({ name: 'ProjectCommentSection' })
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref, watch } from 'vue'
 
@@ -117,7 +116,10 @@ import {
 } from '@/api/project-comment'
 import { useUserStore } from '@/stores/user'
 import type { ProjectComment } from '@/types/project'
+import { reportError } from '@/utils/error-report'
 import { formatDate } from '@/utils/format'
+
+defineOptions({ name: 'ProjectCommentSection' })
 
 const props = defineProps<{
   projectId: number
@@ -146,7 +148,7 @@ watch(
   async () => {
     currentPage.value = 1
     await fetchComments()
-  }
+  },
 )
 
 const fetchComments = async () => {
@@ -161,7 +163,7 @@ const fetchComments = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('获取项目评论失败:', error)
+    reportError(error, { type: 'fetch-project-comments', projectId: props.projectId })
   } finally {
     loading.value = false
   }

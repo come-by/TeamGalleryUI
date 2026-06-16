@@ -52,7 +52,7 @@ const props = withDefaults(
   {
     loading: false,
     submitText: '创建',
-  }
+  },
 )
 
 const emit = defineEmits<{

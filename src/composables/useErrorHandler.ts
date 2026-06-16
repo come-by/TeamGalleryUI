@@ -111,7 +111,7 @@ export const useErrorHandler = (): ErrorState & {
  * @returns 包含 data、loading、error 状态和 execute 方法的对象
  */
 export const useAsyncError = <T>(
-  asyncFn: () => Promise<T>
+  asyncFn: () => Promise<T>,
 ): {
   data: Ref<T | null>
   loading: Ref<boolean>

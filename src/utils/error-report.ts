@@ -35,8 +35,7 @@ export const initErrorReport = (config: SentryConfig): void => {
 
   // 开发环境不上报，仅 console 输出
   if (environment === 'development') {
-    // eslint-disable-next-line no-console
-    console.log('[Sentry] 开发模式，错误上报已禁用')
+    console.warn('[Sentry] 开发模式，错误上报已禁用')
     return
   }
 
@@ -74,8 +73,7 @@ export const initErrorReport = (config: SentryConfig): void => {
   })
 
   isInitialized = true
-  // eslint-disable-next-line no-console
-  console.log('[Sentry] 错误上报已初始化')
+  console.warn('[Sentry] 错误上报已初始化')
 }
 
 /**
@@ -149,7 +147,7 @@ export const reportError = (error: unknown, context?: Record<string, unknown>): 
  */
 export const reportApiError = (
   error: { code?: string; message?: string; status?: number },
-  context?: { url?: string; method?: string; params?: unknown; status?: number }
+  context?: { url?: string; method?: string; params?: unknown; status?: number },
 ): void => {
   if (!isInitialized) return
 
@@ -203,7 +201,7 @@ export const clearUserContext = (): void => {
 export const addBreadcrumb = (
   message: string,
   category: string,
-  level: 'info' | 'warning' | 'error' = 'info'
+  level: 'info' | 'warning' | 'error' = 'info',
 ): void => {
   if (!isInitialized) return
 
@@ -238,7 +236,7 @@ export enum ErrorCategory {
 export const reportCategorizedError = (
   error: unknown,
   category: ErrorCategory,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ): void => {
   if (!isInitialized) return
 

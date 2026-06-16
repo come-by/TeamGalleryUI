@@ -30,7 +30,7 @@ const defaultMessage = '加载失败，请重试'
 
 const message = computed(() => props.message || defaultMessage)
 
-onErrorCaptured((err, instance, info) => {
+onErrorCaptured((err, _instance, info) => {
   hasError.value = true
   error.value = err instanceof Error ? err : new Error(String(err))
 
@@ -38,14 +38,10 @@ onErrorCaptured((err, instance, info) => {
   if (props.report !== false) {
     reportError(error.value, {
       type: 'error-boundary',
-      component: instance?.$options?.name || 'Anonymous',
+      component: 'ErrorBoundary',
       info,
     })
-    addBreadcrumb(
-      `组件错误: ${instance?.$options?.name || 'Anonymous'}`,
-      'vue.errorCaptured',
-      'error'
-    )
+    addBreadcrumb('组件错误: ErrorBoundary', 'vue.errorCaptured', 'error')
   }
 
   // 阻止错误继续向上传播

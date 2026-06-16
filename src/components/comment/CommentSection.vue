@@ -104,7 +104,6 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({ name: 'CommentSection' })
 import { Star } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -118,7 +117,10 @@ import {
 } from '@/api/comment'
 import { useUserStore } from '@/stores/user'
 import type { Comment } from '@/types'
+import { reportError } from '@/utils/error-report'
 import { formatDate } from '@/utils/format'
+
+defineOptions({ name: 'CommentSection' })
 
 const props = defineProps<{
   articleId: number
@@ -147,7 +149,7 @@ watch(
   async () => {
     currentPage.value = 1
     await fetchComments()
-  }
+  },
 )
 
 const fetchComments = async () => {
@@ -162,7 +164,7 @@ const fetchComments = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('获取评论失败:', error)
+    reportError(error, { type: 'fetch-comments', articleId: props.articleId })
   } finally {
     loading.value = false
   }

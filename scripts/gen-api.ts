@@ -35,7 +35,7 @@ console.log(' 生成 TypeScript 类型...')
 try {
   execSync(
     `npx openapi-typescript "${OPENAPI_3_PATH}" --output "${SCHEMAS_OUTPUT}" --export-type`,
-    { stdio: 'inherit', cwd: rootDir }
+    { stdio: 'inherit', cwd: rootDir },
   )
   console.log(' 类型生成完成\n')
 } catch (error) {

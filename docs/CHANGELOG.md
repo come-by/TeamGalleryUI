@@ -2,12 +2,22 @@
 
 > 本文档记录 TeamGallery 前端应用的版本变更和重要更新。
 
-| 项目 | 值 |
-|------|-----|
-| 适用 | 前端应用 |
+| 项目     | 值         |
+| -------- | ---------- |
+| 适用     | 前端应用   |
 | 最后更新 | 2026-06-08 |
 
 ## 目录
+
+## [1.6.0] - 未发布
+
+### 规划
+
+- 文章体系重构：首页重定向到 `/projects`，导航栏增加手册入口和铃铛通知图标
+- 操作手册模块：ManualListView + ManualDetailView（/manuals）
+- 通知模块：NotificationListView + NotificationDetailView（/notifications）
+- 铃铛红点提示：基于未读通知数的 el-badge 徽标
+- 未读数轮询：每 30 秒轮询 `/api/notifications/unread-count`
 
 ## [Unreleased]
 
@@ -33,11 +43,11 @@
 
 ### 变更类型
 
-| 类型 | 说明 |
-|------|------|
-| `Added` | 新增功能 |
-| `Changed` | 现有功能的变更 |
+| 类型         | 说明           |
+| ------------ | -------------- |
+| `Added`      | 新增功能       |
+| `Changed`    | 现有功能的变更 |
 | `Deprecated` | 即将移除的功能 |
-| `Removed` | 已移除的功能 |
-| `Fixed` | Bug 修复 |
-| `Security` | 安全修复 |
+| `Removed`    | 已移除的功能   |
+| `Fixed`      | Bug 修复       |
+| `Security`   | 安全修复       |

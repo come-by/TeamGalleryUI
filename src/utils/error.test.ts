@@ -85,7 +85,7 @@ describe('错误处理工具函数', () => {
       ]
       handleValidationError(details)
       expect(ElMessage.error).toHaveBeenCalledWith(
-        'username: 用户名不能为空；email: 邮箱格式不正确'
+        'username: 用户名不能为空；email: 邮箱格式不正确',
       )
     })
 

@@ -39,6 +39,7 @@ import { onMounted, ref } from 'vue'
 
 import { getUsers } from '@/api/admin'
 import type { User } from '@/types'
+import { reportError } from '@/utils/error-report'
 import { formatDate } from '@/utils/format'
 
 const users = ref<User[]>([])
@@ -63,7 +64,7 @@ const fetchUsers = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('获取用户列表失败:', error)
+    reportError(error, { type: 'fetch-users' })
   } finally {
     loading.value = false
   }

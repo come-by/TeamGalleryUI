@@ -49,7 +49,7 @@ const props = withDefaults(
     loading: false,
     showStatus: false,
     submitText: '提交',
-  }
+  },
 )
 
 const emit = defineEmits<{

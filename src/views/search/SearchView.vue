@@ -47,6 +47,7 @@ import { useRoute } from 'vue-router'
 
 import { searchArticles } from '@/api/search'
 import type { Article } from '@/types'
+import { reportError } from '@/utils/error-report'
 import { sanitizeHtml } from '@/utils/sanitize'
 
 const route = useRoute()
@@ -75,7 +76,7 @@ const fetchResults = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('搜索失败:', error)
+    reportError(error, { type: 'search', keyword: keyword.value })
   } finally {
     loading.value = false
   }

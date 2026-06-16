@@ -123,7 +123,7 @@ const handleRemove = async (row: ProjectMember) => {
     await ElMessageBox.confirm(
       `确定要移除成员 "${row.user?.nickname || row.user?.username}" 吗？`,
       '确认移除',
-      { type: 'warning' }
+      { type: 'warning' },
     )
     await projectStore.removeMember(props.project.id, row.user_id)
     await projectStore.fetchMembers(props.project.id)

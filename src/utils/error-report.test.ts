@@ -66,7 +66,7 @@ describe('错误上报工具', () => {
         expect.objectContaining({
           dsn: 'https://test@sentry.io/123',
           environment: 'production',
-        })
+        }),
       )
     })
 
@@ -117,7 +117,7 @@ describe('错误上报工具', () => {
 
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('未初始化'),
-        expect.any(Error)
+        expect.any(Error),
       )
       consoleSpy.mockRestore()
     })
@@ -136,7 +136,7 @@ describe('错误上报工具', () => {
 
       reportApiError(
         { code: 'ARTICLE_NOT_FOUND', message: '文章不存在', status: 404 },
-        { url: '/api/articles/1', method: 'get' }
+        { url: '/api/articles/1', method: 'get' },
       )
 
       expect(Sentry.captureMessage).toHaveBeenCalledWith(
@@ -147,7 +147,7 @@ describe('错误上报工具', () => {
             'api.error_code': 'ARTICLE_NOT_FOUND',
             'api.status': '404',
           },
-        })
+        }),
       )
     })
 
@@ -215,7 +215,7 @@ describe('错误上报工具', () => {
           message: 'User clicked button',
           category: 'ui',
           level: 'info',
-        })
+        }),
       )
     })
   })
@@ -250,7 +250,7 @@ describe('错误上报工具', () => {
         expect.objectContaining({
           level: 'warning',
           tags: { 'error.category': 'validation' },
-        })
+        }),
       )
 
       // 路由错误应该是 info 级别
@@ -260,7 +260,7 @@ describe('错误上报工具', () => {
         expect.objectContaining({
           level: 'info',
           tags: { 'error.category': 'route' },
-        })
+        }),
       )
 
       // API 错误应该是 error 级别
@@ -270,7 +270,7 @@ describe('错误上报工具', () => {
         expect.objectContaining({
           level: 'error',
           tags: { 'error.category': 'api' },
-        })
+        }),
       )
     })
   })

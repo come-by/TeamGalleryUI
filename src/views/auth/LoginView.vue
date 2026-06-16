@@ -83,11 +83,11 @@ const handleLogin = async () => {
 .footer {
   text-align: center;
   margin-top: 10px;
-  color: #666;
+  color: var(--color-text-regular);
 }
 
 .footer a {
-  color: #409eff;
+  color: var(--color-primary);
   text-decoration: none;
 }
 </style>

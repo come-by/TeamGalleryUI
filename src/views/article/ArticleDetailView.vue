@@ -73,7 +73,9 @@ import {
 import CommentSection from '@/components/comment/CommentSection.vue'
 import { useArticleStore } from '@/stores/article'
 import { useUserStore } from '@/stores/user'
+import { reportError } from '@/utils/error-report'
 import { formatDate } from '@/utils/format'
+import { sanitizeHtml } from '@/utils/sanitize'
 
 const route = useRoute()
 const router = useRouter()
@@ -98,7 +100,7 @@ onMounted(async () => {
         isFavorited.value = res.data?.is_favorited || false
       }
     } catch (error) {
-      console.error('获取互动状态失败:', error)
+      reportError(error, { type: 'interaction-status', articleId: id })
     }
   }
 })
@@ -167,8 +169,6 @@ const handleDelete = async () => {
     }
   }
 }
-
-import { sanitizeHtml } from '@/utils/sanitize'
 
 const renderContent = (content: string) => {
   return sanitizeHtml(content)

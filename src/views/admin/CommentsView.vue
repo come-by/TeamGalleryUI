@@ -51,6 +51,7 @@ import { onMounted, ref } from 'vue'
 
 import { approveComment, getPendingComments, rejectComment } from '@/api/comment'
 import type { Comment } from '@/types'
+import { reportError } from '@/utils/error-report'
 
 const comments = ref<Comment[]>([])
 const loading = ref(true)
@@ -74,7 +75,7 @@ const fetchComments = async () => {
       total.value = res.data?.pagination?.total || 0
     }
   } catch (error) {
-    console.error('获取待审核评论失败:', error)
+    reportError(error, { type: 'fetch-pending-comments' })
   } finally {
     loading.value = false
   }

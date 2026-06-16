@@ -90,7 +90,7 @@ const validatePassword = (_rule: unknown, value: string, callback: (error?: Erro
 const validateConfirmPassword = (
   _rule: unknown,
   value: string,
-  callback: (error?: Error) => void
+  callback: (error?: Error) => void,
 ) => {
   if (value !== form.password) {
     callback(new Error('两次输入的密码不一致'))

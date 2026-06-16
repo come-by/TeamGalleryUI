@@ -2,38 +2,49 @@
 
 > 本文档定义 TeamGallery 前端应用的所有 API 调用方式，与后端接口一一对应。
 
-| 项目 | 值 |
-|------|-----|
-| 适用 | 前端应用 |
-| 最后更新 | 2026-06-11 |
+| 项目     | 值         |
+| -------- | ---------- |
+| 适用     | 前端应用   |
+| 最后更新 | 2026-06-16 |
 
 ## 目录
 
 ## 1. 通用说明
+
 ## 2. 认证模块
+
 ## 3. 用户模块
+
 ## 4. 文章模块
+
 ## 5. 评论模块
+
 ## 6. 互动模块
+
 ## 7. 搜索模块
+
 ## 8. 上传模块
+
 ## 9. 项目管理
+
 ## 10. 管理模块
+
 ## 11. 数据模型
+
 ## 相关文档
 
 ---
 
 ## 1. 通用说明
 
-| 配置项 | 值 | 说明 |
-|--------|-----|------|
-| **Base URL** | `VITE_API_BASE_URL`（环境变量） | 默认 `/api` |
-| **API 前缀** | 无（直接使用后端路径） | 完整 URL 为 `${VITE_API_BASE_URL}/xxx` |
-| **认证方式** | Bearer Token（`Authorization` 头） | 请求拦截器自动添加 |
-| **数据格式** | JSON | |
-| **分页参数** | `page`（页码，从 1 开始）、`page_size`（每页数量） | |
-| **分页响应** | `data.data[]` + `data.pagination{}` | 数据在 `data` 数组，分页信息在 `pagination` 对象 |
+| 配置项       | 值                                                 | 说明                                             |
+| ------------ | -------------------------------------------------- | ------------------------------------------------ |
+| **Base URL** | `VITE_API_BASE_URL`（环境变量）                    | 默认 `/api`                                      |
+| **API 前缀** | 无（直接使用后端路径）                             | 完整 URL 为 `${VITE_API_BASE_URL}/xxx`           |
+| **认证方式** | Bearer Token（`Authorization` 头）                 | 请求拦截器自动添加                               |
+| **数据格式** | JSON                                               |                                                  |
+| **分页参数** | `page`（页码，从 1 开始）、`page_size`（每页数量） |                                                  |
+| **分页响应** | `data.data[]` + `data.pagination{}`                | 数据在 `data` 数组，分页信息在 `pagination` 对象 |
 
 ### 1.1 统一响应格式
 
@@ -41,16 +52,16 @@
 
 ```typescript
 interface ApiResponse<T = unknown> {
-  success: boolean      // true 表示成功
-  message?: string      // 提示信息
-  data?: T             // 响应数据
-  error?: ApiError      // 错误信息（失败时）
-  request_id?: string   // 请求追踪 ID
+  success: boolean // true 表示成功
+  message?: string // 提示信息
+  data?: T // 响应数据
+  error?: ApiError // 错误信息（失败时）
+  request_id?: string // 请求追踪 ID
 }
 
 interface ApiError {
-  code: string          // 错误码，如 "UNAUTHORIZED"
-  message: string       // 错误消息
+  code: string // 错误码，如 "UNAUTHORIZED"
+  message: string // 错误消息
   details?: ErrorDetail[] // 错误详情
 }
 
@@ -64,11 +75,11 @@ interface ErrorDetail {
 
 ```typescript
 interface PaginatedResponse<T> {
-  data: T[]             // 数据列表
+  data: T[] // 数据列表
   pagination: {
-    page: number        // 当前页码
-    page_size: number   // 每页数量
-    total: number       // 总记录数
+    page: number // 当前页码
+    page_size: number // 每页数量
+    total: number // 总记录数
     total_pages: number // 总页数
   }
 }
@@ -76,19 +87,19 @@ interface PaginatedResponse<T> {
 
 ### 1.3 错误码
 
-| 错误码 | HTTP 状态 | 前端处理 |
-|--------|----------|---------|
-| `OK` | 200 | 正常处理 |
-| `BAD_REQUEST` | 400 | 提示用户检查输入 |
-| `VALIDATION_FAILED` | 400 | 显示字段级错误 |
-| `UNAUTHORIZED` | 401 | 尝试刷新 Token 或跳转登录 |
-| `INVALID_CREDENTIALS` | 401 | 提示用户名或密码错误 |
-| `FORBIDDEN` | 403 | 提示权限不足 |
-| `NOT_FOUND` | 404 | 提示资源不存在 |
-| `DUPLICATE_ENTRY` | 409 | 提示数据已存在 |
-| `FILE_TOO_LARGE` | 413 | 提示文件过大 |
-| `TOO_MANY_REQUESTS` | 429 | 提示稍后重试 |
-| `INTERNAL_SERVER_ERROR` | 500 | 提示服务器错误 |
+| 错误码                  | HTTP 状态 | 前端处理                  |
+| ----------------------- | --------- | ------------------------- |
+| `OK`                    | 200       | 正常处理                  |
+| `BAD_REQUEST`           | 400       | 提示用户检查输入          |
+| `VALIDATION_FAILED`     | 400       | 显示字段级错误            |
+| `UNAUTHORIZED`          | 401       | 尝试刷新 Token 或跳转登录 |
+| `INVALID_CREDENTIALS`   | 401       | 提示用户名或密码错误      |
+| `FORBIDDEN`             | 403       | 提示权限不足              |
+| `NOT_FOUND`             | 404       | 提示资源不存在            |
+| `DUPLICATE_ENTRY`       | 409       | 提示数据已存在            |
+| `FILE_TOO_LARGE`        | 413       | 提示文件过大              |
+| `TOO_MANY_REQUESTS`     | 429       | 提示稍后重试              |
+| `INTERNAL_SERVER_ERROR` | 500       | 提示服务器错误            |
 
 ---
 
@@ -96,10 +107,10 @@ interface PaginatedResponse<T> {
 
 对应文件：`src/api/user.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| POST | `/login` | `login()` | 否 |
-| POST | `/register` | `register()` | 否 |
+| 方法 | 路径             | 函数             | 认证          |
+| ---- | ---------------- | ---------------- | ------------- |
+| POST | `/login`         | `login()`        | 否            |
+| POST | `/register`      | `register()`     | 否            |
 | POST | `/token/refresh` | `refreshToken()` | Refresh Token |
 
 ### 2.1 用户登录
@@ -131,10 +142,10 @@ refreshToken()
 
 对应文件：`src/api/user.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| GET | `/profile` | `getProfile()` | 是 |
-| DELETE | `/user` | `deleteUser()` | 是 |
+| 方法   | 路径       | 函数           | 认证 |
+| ------ | ---------- | -------------- | ---- |
+| GET    | `/profile` | `getProfile()` | 是   |
+| DELETE | `/user`    | `deleteUser()` | 是   |
 
 ### 3.1 获取用户资料
 
@@ -156,15 +167,15 @@ deleteUser()
 
 对应文件：`src/api/article.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| GET | `/articles` | `getArticles(params)` | 否 |
-| GET | `/articles/latest` | `getLatestArticles(count)` | 否 |
-| GET | `/articles/:id` | `getArticle(id)` | 否 |
-| GET | `/users/:user_id/articles` | `getUserArticles(userId, params)` | 否 |
-| POST | `/articles` | `createArticle(data)` | 是 |
-| PUT | `/articles/:id` | `updateArticle(id, data)` | 是 |
-| DELETE | `/articles/:id` | `deleteArticle(id)` | 是 |
+| 方法   | 路径                       | 函数                              | 认证 |
+| ------ | -------------------------- | --------------------------------- | ---- |
+| GET    | `/articles`                | `getArticles(params)`             | 否   |
+| GET    | `/articles/latest`         | `getLatestArticles(count)`        | 否   |
+| GET    | `/articles/:id`            | `getArticle(id)`                  | 否   |
+| GET    | `/users/:user_id/articles` | `getUserArticles(userId, params)` | 否   |
+| POST   | `/articles`                | `createArticle(data)`             | 是   |
+| PUT    | `/articles/:id`            | `updateArticle(id, data)`         | 是   |
+| DELETE | `/articles/:id`            | `deleteArticle(id)`               | 是   |
 
 ### 4.1 获取文章列表
 
@@ -188,9 +199,81 @@ createArticle({
   content: '正文...',
   summary: '摘要',
   status: 'published',
-  category_id: 1
+  category_id: 1,
 })
 // POST /api/articles
+```
+
+### 4.1 文章 Type 说明
+
+创建文章时可指定 `type` 字段：
+
+| type 值        | 说明             | 权限要求     |
+| -------------- | ---------------- | ------------ |
+| `article`      | 普通文章（默认） | 任何登录用户 |
+| `manual`       | 操作手册         | 仅 admin     |
+| `notification` | 通知             | 仅 admin     |
+
+---
+
+## 4B. 操作手册模块
+
+对应文件：`src/api/manual.ts`（新建）
+
+| 方法 | 路径           | 函数                 | 认证 |
+| ---- | -------------- | -------------------- | ---- |
+| GET  | `/manuals`     | `getManuals(params)` | 否   |
+| GET  | `/manuals/:id` | `getManual(id)`      | 否   |
+
+### 4B.1 获取操作手册列表
+
+```typescript
+getManuals({ page: 1, page_size: 10, keyword: '部署' })
+// GET /api/manuals?page=1&page_size=10&keyword=部署
+```
+
+### 4B.2 获取操作手册详情
+
+```typescript
+getManual(1)
+// GET /api/manuals/1
+```
+
+---
+
+## 4C. 通知模块
+
+对应文件：`src/api/notification.ts`（新建）
+
+| 方法 | 路径                          | 函数                       | 认证 |
+| ---- | ----------------------------- | -------------------------- | ---- |
+| GET  | `/notifications`              | `getNotifications(params)` | 是   |
+| GET  | `/notifications/:id`          | `getNotification(id)`      | 是   |
+| GET  | `/notifications/unread-count` | `getUnreadCount()`         | 是   |
+| POST | `/notifications/:id/read`     | `markAsRead(id)`           | 是   |
+| POST | `/notifications/read-all`     | `markAllAsRead()`          | 是   |
+
+### 4C.1 获取通知列表
+
+```typescript
+getNotifications({ page: 1, page_size: 10 })
+// GET /api/notifications?page=1&page_size=10
+// 响应每项含 is_read 字段
+```
+
+### 4C.2 获取未读通知数
+
+```typescript
+getUnreadCount()
+// GET /api/notifications/unread-count
+// 响应: { success: true, data: { unread_count: 5 } }
+```
+
+### 4C.3 标记已读
+
+```typescript
+markAsRead(1) // POST /api/notifications/1/read
+markAllAsRead() // POST /api/notifications/read-all
 ```
 
 ---
@@ -199,18 +282,18 @@ createArticle({
 
 对应文件：`src/api/comment.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| GET | `/articles/:id/comments` | `getComments(articleId, params)` | 否 |
-| GET | `/articles/:id/comments/statistics` | `getCommentStatistics(articleId)` | 否 |
-| GET | `/users/:user_id/comments` | `getUserComments(userId, params)` | 否 |
-| POST | `/articles/:id/comments` | `createComment(articleId, data)` | 是 |
-| DELETE | `/comments/:comment_id` | `deleteComment(commentId)` | 是 |
-| POST | `/comments/:id/like` | `likeComment(commentId)` | 否 |
-| POST | `/comments/:id/report` | `reportComment(commentId)` | 否 |
-| GET | `/admin/comments/pending` | `getPendingComments(params)` | 管理员 |
-| PUT | `/admin/comments/:id/approve` | `approveComment(commentId)` | 管理员 |
-| PUT | `/admin/comments/:id/reject` | `rejectComment(commentId)` | 管理员 |
+| 方法   | 路径                                | 函数                              | 认证   |
+| ------ | ----------------------------------- | --------------------------------- | ------ |
+| GET    | `/articles/:id/comments`            | `getComments(articleId, params)`  | 否     |
+| GET    | `/articles/:id/comments/statistics` | `getCommentStatistics(articleId)` | 否     |
+| GET    | `/users/:user_id/comments`          | `getUserComments(userId, params)` | 否     |
+| POST   | `/articles/:id/comments`            | `createComment(articleId, data)`  | 是     |
+| DELETE | `/comments/:comment_id`             | `deleteComment(commentId)`        | 是     |
+| POST   | `/comments/:id/like`                | `likeComment(commentId)`          | 否     |
+| POST   | `/comments/:id/report`              | `reportComment(commentId)`        | 否     |
+| GET    | `/admin/comments/pending`           | `getPendingComments(params)`      | 管理员 |
+| PUT    | `/admin/comments/:id/approve`       | `approveComment(commentId)`       | 管理员 |
+| PUT    | `/admin/comments/:id/reject`        | `rejectComment(commentId)`        | 管理员 |
 
 ### 5.1 获取文章评论
 
@@ -232,15 +315,15 @@ createComment(1, { content: '好文章！', parent_id: null })
 
 对应文件：`src/api/interaction.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| POST | `/articles/:id/like` | `likeArticle(articleId)` | 是 |
-| DELETE | `/articles/:id/like` | `unlikeArticle(articleId)` | 是 |
-| POST | `/articles/:id/favorite` | `favoriteArticle(articleId)` | 是 |
-| DELETE | `/articles/:id/favorite` | `unfavoriteArticle(articleId)` | 是 |
-| GET | `/favorites` | `getFavorites(params)` | 是 |
-| GET | `/likes` | `getLikes(params)` | 是 |
-| GET | `/articles/:id/interaction/status` | `getInteractionStatus(articleId)` | 是 |
+| 方法   | 路径                               | 函数                              | 认证 |
+| ------ | ---------------------------------- | --------------------------------- | ---- |
+| POST   | `/articles/:id/like`               | `likeArticle(articleId)`          | 是   |
+| DELETE | `/articles/:id/like`               | `unlikeArticle(articleId)`        | 是   |
+| POST   | `/articles/:id/favorite`           | `favoriteArticle(articleId)`      | 是   |
+| DELETE | `/articles/:id/favorite`           | `unfavoriteArticle(articleId)`    | 是   |
+| GET    | `/favorites`                       | `getFavorites(params)`            | 是   |
+| GET    | `/likes`                           | `getLikes(params)`                | 是   |
+| GET    | `/articles/:id/interaction/status` | `getInteractionStatus(articleId)` | 是   |
 
 ### 6.1 互动状态查询
 
@@ -256,12 +339,12 @@ getInteractionStatus(1)
 
 对应文件：`src/api/search.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| GET | `/search` | `searchArticles(params)` | 否 |
-| GET | `/search/suggestions` | `getSuggestions(q, limit)` | 否 |
-| GET | `/search/tags/:id` | `searchByTag(tagId, params)` | 否 |
-| GET | `/search/categories/:id` | `searchByCategory(categoryId, params)` | 否 |
+| 方法 | 路径                     | 函数                                   | 认证 |
+| ---- | ------------------------ | -------------------------------------- | ---- |
+| GET  | `/search`                | `searchArticles(params)`               | 否   |
+| GET  | `/search/suggestions`    | `getSuggestions(q, limit)`             | 否   |
+| GET  | `/search/tags/:id`       | `searchByTag(tagId, params)`           | 否   |
+| GET  | `/search/categories/:id` | `searchByCategory(categoryId, params)` | 否   |
 
 ### 7.1 全文搜索
 
@@ -283,11 +366,11 @@ getSuggestions('Go', 10)
 
 对应文件：`src/api/upload.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| POST | `/upload/image` | `uploadImage(formData, onProgress)` | 是 |
-| POST | `/upload/file` | `uploadFile(formData, onProgress)` | 是 |
-| DELETE | `/upload/:path` | `deleteFile(path)` | 是 |
+| 方法   | 路径            | 函数                                | 认证 |
+| ------ | --------------- | ----------------------------------- | ---- |
+| POST   | `/upload/image` | `uploadImage(formData, onProgress)` | 是   |
+| POST   | `/upload/file`  | `uploadFile(formData, onProgress)`  | 是   |
+| DELETE | `/upload/:path` | `deleteFile(path)`                  | 是   |
 
 ### 8.1 上传图片
 
@@ -305,17 +388,17 @@ uploadImage(formData)
 
 对应文件：`src/api/project.ts`、`src/stores/project.ts`、`src/composables/useProject.ts`
 
-| 方法 | 路径 | 函数 | 认证 | 权限 |
-|------|------|------|------|------|
-| GET | `/projects` | `getProjects(params)` | 否 | - |
-| GET | `/projects/:id` | `getProject(id)` | 否 | - |
-| POST | `/projects` | `createProject(data)` | 是 | 登录用户 |
-| PUT | `/projects/:id` | `updateProject(id, data)` | 是 | owner / admin |
-| DELETE | `/projects/:id` | `deleteProject(id)` | 是 | 仅 owner |
-| GET | `/projects/:id/members` | `getProjectMembers(projectId, params)` | 否 | - |
-| POST | `/projects/:id/members` | `addProjectMember(projectId, data)` | 是 | owner / admin |
-| DELETE | `/projects/:id/members/:user_id` | `removeProjectMember(projectId, userId)` | 是 | owner / admin |
-| PUT | `/projects/:id/members/:user_id/role` | `updateProjectMemberRole(projectId, userId, data)` | 是 | 仅 owner |
+| 方法   | 路径                                  | 函数                                               | 认证 | 权限          |
+| ------ | ------------------------------------- | -------------------------------------------------- | ---- | ------------- |
+| GET    | `/projects`                           | `getProjects(params)`                              | 否   | -             |
+| GET    | `/projects/:id`                       | `getProject(id)`                                   | 否   | -             |
+| POST   | `/projects`                           | `createProject(data)`                              | 是   | 登录用户      |
+| PUT    | `/projects/:id`                       | `updateProject(id, data)`                          | 是   | owner / admin |
+| DELETE | `/projects/:id`                       | `deleteProject(id)`                                | 是   | 仅 owner      |
+| GET    | `/projects/:id/members`               | `getProjectMembers(projectId, params)`             | 否   | -             |
+| POST   | `/projects/:id/members`               | `addProjectMember(projectId, data)`                | 是   | owner / admin |
+| DELETE | `/projects/:id/members/:user_id`      | `removeProjectMember(projectId, userId)`           | 是   | owner / admin |
+| PUT    | `/projects/:id/members/:user_id/role` | `updateProjectMemberRole(projectId, userId, data)` | 是   | 仅 owner      |
 
 ### 9.1 获取项目列表
 
@@ -330,7 +413,7 @@ getProjects({ page: 1, page_size: 12, status: 'active', keyword: '搜索词' })
 createProject({
   name: '新项目',
   description: '项目描述',
-  cover_image: 'https://example.com/cover.jpg'
+  cover_image: 'https://example.com/cover.jpg',
 })
 // POST /api/projects
 // 响应: { success: true, data: { id: 1, name: "新项目", ... } }
@@ -372,16 +455,16 @@ updateProjectMemberRole(1, 3, { role: 'admin' })
 
 ### 9.6 权限矩阵
 
-| 操作 | Owner | Admin | Member | 非成员 |
-|------|-------|-------|--------|--------|
-| 查看项目 | Y | Y | Y | Y |
-| 编辑项目 | Y | Y | N | N |
-| 删除项目 | Y | N | N | N |
-| 添加成员(member) | Y | Y | N | N |
-| 添加成员(admin) | Y | N | N | N |
-| 移除成员(member) | Y | Y | N | N |
-| 移除成员(admin) | Y | N | N | N |
-| 修改成员角色 | Y | N | N | N |
+| 操作             | Owner | Admin | Member | 非成员 |
+| ---------------- | ----- | ----- | ------ | ------ |
+| 查看项目         | Y     | Y     | Y      | Y      |
+| 编辑项目         | Y     | Y     | N      | N      |
+| 删除项目         | Y     | N     | N      | N      |
+| 添加成员(member) | Y     | Y     | N      | N      |
+| 添加成员(admin)  | Y     | N     | N      | N      |
+| 移除成员(member) | Y     | Y     | N      | N      |
+| 移除成员(admin)  | Y     | N     | N      | N      |
+| 修改成员角色     | Y     | N     | N      | N      |
 
 前端通过 `useProject()` composable 的 `canEdit()`、`canDelete()`、`canManageMembers()` 方法控制按钮显隐。
 
@@ -391,18 +474,18 @@ updateProjectMemberRole(1, 3, { role: 'admin' })
 
 对应文件：`src/api/project-comment.ts`
 
-| 方法 | 路径 | 函数 | 认证 | 权限 |
-|------|------|------|------|------|
-| GET | `/projects/:id/comments` | `getProjectComments(projectId, params)` | 否 | 项目成员 |
-| GET | `/projects/:id/comments/statistics` | `getProjectCommentStatistics(projectId)` | 否 | 项目成员 |
-| GET | `/users/:user_id/project-comments` | `getUserProjectComments(userId, params)` | 否 | - |
-| POST | `/projects/:id/comments` | `createProjectComment(projectId, data)` | 是 | 项目成员 |
-| DELETE | `/project-comments/:comment_id` | `deleteProjectComment(commentId)` | 是 | 本人 |
-| POST | `/project-comments/:id/like` | `likeProjectComment(commentId)` | 是 | 项目成员 |
-| POST | `/project-comments/:id/report` | `reportProjectComment(commentId)` | 是 | 项目成员 |
-| GET | `/admin/project-comments/pending` | `getPendingProjectComments(params)` | 是 | 管理员 |
-| PUT | `/admin/project-comments/:id/approve` | `approveProjectComment(commentId)` | 是 | 管理员 |
-| PUT | `/admin/project-comments/:id/reject` | `rejectProjectComment(commentId)` | 是 | 管理员 |
+| 方法   | 路径                                  | 函数                                     | 认证 | 权限     |
+| ------ | ------------------------------------- | ---------------------------------------- | ---- | -------- |
+| GET    | `/projects/:id/comments`              | `getProjectComments(projectId, params)`  | 否   | 项目成员 |
+| GET    | `/projects/:id/comments/statistics`   | `getProjectCommentStatistics(projectId)` | 否   | 项目成员 |
+| GET    | `/users/:user_id/project-comments`    | `getUserProjectComments(userId, params)` | 否   | -        |
+| POST   | `/projects/:id/comments`              | `createProjectComment(projectId, data)`  | 是   | 项目成员 |
+| DELETE | `/project-comments/:comment_id`       | `deleteProjectComment(commentId)`        | 是   | 本人     |
+| POST   | `/project-comments/:id/like`          | `likeProjectComment(commentId)`          | 是   | 项目成员 |
+| POST   | `/project-comments/:id/report`        | `reportProjectComment(commentId)`        | 是   | 项目成员 |
+| GET    | `/admin/project-comments/pending`     | `getPendingProjectComments(params)`      | 是   | 管理员   |
+| PUT    | `/admin/project-comments/:id/approve` | `approveProjectComment(commentId)`       | 是   | 管理员   |
+| PUT    | `/admin/project-comments/:id/reject`  | `rejectProjectComment(commentId)`        | 是   | 管理员   |
 
 ### 10.1 获取项目评论
 
@@ -420,13 +503,13 @@ createProjectComment(1, { content: '项目进展顺利！', parent_id: null })
 
 ### 10.3 权限矩阵
 
-| 操作 | Owner | Admin | Member | 非成员 |
-|------|-------|-------|--------|--------|
-| 查看评论 | Y | Y | Y | N |
-| 发表评论 | Y | Y | Y | N |
-| 删除自己的评论 | Y | Y | Y | N |
-| 删除他人评论 | Y | Y | N | N |
-| 点赞/举报评论 | Y | Y | Y | N |
+| 操作           | Owner | Admin | Member | 非成员 |
+| -------------- | ----- | ----- | ------ | ------ |
+| 查看评论       | Y     | Y     | Y      | N      |
+| 发表评论       | Y     | Y     | Y      | N      |
+| 删除自己的评论 | Y     | Y     | Y      | N      |
+| 删除他人评论   | Y     | Y     | N      | N      |
+| 点赞/举报评论  | Y     | Y     | Y      | N      |
 
 > 仅项目成员可查看和参与项目评论区，非成员无法访问。
 
@@ -436,9 +519,9 @@ createProjectComment(1, { content: '项目进展顺利！', parent_id: null })
 
 对应文件：`src/api/admin.ts`
 
-| 方法 | 路径 | 函数 | 认证 |
-|------|------|------|------|
-| GET | `/admin/users` | `getUsers(params)` | 管理员 |
+| 方法 | 路径           | 函数               | 认证   |
+| ---- | -------------- | ------------------ | ------ |
+| GET  | `/admin/users` | `getUsers(params)` | 管理员 |
 
 ### 9.1 获取用户列表
 

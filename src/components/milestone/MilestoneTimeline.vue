@@ -147,7 +147,7 @@ const props = withDefaults(
   }>(),
   {
     editable: false,
-  }
+  },
 )
 
 const {

@@ -38,7 +38,7 @@ export function useDebounce<T>(value: Ref<T>, delay: number = 300) {
         timer = null
       }, delay)
     },
-    { immediate: false }
+    { immediate: false },
   )
 
   return {

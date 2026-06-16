@@ -157,7 +157,7 @@ const props = withDefaults(
     concurrency: 3,
     retries: 3,
     autoUpload: false,
-  }
+  },
 )
 
 defineEmits<{
@@ -213,10 +213,10 @@ const maxSizeHint = computed(() => {
 })
 
 const pendingCount = computed(
-  () => fileList.filter((f) => f.status === 'pending' || f.status === 'error').length
+  () => fileList.filter((f) => f.status === 'pending' || f.status === 'error').length,
 )
 const hasError = computed(() =>
-  fileList.some((f) => f.status === 'error' || f.status === 'cancelled')
+  fileList.some((f) => f.status === 'error' || f.status === 'cancelled'),
 )
 
 function formatSize(bytes: number): string {
