@@ -50,8 +50,8 @@ describe('useUserStore', () => {
             username: 'test',
             email: 'test@example.com',
             nickname: 'Test',
+            phone: '13800001111',
             role: 'user',
-            status: 'active',
             created_at: '2024-01-01T00:00:00Z',
           },
         },
@@ -96,8 +96,8 @@ describe('useUserStore', () => {
             username: 'test',
             email: 'test@example.com',
             nickname: 'Test',
+            phone: '13800001111',
             role: 'user',
-            status: 'active',
             created_at: '2024-01-01T00:00:00Z',
           },
         },
@@ -125,8 +125,8 @@ describe('useUserStore', () => {
         username: 'admin',
         email: 'admin@example.com',
         nickname: 'Admin',
+        phone: '13800000001',
         role: 'admin',
-        status: 'active',
         created_at: '2024-01-01T00:00:00Z',
       }
       expect(store.isAdmin).toBe(true)
@@ -139,8 +139,8 @@ describe('useUserStore', () => {
         username: 'user',
         email: 'user@example.com',
         nickname: 'User',
+        phone: '13800000002',
         role: 'user',
-        status: 'active',
         created_at: '2024-01-01T00:00:00Z',
       }
       expect(store.isAdmin).toBe(false)
@@ -155,8 +155,8 @@ describe('useUserStore', () => {
         username: 'testuser',
         email: 'test@example.com',
         nickname: 'Test',
+        phone: '13800001111',
         role: 'user',
-        status: 'active',
         created_at: '2024-01-01T00:00:00Z',
       }
       expect(store.username).toBe('testuser')
@@ -169,8 +169,8 @@ describe('useUserStore', () => {
         username: 'testuser',
         email: 'test@example.com',
         nickname: 'Test Nickname',
+        phone: '13800001111',
         role: 'user',
-        status: 'active',
         created_at: '2024-01-01T00:00:00Z',
       }
       expect(store.nickname).toBe('Test Nickname')
@@ -182,8 +182,8 @@ describe('useUserStore', () => {
         id: 1,
         username: 'testuser',
         email: 'test@example.com',
+        phone: '13800001111',
         role: 'user',
-        status: 'active',
         created_at: '2024-01-01T00:00:00Z',
       }
       expect(store.nickname).toBe('testuser')
@@ -252,8 +252,8 @@ describe('useUserStore', () => {
           username: 'testuser',
           email: 'test@example.com',
           nickname: 'Test',
+          phone: '13800001111',
           role: 'user',
-          status: 'active',
           created_at: '2024-01-01T00:00:00Z',
         },
       })

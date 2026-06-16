@@ -9,18 +9,9 @@
         <el-table-column prop="username" label="用户名" />
         <el-table-column prop="email" label="邮箱" />
         <el-table-column prop="nickname" label="昵称" />
-        <el-table-column prop="role" label="角色" width="100">
+        <el-table-column prop="phone" label="电话">
           <template #default="{ row }">
-            <el-tag :type="row.role === 'admin' ? 'danger' : ''">
-              {{ row.role === 'admin' ? '管理员' : '用户' }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="100">
-          <template #default="{ row }">
-            <el-tag :type="row.status === 'active' ? 'success' : 'info'">
-              {{ row.status === 'active' ? '激活' : '未激活' }}
-            </el-tag>
+            {{ row.phone || '-' }}
           </template>
         </el-table-column>
         <el-table-column prop="created_at" label="注册时间" width="180">
@@ -48,6 +39,7 @@ import { onMounted, ref } from 'vue'
 
 import { getUsers } from '@/api/admin'
 import type { User } from '@/types'
+import { formatDate } from '@/utils/format'
 
 const users = ref<User[]>([])
 const loading = ref(true)
@@ -80,11 +72,6 @@ const fetchUsers = async () => {
 const handlePageChange = (page: number) => {
   currentPage.value = page
   fetchUsers()
-}
-
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return '-'
-  return new Date(dateStr).toLocaleDateString('zh-CN')
 }
 </script>
 

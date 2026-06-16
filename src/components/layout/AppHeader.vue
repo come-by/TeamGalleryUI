@@ -5,22 +5,6 @@
       <router-link to="/articles" class="nav-link">文章</router-link>
       <router-link to="/projects" class="nav-link">项目</router-link>
     </div>
-    <div class="nav-center">
-      <el-select
-        v-model="searchQuery"
-        filterable
-        remote
-        reserve-keyword
-        placeholder="搜索文章"
-        :remote-method="handleSearch"
-        :loading="searchLoading"
-        class="search-select"
-        @keyup.enter="goToSearch"
-        @change="goToSearch"
-      >
-        <el-option v-for="item in suggestions" :key="item" :label="item" :value="item" />
-      </el-select>
-    </div>
     <div class="nav-right">
       <template v-if="!isLoggedIn">
         <router-link to="/login" class="nav-link">登录</router-link>
@@ -56,12 +40,10 @@ import { ArrowDown, UserFilled } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { useSearch } from '@/composables/useSearch'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
-const { searchQuery, suggestions, searchLoading, handleSearch } = useSearch()
 
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 const isAdmin = computed(() => userStore.isAdmin)
@@ -73,12 +55,6 @@ onMounted(() => {
     userStore.fetchProfile()
   }
 })
-
-const goToSearch = () => {
-  if (searchQuery.value) {
-    router.push({ path: '/search', query: { q: searchQuery.value } })
-  }
-}
 
 type DropdownCommand = 'profile' | 'favorites' | 'likes' | 'admin' | 'logout'
 
@@ -137,16 +113,6 @@ const handleCommand = (command: DropdownCommand) => {
 
 .nav-link:hover {
   color: #409eff;
-}
-
-.nav-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.search-select {
-  width: 300px;
 }
 
 .user-dropdown {

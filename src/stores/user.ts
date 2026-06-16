@@ -2,8 +2,20 @@ import { ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { getProfile, login as loginApi, register as registerApi } from '@/api/user'
-import type { ApiResponse, LoginParams, LoginResponse, RegisterParams, User } from '@/types'
+import {
+  getProfile,
+  login as loginApi,
+  register as registerApi,
+  updateProfile as updateProfileApi,
+} from '@/api/user'
+import type {
+  ApiResponse,
+  LoginParams,
+  LoginResponse,
+  ProfileUpdateParams,
+  RegisterParams,
+  User,
+} from '@/types'
 import { handleApiError } from '@/utils/error'
 
 export const useUserStore = defineStore('user', () => {
@@ -63,11 +75,9 @@ export const useUserStore = defineStore('user', () => {
     try {
       const res = await getProfile()
       if (res.success) {
-        // Go 后端 GetProfile 可能返回 UserProfile 嵌套结构，提取内层 user
         const data = res.data as unknown as Record<string, unknown> | null
-        if (data && data.user) {
-          user.value = data.user as User
-        } else if (data && data.username) {
+        if (data && data.username) {
+          // ProfileResponse 直接包含 username/email/nickname/phone 等字段
           user.value = data as unknown as User
         } else {
           user.value = null
@@ -78,6 +88,18 @@ export const useUserStore = defineStore('user', () => {
     } catch (error) {
       handleApiError(error)
     }
+  }
+
+  const updateProfile = async (data: ProfileUpdateParams): Promise<ApiResponse<User>> => {
+    const res = await updateProfileApi(data)
+    if (res.success) {
+      ElMessage.success('资料更新成功')
+      // 更新本地用户状态
+      await fetchProfile()
+    } else {
+      handleApiError(res.error)
+    }
+    return res
   }
 
   const logout = (): void => {
@@ -99,6 +121,7 @@ export const useUserStore = defineStore('user', () => {
     login,
     register,
     fetchProfile,
+    updateProfile,
     logout,
   }
 })

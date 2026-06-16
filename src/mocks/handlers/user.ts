@@ -18,9 +18,13 @@ const users = [
     email: 'admin@example.com',
     nickname: '管理员',
     avatar: 'https://example.com/avatar1.jpg',
+    phone: '13800000001',
     bio: '全栈开发者',
+    website: 'https://admin.dev',
+    github: 'admin-dev',
+    twitter: 'admin_dev',
+    location: '北京',
     role: 'admin',
-    status: 'active',
     created_at: '2024-01-01T00:00:00Z',
   },
   {
@@ -29,9 +33,13 @@ const users = [
     email: 'test@example.com',
     nickname: '测试用户',
     avatar: 'https://example.com/avatar2.jpg',
+    phone: '13800000002',
     bio: '前端爱好者',
+    website: 'https://test.dev',
+    github: 'test-user',
+    twitter: 'test_user',
+    location: '上海',
     role: 'user',
-    status: 'active',
     created_at: '2024-01-02T00:00:00Z',
   },
 ]
@@ -94,15 +102,33 @@ export const updateProfileHandler = http.put('/api/v1/profile', async ({ request
 
   const body = await getRequestBody(request)
   const nickname = body.nickname as string | undefined
+  const email = body.email as string | undefined
+  const phone = body.phone as string | undefined
   const avatar = body.avatar as string | undefined
   const bio = body.bio as string | undefined
+  const website = body.website as string | undefined
+  const github = body.github as string | undefined
+  const twitter = body.twitter as string | undefined
+  const location = body.location as string | undefined
+
+  // 邮箱唯一性检查
+  if (email && users.some((u) => u.id !== users[0].id && u.email === email)) {
+    return errorResponse('DUPLICATE_ENTRY', '邮箱已被其他用户使用', 409)
+  }
 
   // 更新第一个用户（模拟当前登录用户）
   if (nickname) users[0].nickname = nickname
+  if (email) users[0].email = email
+  if (phone) users[0].phone = phone
   if (avatar) users[0].avatar = avatar
   if (bio !== undefined) users[0].bio = bio
+  if (website) users[0].website = website
+  if (github) users[0].github = github
+  if (twitter) users[0].twitter = twitter
+  if (location) users[0].location = location
 
-  return successResponse(users[0])
+  const { password: _, ...userWithoutPassword } = users[0] as Record<string, unknown>
+  return successResponse(userWithoutPassword)
 })
 
 // 获取我的收藏列表

@@ -4,9 +4,17 @@ export interface User {
   email: string
   nickname?: string
   avatar?: string
+  phone?: string
   role: 'admin' | 'user'
-  status: 'active' | 'inactive'
   created_at: string
+  // 扩展资料字段（来自 ProfileResponse）
+  bio?: string
+  website?: string
+  github?: string
+  twitter?: string
+  location?: string
+  birthday?: string
+  updated_at?: string
 }
 
 export interface LoginParams {
@@ -19,6 +27,7 @@ export interface RegisterParams {
   email: string
   password: string
   nickname?: string
+  phone?: string
 }
 
 export interface LoginResponse {
@@ -31,5 +40,12 @@ export interface LoginResponse {
 export interface ProfileUpdateParams {
   nickname?: string
   email?: string
+  phone?: string
   avatar?: string
+  bio?: string
+  website?: string
+  github?: string
+  twitter?: string
+  location?: string
+  birthday?: string
 }
