@@ -108,7 +108,7 @@ describe('MSW 集成测试 - 认证模块', () => {
         {},
         {
           headers: { Authorization: 'Bearer refresh-test-token' },
-        }
+        },
       )
 
       expect(response.data.success).toBe(true)
@@ -122,7 +122,7 @@ describe('MSW 集成测试 - 认证模块', () => {
           {},
           {
             headers: { Authorization: 'Bearer invalid-token' },
-          }
+          },
         )
       } catch (error: unknown) {
         const err = error as { response: { status: number } }
@@ -142,7 +142,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       expect(response.data.data.pagination.total).toBeGreaterThan(0)
       // 只返回 published 状态的文章
       expect(
-        response.data.data.data.every((a: { status: string }) => a.status === 'published')
+        response.data.data.data.every((a: { status: string }) => a.status === 'published'),
       ).toBe(true)
     })
 
@@ -162,7 +162,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       })
 
       expect(
-        response.data.data.data.every((a: { category: string }) => a.category === '前端')
+        response.data.data.data.every((a: { category: string }) => a.category === '前端'),
       ).toBe(true)
     })
 
@@ -172,7 +172,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       })
 
       expect(response.data.data.data.every((a: { tags: string[] }) => a.tags.includes('Vue'))).toBe(
-        true
+        true,
       )
     })
 
@@ -218,7 +218,7 @@ describe('MSW 集成测试 - 文章模块', () => {
         },
         {
           headers: { Authorization: 'Bearer test-token' },
-        }
+        },
       )
 
       expect(response.data.success).toBe(true)
@@ -239,7 +239,7 @@ describe('MSW 集成测试 - 文章模块', () => {
         await axios.post(
           `${API_BASE}/articles`,
           { content: '内容' },
-          { headers: { Authorization: 'Bearer test-token' } }
+          { headers: { Authorization: 'Bearer test-token' } },
         )
       } catch (error: unknown) {
         const err = error as {
@@ -255,7 +255,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       const response = await axios.put(
         `${API_BASE}/articles/1`,
         { title: '更新后的标题' },
-        { headers: { Authorization: 'Bearer test-token' } }
+        { headers: { Authorization: 'Bearer test-token' } },
       )
 
       expect(response.data.success).toBe(true)
@@ -279,7 +279,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       const response1 = await axios.post(
         `${API_BASE}/articles/2/like`,
         {},
-        { headers: { Authorization: 'Bearer test-token' } }
+        { headers: { Authorization: 'Bearer test-token' } },
       )
       expect(response1.data.data.is_liked).toBe(true)
       expect(response1.data.data.likes).toBe(6)
@@ -288,7 +288,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       const response2 = await axios.post(
         `${API_BASE}/articles/2/like`,
         {},
-        { headers: { Authorization: 'Bearer test-token' } }
+        { headers: { Authorization: 'Bearer test-token' } },
       )
       expect(response2.data.data.is_liked).toBe(false)
       expect(response2.data.data.likes).toBe(5)
@@ -300,7 +300,7 @@ describe('MSW 集成测试 - 文章模块', () => {
       const response = await axios.post(
         `${API_BASE}/articles/2/favorite`,
         {},
-        { headers: { Authorization: 'Bearer test-token' } }
+        { headers: { Authorization: 'Bearer test-token' } },
       )
 
       expect(response.data.success).toBe(true)
@@ -335,7 +335,7 @@ describe('MSW 集成测试 - 用户模块', () => {
       const response = await axios.put(
         `${API_BASE}/profile`,
         { nickname: '新昵称', bio: '新简介' },
-        { headers: { Authorization: 'Bearer test-token' } }
+        { headers: { Authorization: 'Bearer test-token' } },
       )
 
       expect(response.data.success).toBe(true)
@@ -373,9 +373,9 @@ describe('MSW 动态 Handler 测试', () => {
       http.post('/api/v1/login', async () => {
         return HttpResponse.json(
           { success: false, error: { code: 'SERVER_ERROR', message: '服务器维护中' } },
-          { status: 503 }
+          { status: 503 },
         )
-      })
+      }),
     )
 
     try {

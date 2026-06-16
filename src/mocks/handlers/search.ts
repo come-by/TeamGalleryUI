@@ -57,7 +57,7 @@ export const searchArticlesHandler = http.get('/api/v1/search', async ({ request
     (a) =>
       a.title.toLowerCase().includes(q) ||
       a.summary.toLowerCase().includes(q) ||
-      a.tags.some((t) => t.toLowerCase().includes(q))
+      a.tags.some((t) => t.toLowerCase().includes(q)),
   )
 
   const total = results.length
@@ -102,7 +102,7 @@ export const searchSuggestionsHandler = http.get(
       .slice(0, limit)
 
     return successResponse(suggestions)
-  }
+  },
 )
 
 export const searchHandlers = [searchArticlesHandler, searchSuggestionsHandler]

@@ -237,7 +237,7 @@ describe('useUserStore', () => {
 
       const store = useUserStore()
       await expect(
-        store.register({ username: 'test', email: 'test@example.com', password: 'Password123' })
+        store.register({ username: 'test', email: 'test@example.com', password: 'Password123' }),
       ).rejects.toThrow('Network error')
     })
   })
@@ -321,7 +321,7 @@ describe('useUserStore', () => {
 
       const store = useUserStore()
       await expect(store.login({ username: 'test', password: '123456' })).rejects.toThrow(
-        'Network error'
+        'Network error',
       )
       expect(store.token).toBe('')
       expect(store.isLoggedIn).toBe(false)

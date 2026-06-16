@@ -17,7 +17,7 @@ export const errorResponse = (
   code: string,
   message: string,
   status: number = 400,
-  details?: Array<{ field: string; message: string }>
+  details?: Array<{ field: string; message: string }>,
 ) => {
   const response: ApiResponse<never> = {
     success: false,
@@ -31,7 +31,7 @@ export const paginatedResponse = <T>(
   list: T[],
   total: number,
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
 ) => {
   const totalPages = Math.ceil(total / pageSize)
   const data: PaginatedResponse<T> = {

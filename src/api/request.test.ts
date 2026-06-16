@@ -60,7 +60,7 @@ describe('request 模块', () => {
     // 确保 axios.create 返回 mock 对象
     const axiosModule = await import('axios')
     vi.mocked(axiosModule.default.create).mockReturnValue(
-      mockAxiosInstance as unknown as ReturnType<typeof axiosModule.default.create>
+      mockAxiosInstance as unknown as ReturnType<typeof axiosModule.default.create>,
     )
   })
 

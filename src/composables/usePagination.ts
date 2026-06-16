@@ -16,7 +16,7 @@ interface UsePaginationOptions {
  */
 export function usePagination<T>(
   fetchFn: (params: { page: number; page_size: number }) => Promise<T[]>,
-  options: UsePaginationOptions = {}
+  options: UsePaginationOptions = {},
 ) {
   const currentPage = ref(options.page ?? 1)
   const pageSize = ref(options.pageSize ?? 10)

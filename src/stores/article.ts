@@ -13,12 +13,25 @@ import {
 import type { Article, ArticleListParams } from '@/types'
 import { handleApiError } from '@/utils/error'
 
+/**
+ * 文章状态管理 Store
+ * 管理文章列表、详情、CRUD 操作和加载状态
+ */
 export const useArticleStore = defineStore('article', () => {
+  /** 文章列表 */
   const articles = ref<Article[]>([])
+  /** 当前选中的文章 */
   const currentArticle = ref<Article | null>(null)
+  /** 文章总数 */
   const total = ref(0)
+  /** 加载状态 */
   const loading = ref(false)
 
+  /**
+   * 获取文章列表
+   *
+   * @param params - 查询参数
+   */
   const fetchArticles = async (params: ArticleListParams = {}): Promise<void> => {
     loading.value = true
     try {
@@ -36,6 +49,11 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /**
+   * 获取单篇文章详情
+   *
+   * @param id - 文章 ID
+   */
   const fetchArticle = async (id: number): Promise<void> => {
     loading.value = true
     try {
@@ -52,6 +70,11 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /**
+   * 获取最新文章
+   *
+   * @param count - 获取数量，默认 5
+   */
   const fetchLatest = async (count = 5): Promise<void> => {
     try {
       const res = await getLatestArticles(count)
@@ -65,6 +88,13 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /**
+   * 创建新文章
+   *
+   * @param data - 文章创建数据
+   * @returns 创建的文章
+   * @throws {Error} 创建失败时抛出错误
+   */
   const createNewArticle = async (data: Partial<Article>): Promise<Article> => {
     try {
       const res = await createArticle(data)
@@ -80,6 +110,14 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /**
+   * 更新现有文章
+   *
+   * @param id - 文章 ID
+   * @param data - 更新数据
+   * @returns 更新后的文章
+   * @throws {Error} 更新失败时抛出错误
+   */
   const updateExistingArticle = async (id: number, data: Partial<Article>): Promise<Article> => {
     try {
       const res = await updateArticle(id, data)
@@ -95,6 +133,12 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /**
+   * 删除文章
+   *
+   * @param id - 文章 ID
+   * @throws {Error} 删除失败时抛出错误
+   */
   const removeArticle = async (id: number): Promise<void> => {
     try {
       const res = await deleteArticle(id)
@@ -110,6 +154,7 @@ export const useArticleStore = defineStore('article', () => {
     }
   }
 
+  /** 清除当前选中的文章引用 */
   const clearCurrent = (): void => {
     currentArticle.value = null
   }

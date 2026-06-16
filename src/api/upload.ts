@@ -11,7 +11,7 @@ export interface UploadResponse {
 
 export const uploadImage = (
   formData: FormData,
-  onProgress?: (percent: number) => void
+  onProgress?: (percent: number) => void,
 ): Promise<ApiResponse<UploadResponse>> => {
   return request.post('/upload/image', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -23,7 +23,7 @@ export const uploadImage = (
 
 export const uploadFile = (
   formData: FormData,
-  onProgress?: (percent: number) => void
+  onProgress?: (percent: number) => void,
 ): Promise<ApiResponse<UploadResponse>> => {
   return request.post('/upload/file', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },

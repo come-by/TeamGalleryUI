@@ -67,7 +67,7 @@ export const getUsersHandler = http.get('/api/v1/users', async ({ request }) => 
   if (keyword) {
     const kw = keyword.toLowerCase()
     filtered = users.filter(
-      (u) => u.username.toLowerCase().includes(kw) || u.nickname.toLowerCase().includes(kw)
+      (u) => u.username.toLowerCase().includes(kw) || u.nickname.toLowerCase().includes(kw),
     )
   }
 

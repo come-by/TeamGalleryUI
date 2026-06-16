@@ -130,7 +130,7 @@ export function useMilestone() {
   async function update(
     projectId: number,
     id: number,
-    data: MilestoneUpdateParams
+    data: MilestoneUpdateParams,
   ): Promise<Milestone | null> {
     loading.value = true
     try {
@@ -181,7 +181,7 @@ export function useMilestone() {
   async function updateSort(
     projectId: number,
     id: number,
-    data: MilestoneSortParams
+    data: MilestoneSortParams,
   ): Promise<boolean> {
     loading.value = true
     try {
@@ -207,7 +207,7 @@ export function useMilestone() {
   async function updateStatus(
     projectId: number,
     id: number,
-    status: MilestoneStatus
+    status: MilestoneStatus,
   ): Promise<Milestone | null> {
     loading.value = true
     try {

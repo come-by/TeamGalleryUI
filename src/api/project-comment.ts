@@ -16,7 +16,7 @@ import request from './request'
  */
 export const getProjectComments = (
   projectId: number,
-  params: ProjectCommentListParams = {}
+  params: ProjectCommentListParams = {},
 ): Promise<ApiResponse<PaginatedResponse<ProjectComment>>> => {
   return request.get(`/projects/${projectId}/comments`, { params })
 }
@@ -28,7 +28,7 @@ export const getProjectComments = (
  * @returns 评论统计数据
  */
 export const getProjectCommentStatistics = (
-  projectId: number
+  projectId: number,
 ): Promise<ApiResponse<{ total: number; approved: number; pending: number; rejected: number }>> => {
   return request.get(`/projects/${projectId}/comments/statistics`)
 }
@@ -42,7 +42,7 @@ export const getProjectCommentStatistics = (
  */
 export const createProjectComment = (
   projectId: number,
-  data: ProjectCommentCreateParams
+  data: ProjectCommentCreateParams,
 ): Promise<ApiResponse<ProjectComment>> => {
   return request.post(`/projects/${projectId}/comments`, data)
 }
@@ -86,7 +86,7 @@ export const reportProjectComment = (commentId: number): Promise<ApiResponse> =>
  */
 export const getUserProjectComments = (
   userId: number,
-  params: ProjectCommentListParams = {}
+  params: ProjectCommentListParams = {},
 ): Promise<ApiResponse<PaginatedResponse<ProjectComment>>> => {
   return request.get(`/users/${userId}/project-comments`, { params })
 }
@@ -98,7 +98,7 @@ export const getUserProjectComments = (
  * @returns 待审核评论分页数据
  */
 export const getPendingProjectComments = (
-  params: ProjectCommentListParams = {}
+  params: ProjectCommentListParams = {},
 ): Promise<ApiResponse<PaginatedResponse<ProjectComment>>> => {
   return request.get('/admin/project-comments/pending', { params })
 }

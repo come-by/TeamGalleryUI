@@ -166,7 +166,7 @@ export function useUpload(options: UploadOptions = {}) {
               updateTotalProgress()
             }
           },
-        }
+        },
       )
 
       const body = response.data
@@ -200,7 +200,7 @@ export function useUpload(options: UploadOptions = {}) {
 
       reportApiError(
         { code: 'FILE_UPLOAD_FAILED', message: `上传失败: ${item.name}` },
-        { url: item.name, params: { filename: item.name, size: item.size } }
+        { url: item.name, params: { filename: item.name, size: item.size } },
       )
       updateTotalProgress()
     } finally {

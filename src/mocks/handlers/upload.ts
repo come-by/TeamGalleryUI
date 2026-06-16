@@ -111,7 +111,7 @@ export const deleteFileHandler = http.delete(
     }
 
     return successResponse(null)
-  }
+  },
 )
 
 export const uploadHandlers = [uploadFileHandler, uploadImageHandler, deleteFileHandler]

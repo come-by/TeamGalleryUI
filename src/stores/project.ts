@@ -108,7 +108,7 @@ export const useProjectStore = defineStore('project', () => {
 
   const fetchMembers = async (
     projectId: number,
-    params: MemberListParams = { page: 1, page_size: 20 }
+    params: MemberListParams = { page: 1, page_size: 20 },
   ) => {
     memberLoading.value = true
     try {
@@ -149,7 +149,7 @@ export const useProjectStore = defineStore('project', () => {
   const updateMemberRole = async (
     projectId: number,
     userId: number,
-    data: UpdateMemberRoleParams
+    data: UpdateMemberRoleParams,
   ) => {
     const res = await updateProjectMemberRole(projectId, userId, data)
     if (res.success) {

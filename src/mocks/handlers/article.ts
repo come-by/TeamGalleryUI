@@ -92,7 +92,7 @@ export const getArticlesHandler = http.get('/api/v1/articles', async ({ request 
   if (keyword) {
     const kw = keyword.toLowerCase()
     filtered = filtered.filter(
-      (a) => a.title.toLowerCase().includes(kw) || a.content.toLowerCase().includes(kw)
+      (a) => a.title.toLowerCase().includes(kw) || a.content.toLowerCase().includes(kw),
     )
   }
 
@@ -181,7 +181,7 @@ export const updateArticleHandler = http.put(
     articles[index] = { ...articles[index], ...body, updated_at: new Date().toISOString() }
 
     return successResponse(articles[index])
-  }
+  },
 )
 
 // 删除文章
@@ -203,7 +203,7 @@ export const deleteArticleHandler = http.delete(
 
     articles.splice(index, 1)
     return successResponse({ message: '删除成功' })
-  }
+  },
 )
 
 // 点赞文章
@@ -232,7 +232,7 @@ export const likeArticleHandler = http.post(
     }
 
     return successResponse({ likes: article.likes, is_liked: article.is_liked })
-  }
+  },
 )
 
 // 收藏文章
@@ -254,7 +254,7 @@ export const favoriteArticleHandler = http.post(
 
     article.is_favorited = !article.is_favorited
     return successResponse({ is_favorited: article.is_favorited })
-  }
+  },
 )
 
 export const articleHandlers = [

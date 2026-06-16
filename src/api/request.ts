@@ -1,6 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 
+import router from '@/router'
 import type { ApiError, ApiResponse, PaginatedResponse, User } from '@/types'
 import {
   handleApiError,
@@ -68,7 +69,7 @@ const refreshAccessToken = async (): Promise<string> => {
       headers: {
         Authorization: `Bearer ${refreshToken}`,
       },
-    }
+    },
   )
 
   if (response.data?.success && response.data.data?.access_token) {
@@ -97,7 +98,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 axiosInstance.interceptors.response.use(
@@ -122,7 +123,7 @@ axiosInstance.interceptors.response.use(
         originalRequest._retry = true
 
         await new Promise((resolve) =>
-          setTimeout(resolve, RETRY_DELAY * originalRequest._retryCount)
+          setTimeout(resolve, RETRY_DELAY * originalRequest._retryCount),
         )
 
         return request(originalRequest)
@@ -152,7 +153,7 @@ axiosInstance.interceptors.response.use(
             processQueue(refreshError, null)
             clearTokens()
             ElMessage.error('登录已过期，请重新登录')
-            window.location.href = '/login'
+            router.push('/login')
             return Promise.reject(refreshError)
           } finally {
             isRefreshing = false
@@ -194,7 +195,7 @@ axiosInstance.interceptors.response.use(
       ElMessage.error('网络连接失败')
     }
     return Promise.reject(error.message)
-  }
+  },
 )
 
 // 核心请求函数：处理请求共享

@@ -20,7 +20,7 @@ import request from './request'
  */
 export const getMilestones = (
   projectId: number,
-  params: MilestoneListParams
+  params: MilestoneListParams,
 ): Promise<ApiResponse<PaginatedResponse<Milestone>>> => {
   return request.get(`/projects/${projectId}/milestones`, { params })
 }
@@ -45,7 +45,7 @@ export const getMilestone = (projectId: number, id: number): Promise<ApiResponse
  */
 export const createMilestone = (
   projectId: number,
-  data: MilestoneCreateParams
+  data: MilestoneCreateParams,
 ): Promise<ApiResponse<Milestone>> => {
   return request.post(`/projects/${projectId}/milestones`, data)
 }
@@ -61,7 +61,7 @@ export const createMilestone = (
 export const updateMilestone = (
   projectId: number,
   id: number,
-  data: MilestoneUpdateParams
+  data: MilestoneUpdateParams,
 ): Promise<ApiResponse<Milestone>> => {
   return request.put(`/projects/${projectId}/milestones/${id}`, data)
 }
@@ -88,7 +88,7 @@ export const deleteMilestone = (projectId: number, id: number): Promise<ApiRespo
 export const updateMilestoneSort = (
   projectId: number,
   id: number,
-  data: MilestoneSortParams
+  data: MilestoneSortParams,
 ): Promise<ApiResponse> => {
   return request.put(`/projects/${projectId}/milestones/${id}/sort`, data)
 }
@@ -104,7 +104,7 @@ export const updateMilestoneSort = (
 export const updateMilestoneStatus = (
   projectId: number,
   id: number,
-  data: MilestoneStatusParams
+  data: MilestoneStatusParams,
 ): Promise<ApiResponse<Milestone>> => {
   return request.put(`/projects/${projectId}/milestones/${id}/status`, data)
 }
