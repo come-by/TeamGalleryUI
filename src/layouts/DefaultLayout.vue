@@ -20,10 +20,26 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'DefaultLayout' })
+import { computed } from 'vue'
+
 import AppHeader from '@/components/layout/AppHeader.vue'
+import { useIdleTimeout } from '@/composables/useIdleTimeout'
+import { useSessionMonitor } from '@/composables/useSessionMonitor'
+import { useUserStore } from '@/stores/user'
 
 // 需要缓存的组件名称列表（与 defineOptions 中的 name 一致）
 const cachedViews = ['ArticleListView', 'SearchView', 'FavoritesView', 'LikesView']
+
+// 企业安全：会话监控始终运行（内部跳过未登录状态）
+const userStore = useUserStore()
+useSessionMonitor()
+
+// 闲置超时仅在已登录时启用
+useIdleTimeout(
+  30, // 30 分钟无操作
+  60, // 1 分钟警告时间
+  computed(() => userStore.isLoggedIn), // 仅在已登录时启用
+)
 </script>
 
 <style scoped>

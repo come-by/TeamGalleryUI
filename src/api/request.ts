@@ -57,20 +57,14 @@ const clearTokens = (): void => {
 }
 
 const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = getRefreshToken()
-  if (!refreshToken) {
+  const rtk = getRefreshToken()
+  if (!rtk) {
     throw new Error('No refresh token available')
   }
 
-  const response = await axios.post(
-    `${import.meta.env.VITE_API_BASE_URL || '/api'}/token/refresh`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-      },
-    },
-  )
+  const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/refresh`, {
+    refresh_token: rtk,
+  })
 
   if (response.data?.success && response.data.data?.access_token) {
     const { access_token, refresh_token } = response.data.data
@@ -134,9 +128,12 @@ axiosInstance.interceptors.response.use(
       const { status, data } = error.response
       const apiError: ApiError = data?.error || { code: 'UNKNOWN', message: '请求失败' }
 
-      // 登录/注册接口的 401 是认证失败，不需要刷新 token
+      // 登录/注册/刷新/登出接口的 401 是认证失败，不需要刷新 token
       const isAuthEndpoint =
-        originalRequest?.url?.endsWith('/login') || originalRequest?.url?.endsWith('/register')
+        originalRequest?.url?.endsWith('/login') ||
+        originalRequest?.url?.endsWith('/register') ||
+        originalRequest?.url?.endsWith('/auth/refresh') ||
+        originalRequest?.url?.endsWith('/auth/logout')
 
       // 401 尝试刷新 token（跳过登录和注册接口）
       if (isUnauthorized(apiError) && !originalRequest._retry && !isAuthEndpoint) {

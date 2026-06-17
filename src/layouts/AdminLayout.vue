@@ -37,11 +37,24 @@ import { ChatDotRound, User } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { useIdleTimeout } from '@/composables/useIdleTimeout'
+import { useSessionMonitor } from '@/composables/useSessionMonitor'
+import { useUserStore } from '@/stores/user'
+
 const route = useRoute()
 const currentRoute = computed(() => route.path as string)
 
 // 需要缓存的组件名称列表（与 defineOptions 中的 name 一致）
 const cachedViews = ['UsersView', 'CommentsView']
+
+// 企业安全：后台管理启用闲置超时 + 会话监控
+const userStore = useUserStore()
+useIdleTimeout(
+  30, // 30 分钟无操作
+  60, // 1 分钟警告时间
+  computed(() => userStore.isLoggedIn), // 仅在已登录时启用
+)
+useSessionMonitor()
 </script>
 
 <style scoped>

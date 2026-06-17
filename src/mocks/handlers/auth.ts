@@ -133,18 +133,14 @@ export const getProfileHandler = http.get('/api/v1/profile', async ({ request })
 })
 
 // 刷新 Token
-export const refreshTokenHandler = http.post('/api/v1/token/refresh', async ({ request }) => {
+export const refreshTokenHandler = http.post('/api/v1/auth/refresh', async ({ request }) => {
   await delay()
 
-  const authHeader = request.headers.get('Authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return errorResponse('UNAUTHORIZED', '无效的刷新令牌', 401)
-  }
-
-  const refreshToken = authHeader.replace('Bearer ', '')
+  const body = await getRequestBody(request)
+  const refreshToken = (body as { refresh_token?: string })?.refresh_token || ''
 
   // 验证刷新令牌
-  if (!refreshToken.startsWith('refresh-')) {
+  if (!refreshToken || !refreshToken.startsWith('refresh-')) {
     return errorResponse('UNAUTHORIZED', '刷新令牌已过期', 401)
   }
 
@@ -156,4 +152,24 @@ export const refreshTokenHandler = http.post('/api/v1/token/refresh', async ({ r
   })
 })
 
-export const authHandlers = [loginHandler, registerHandler, getProfileHandler, refreshTokenHandler]
+// 登出
+export const logoutHandler = http.post('/api/v1/auth/logout', async ({ request }) => {
+  await delay()
+
+  const body = await getRequestBody(request)
+  const refreshToken = (body as { refresh_token?: string })?.refresh_token || ''
+
+  if (!refreshToken) {
+    return errorResponse('VALIDATION_FAILED', 'Refresh Token 不能为空', 400)
+  }
+
+  return successResponse(null)
+})
+
+export const authHandlers = [
+  loginHandler,
+  registerHandler,
+  getProfileHandler,
+  refreshTokenHandler,
+  logoutHandler,
+]

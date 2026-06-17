@@ -1,13 +1,21 @@
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useAuth } from '@/composables/useAuth'
 import { useUserStore } from '@/stores/user'
+
+// Mock token 工具：使任意 token 字符串不会被判定为过期
+vi.mock('@/utils/token', () => ({
+  decodeToken: vi.fn(() => ({ exp: Math.floor(Date.now() / 1000) + 3600 })),
+  isTokenExpired: vi.fn(() => false),
+  willTokenExpireSoon: vi.fn(() => false),
+}))
 
 describe('useAuth', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     localStorage.clear()
+    vi.clearAllMocks()
   })
 
   it('should return not logged in state initially', () => {
@@ -50,6 +58,17 @@ describe('useAuth', () => {
 
     const auth = useAuth()
     expect(auth.isAdmin.value).toBe(true)
+  })
+
+  it('should expose isAccessTokenExpired and isRefreshTokenValid', () => {
+    const auth = useAuth()
+    expect(auth.isAccessTokenExpired.value).toBe(false)
+    expect(auth.isRefreshTokenValid.value).toBe(false)
+  })
+
+  it('checkTokenValidity should delegate to userStore', () => {
+    const auth = useAuth()
+    expect(auth.checkTokenValidity()).toBe('invalid')
   })
 
   it('should require auth when not logged in', () => {

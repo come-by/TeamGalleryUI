@@ -103,13 +103,9 @@ describe('MSW 集成测试 - 认证模块', () => {
 
   describe('Token 刷新', () => {
     it('应该成功刷新 token', async () => {
-      const response = await axios.post(
-        `${API_BASE}/token/refresh`,
-        {},
-        {
-          headers: { Authorization: 'Bearer refresh-test-token' },
-        },
-      )
+      const response = await axios.post(`${API_BASE}/auth/refresh`, {
+        refresh_token: 'refresh-test-token',
+      })
 
       expect(response.data.success).toBe(true)
       expect(response.data.data.access_token).toBe('test-token')
@@ -117,13 +113,7 @@ describe('MSW 集成测试 - 认证模块', () => {
 
     it('应该返回错误当刷新令牌无效', async () => {
       try {
-        await axios.post(
-          `${API_BASE}/token/refresh`,
-          {},
-          {
-            headers: { Authorization: 'Bearer invalid-token' },
-          },
-        )
+        await axios.post(`${API_BASE}/auth/refresh`, { refresh_token: 'invalid-token' })
       } catch (error: unknown) {
         const err = error as { response: { status: number } }
         expect(err.response.status).toBe(401)

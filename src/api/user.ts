@@ -63,8 +63,26 @@ export const deleteUser = (): Promise<ApiResponse> => {
 /**
  * 刷新访问令牌
  *
+ * 使用 refresh token 换取新的双 token。
+ * refresh token 通过请求体传递（与后端 /auth/refresh 对齐）。
+ *
  * @returns 新的令牌数据
  */
 export const refreshToken = (): Promise<ApiResponse<RefreshTokenResponse>> => {
-  return request.post<ApiResponse<RefreshTokenResponse>>('/token/refresh')
+  const rtk = localStorage.getItem('refresh_token')
+  return request.post<ApiResponse<RefreshTokenResponse>>('/auth/refresh', {
+    refresh_token: rtk || '',
+  })
+}
+
+/**
+ * 登出（服务端撤销 refresh token）
+ *
+ * @param refreshTokenStr 要撤销的 refresh token
+ * @returns 操作结果
+ */
+export const logoutApi = (refreshTokenStr: string): Promise<ApiResponse> => {
+  return request.post<ApiResponse>('/auth/logout', {
+    refresh_token: refreshTokenStr,
+  })
 }

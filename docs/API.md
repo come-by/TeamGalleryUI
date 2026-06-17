@@ -107,18 +107,34 @@ interface PaginatedResponse<T> {
 
 对应文件：`src/api/user.ts`
 
-| 方法 | 路径             | 函数             | 认证          |
-| ---- | ---------------- | ---------------- | ------------- |
-| POST | `/login`         | `login()`        | 否            |
-| POST | `/register`      | `register()`     | 否            |
-| POST | `/token/refresh` | `refreshToken()` | Refresh Token |
+| 方法 | 路径            | 函数             | 认证          |
+| ---- | --------------- | ---------------- | ------------- |
+| POST | `/login`        | `login()`        | 否            |
+| POST | `/register`     | `register()`     | 否            |
+| POST | `/auth/refresh` | `refreshToken()` | Refresh Token |
+| POST | `/auth/logout`  | `logoutApi()`    | 否            |
+| GET  | `/auth/session` | —                | Access Token  |
+
+**Token 生命周期：**
+
+| Token         | 存储位置       | 有效期  | 用途                |
+| ------------- | -------------- | ------- | ------------------- |
+| Access Token  | `localStorage` | 15 分钟 | API 鉴权            |
+| Refresh Token | `localStorage` | 7 天    | 换发新 Access Token |
+
+**过期处理流程：**
+
+1. 路由跳转时前端 JWT 解码 `exp` 字段主动检测
+2. Access Token 过期 → 静默调 `/auth/refresh` 换新
+3. Refresh Token 也过期 → 强制登出，跳转 `/login`
+4. 定时 60s + 页面切回前台 + API 返回 401 均触发校验
 
 ### 2.1 用户登录
 
 ```typescript
 login({ username: 'test', password: '123456' })
 // POST /api/login
-// 响应: { success: true, data: { token: "..." } }
+// 响应: { success: true, data: { access_token: "...", refresh_token: "...", expires_in: 900 } }
 ```
 
 ### 2.2 用户注册
@@ -132,8 +148,25 @@ register({ username: 'test', email: 'test@test.com', password: '123456', nicknam
 
 ```typescript
 refreshToken()
-// POST /api/token/refresh
-// 注意：此接口需后端实现
+// POST /api/auth/refresh
+// Body: { "refresh_token": "<refresh token>" }
+// 响应: { success: true, data: { access_token: "...", refresh_token: "...", expires_in: 900 } }
+```
+
+### 2.4 登出
+
+```typescript
+logoutApi(refreshTokenStr)
+// POST /api/auth/logout
+// Body: { "refresh_token": "<refresh token>" }
+// 后服务端将 refresh token 加入黑名单，使其失效
+```
+
+### 2.5 会话校验
+
+```typescript
+// GET /api/auth/session (需 Authorization: Bearer <token>)
+// 响应: { success: true, data: { valid: true, user_id: 1, username: "test", remaining_secs: 850 } }
 ```
 
 ---
