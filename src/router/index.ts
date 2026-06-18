@@ -104,6 +104,13 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/notification/NotificationDetailView.vue'),
         meta: { requiresAuth: true },
       },
+      // 聊天路由（需登录）
+      {
+        path: 'chat',
+        name: 'Chat',
+        component: () => import('@/views/chat/ChatView.vue'),
+        meta: { requiresAuth: true, keepAlive: true },
+      },
       {
         path: 'search',
         name: 'Search',

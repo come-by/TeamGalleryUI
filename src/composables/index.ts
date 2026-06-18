@@ -1,4 +1,5 @@
 export * from './useAuth'
+export * from './useChat'
 export * from './useDebounce'
 export * from './useErrorHandler'
 export * from './useMilestone'

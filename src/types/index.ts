@@ -1,5 +1,6 @@
 export * from './api'
 export * from './article'
+export * from './chat'
 export * from './comment'
 export * from './interaction'
 export * from './milestone'

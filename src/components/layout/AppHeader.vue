@@ -11,16 +11,35 @@
         <el-button type="primary" size="small" @click="$router.push('/register')"> 注册 </el-button>
       </template>
       <template v-else>
-        <!-- 通知铃铛 -->
-        <div class="notification-bell" @click="handleBellClick">
-          <el-badge
-            :value="notificationStore.unreadCount"
-            :hidden="!notificationStore.hasUnread"
-            :max="99"
-          >
-            <el-icon :size="22"><Bell /></el-icon>
-          </el-badge>
-        </div>
+        <!-- 铃铛下拉菜单（悬停触发，统一入口） -->
+        <el-dropdown
+          trigger="hover"
+          @command="handleBellCommand"
+          @visible-change="handleBellVisible"
+        >
+          <span class="notification-bell">
+            <el-badge :value="totalBadgeCount" :hidden="!totalBadgeCount" :max="99">
+              <el-icon :size="22"><Bell /></el-icon>
+            </el-badge>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="chat">
+                <span class="bell-item">
+                  <span class="bell-item-label">消息</span>
+                  <span v-if="chatStore.totalUnreadCount" class="bell-item-dot"></span>
+                </span>
+              </el-dropdown-item>
+              <el-dropdown-item command="notification">
+                <span class="bell-item">
+                  <span class="bell-item-label">通知</span>
+                  <span v-if="notificationStore.unreadCount" class="bell-item-dot"></span>
+                </span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
         <el-dropdown @command="handleCommand">
           <span class="user-dropdown">
             <el-avatar :size="28" :src="avatar" class="user-avatar">
@@ -42,6 +61,9 @@
       </template>
     </div>
   </nav>
+
+  <!-- 聊天窗（全局） -->
+  <ChatWindow :visible="chatWindowVisible" @close="closeChatWindow" />
 </template>
 
 <script setup lang="ts">
@@ -50,29 +72,65 @@ import { ArrowDown, Bell, UserFilled } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
+import ChatWindow from '@/components/chat/ChatWindow.vue'
+import { useChat } from '@/composables/useChat'
 import { useNotification } from '@/composables/useNotification'
+import { useChatStore } from '@/stores/chat'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
 const notificationStore = useNotificationStore()
-const { goToNotifications } = useNotification()
+const chatStore = useChatStore()
+const { startPolling: startNotifPolling } = useNotification()
+const { closeChatWindow, chatWindowVisible } = useChat()
 
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 const isAdmin = computed(() => userStore.isAdmin)
 const nickname = computed(() => userStore.nickname)
 const avatar = computed(() => userStore.avatar)
 
+/** 铃铛角标总数 = 消息未读数 + 通知未读数 */
+const totalBadgeCount = computed(() => {
+  return chatStore.totalUnreadCount + notificationStore.unreadCount
+})
+
 onMounted(() => {
   if (userStore.isLoggedIn) {
     userStore.fetchProfile()
     notificationStore.fetchUnreadCount()
+    chatStore.fetchConversations()
   }
 })
 
-const handleBellClick = () => {
-  goToNotifications()
+/**
+ * 铃铛下拉展开/收起时拉取最新数据
+ *
+ * @param visible - 是否展开
+ */
+const handleBellVisible = (visible: boolean) => {
+  if (visible && userStore.isLoggedIn) {
+    notificationStore.fetchUnreadCount()
+    chatStore.fetchConversations()
+    startNotifPolling()
+  }
+}
+
+/**
+ * 铃铛菜单命令处理
+ *
+ * @param command - 菜单命令标识
+ */
+const handleBellCommand = (command: string) => {
+  switch (command) {
+    case 'chat':
+      router.push('/chat')
+      break
+    case 'notification':
+      router.push('/notifications')
+      break
+  }
 }
 
 type DropdownCommand = 'profile' | 'favorites' | 'likes' | 'admin' | 'logout'
@@ -145,6 +203,26 @@ const handleCommand = (command: DropdownCommand) => {
 
 .notification-bell:hover {
   color: #409eff;
+}
+
+.bell-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.bell-item-label {
+  flex: 1;
+}
+
+.bell-item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #f56c6c;
+  flex-shrink: 0;
+  margin-left: 12px;
 }
 
 .user-dropdown {
