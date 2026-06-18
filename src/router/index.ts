@@ -191,8 +191,8 @@ const router = createRouter({
 /**
  * 处理 token 过期：主动检测 access token 是否过期，尝试静默刷新。
  *
- * 企业要求：不等到 API 返回 401 才拦截，路由跳转时就要检查。
- * 这样即使用户停留在页面上不动，下次导航时也会立即被拦截。
+ * HttpOnly Cookie 中的 RefreshToken 前端不可读，因此无法像之前那样
+ * 校验 refresh token 有效期。改为直接尝试刷新，由服务端决定是否允许。
  *
  * @returns 是否已处理（重定向），调用方应直接 return
  */
@@ -200,26 +200,18 @@ async function handleTokenExpiry(): Promise<boolean> {
   const userStore = useUserStore()
 
   const accessExpired = isTokenExpired(userStore.token)
-  const refreshValid = userStore.refreshToken && !isTokenExpired(userStore.refreshToken)
-
   if (!accessExpired) return false
 
-  if (refreshValid) {
-    const refreshed = await tryRefreshToken(userStore)
-    if (!refreshed) {
-      userStore.forceLogout()
-      return false // 让 checkRoutePermissions 处理重定向
-    }
-    return false
+  // access token 已过期，尝试刷新
+  const refreshed = await tryRefreshToken(userStore)
+  if (!refreshed) {
+    userStore.forceLogout()
   }
-
-  // 两个 token 都过期 → 清除残留 token
-  userStore.forceLogout()
-  return false
+  return false // 让 checkRoutePermissions 处理重定向
 }
 
 /**
- * 尝试用 refresh token 换取新 access token。
+ * 尝试用 HttpOnly Cookie 中的 RefreshToken 换取新 AccessToken。
  *
  * @param userStore - 用户状态 store 实例
  * @returns 是否刷新成功
@@ -228,7 +220,7 @@ async function tryRefreshToken(userStore: ReturnType<typeof useUserStore>): Prom
   try {
     const res = await refreshToken()
     if (res.success && res.data?.access_token) {
-      userStore.setTokens(res.data.access_token, res.data.refresh_token || userStore.refreshToken)
+      userStore.setAccessToken(res.data.access_token)
       return true
     }
   } catch {

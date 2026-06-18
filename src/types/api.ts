@@ -58,8 +58,9 @@ export interface PaginatedResponse<T> {
 
 export interface RefreshTokenResponse {
   access_token: string
-  refresh_token: string
+  token_type: string
   expires_in: number
+  // 注：新的 refresh_token 通过 Set-Cookie 下发，不出现在 JSON body
 }
 
 export interface PaginationParams {

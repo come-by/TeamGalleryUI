@@ -1,6 +1,6 @@
-import { http } from 'msw'
+import { http, HttpResponse } from 'msw'
 
-import { delay, errorResponse, getRequestBody, successResponse } from '../utils'
+import { delay, errorResponse, getRequestBody } from '../utils'
 
 // 模拟用户数据库
 const users = [
@@ -56,12 +56,25 @@ export const loginHandler = http.post('/api/v1/login', async ({ request }) => {
   const { password: _, ...userWithoutPassword } = user
   const token = user.role === 'admin' ? 'admin-token' : 'test-token'
 
-  return successResponse({
-    access_token: token,
-    refresh_token: `refresh-${token}`,
-    expires_in: 3600,
-    user: userWithoutPassword,
-  })
+  // refresh_token 通过 HttpOnly Cookie 下发，不出现在 JSON body
+  const cookieValue = `refresh_token=refresh-${token}`
+
+  return HttpResponse.json(
+    {
+      success: true,
+      data: {
+        access_token: token,
+        token_type: 'Bearer',
+        expires_in: 900,
+        user: userWithoutPassword,
+      },
+    },
+    {
+      headers: {
+        'Set-Cookie': `${cookieValue}; Path=/api; HttpOnly; SameSite=Strict; Max-Age=604800`,
+      },
+    },
+  )
 })
 
 // 注册
@@ -106,7 +119,7 @@ export const registerHandler = http.post('/api/v1/register', async ({ request })
     ])
   }
 
-  return successResponse({ message: '注册成功' })
+  return HttpResponse.json({ success: true, data: { message: '注册成功' } })
 })
 
 // 获取用户资料
@@ -129,41 +142,63 @@ export const getProfileHandler = http.get('/api/v1/profile', async ({ request })
   }
 
   const { password: _, ...userWithoutPassword } = user
-  return successResponse(userWithoutPassword)
+  return HttpResponse.json({ success: true, data: userWithoutPassword })
 })
 
 // 刷新 Token
+// RefreshToken 通过 HttpOnly Cookie 携带，不再从请求体读取
 export const refreshTokenHandler = http.post('/api/v1/auth/refresh', async ({ request }) => {
   await delay()
 
-  const body = await getRequestBody(request)
-  const refreshToken = (body as { refresh_token?: string })?.refresh_token || ''
+  // 从 Cookie 头读取 refresh_token
+  const cookieHeader = request.headers.get('cookie') || ''
+  const match = cookieHeader.match(/refresh_token=([^;]+)/)
+  const refreshTokenCookie = match ? match[1] : ''
 
   // 验证刷新令牌
-  if (!refreshToken || !refreshToken.startsWith('refresh-')) {
+  if (!refreshTokenCookie || !refreshTokenCookie.startsWith('refresh-')) {
     return errorResponse('UNAUTHORIZED', '刷新令牌已过期', 401)
   }
 
-  const originalToken = refreshToken.replace('refresh-', '')
-  return successResponse({
-    access_token: originalToken,
-    refresh_token: refreshToken,
-    expires_in: 3600,
-  })
+  const originalToken = refreshTokenCookie.replace('refresh-', '')
+
+  return HttpResponse.json(
+    {
+      success: true,
+      data: {
+        access_token: originalToken,
+        token_type: 'Bearer',
+        expires_in: 900,
+      },
+    },
+    {
+      headers: {
+        'Set-Cookie': `refresh_token=${refreshTokenCookie}; Path=/api; HttpOnly; SameSite=Strict; Max-Age=604800`,
+      },
+    },
+  )
 })
 
 // 登出
+// Cookie 自动携带，无需请求体传参。响应清除 Cookie。
 export const logoutHandler = http.post('/api/v1/auth/logout', async ({ request }) => {
   await delay()
 
-  const body = await getRequestBody(request)
-  const refreshToken = (body as { refresh_token?: string })?.refresh_token || ''
+  const cookieHeader = request.headers.get('cookie') || ''
+  const hasRefreshToken = cookieHeader.includes('refresh_token=')
 
-  if (!refreshToken) {
-    return errorResponse('VALIDATION_FAILED', 'Refresh Token 不能为空', 400)
+  if (!hasRefreshToken) {
+    return errorResponse('UNAUTHORIZED', '未提供 Refresh Token', 401)
   }
 
-  return successResponse(null)
+  return HttpResponse.json(
+    { success: true, data: null },
+    {
+      headers: {
+        'Set-Cookie': 'refresh_token=; Path=/api; HttpOnly; SameSite=Strict; Max-Age=0',
+      },
+    },
+  )
 })
 
 export const authHandlers = [

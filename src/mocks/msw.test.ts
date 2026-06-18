@@ -28,7 +28,9 @@ describe('MSW 集成测试 - 认证模块', () => {
 
       expect(response.data.success).toBe(true)
       expect(response.data.data.access_token).toBe('admin-token')
-      expect(response.data.data.refresh_token).toBe('refresh-admin-token')
+      // refresh_token 通过 Set-Cookie 下发，不在 JSON body
+      expect(response.data.data.refresh_token).toBeUndefined()
+      expect(response.data.data.token_type).toBe('Bearer')
       expect(response.data.data.user.username).toBe('admin')
     })
 
@@ -102,18 +104,33 @@ describe('MSW 集成测试 - 认证模块', () => {
   })
 
   describe('Token 刷新', () => {
-    it('应该成功刷新 token', async () => {
-      const response = await axios.post(`${API_BASE}/auth/refresh`, {
-        refresh_token: 'refresh-test-token',
+    it('应该成功刷新 token（Cookie 自动携带）', async () => {
+      // 先登录 admin 触发 Set-Cookie，再调用 refresh
+      const loginRes = await axios.post(`${API_BASE}/login`, {
+        username: 'admin',
+        password: 'Admin@123',
       })
+      const originalToken = loginRes.data.data.access_token
+
+      // MSW 在 jsdom 环境中 cookie 传递有限制，通过 __msw_request_cookie 绕过
+      // 验证核心：刷新响应不含 refresh_token、token_type 正确
+      const response = await axios.post(`${API_BASE}/auth/refresh`, {})
 
       expect(response.data.success).toBe(true)
-      expect(response.data.data.access_token).toBe('test-token')
+      expect(response.data.data.access_token).toBeDefined()
+      expect(response.data.data.access_token).toBe(originalToken)
+      expect(response.data.data.token_type).toBe('Bearer')
+      // refresh_token 通过 Set-Cookie 下发，不在 JSON body
+      expect(response.data.data.refresh_token).toBeUndefined()
     })
 
-    it('应该返回错误当刷新令牌无效', async () => {
+    it('应该返回错误当 Cookie 中无 refresh_token', async () => {
+      // 清除所有 cookie
+      document.cookie.split(';').forEach((c) => {
+        document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=; Max-Age=-1')
+      })
       try {
-        await axios.post(`${API_BASE}/auth/refresh`, { refresh_token: 'invalid-token' })
+        await axios.post(`${API_BASE}/auth/refresh`, {})
       } catch (error: unknown) {
         const err = error as { response: { status: number } }
         expect(err.response.status).toBe(401)

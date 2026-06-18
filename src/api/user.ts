@@ -5,6 +5,7 @@ import type {
   ProfileUpdateParams,
   RefreshTokenResponse,
   RegisterParams,
+  SearchUsersResponse,
   User,
 } from '@/types'
 
@@ -14,6 +15,8 @@ export type { LoginParams, LoginResponse, RegisterParams, User }
 
 /**
  * 用户登录
+ *
+ * refresh_token 通过 HttpOnly Cookie 下发，不出现在 JSON body。
  *
  * @param data - 登录参数（用户名、密码）
  * @returns 登录响应（含 access_token 和用户信息）
@@ -63,26 +66,42 @@ export const deleteUser = (): Promise<ApiResponse> => {
 /**
  * 刷新访问令牌
  *
- * 使用 refresh token 换取新的双 token。
- * refresh token 通过请求体传递（与后端 /auth/refresh 对齐）。
+ * RefreshToken 通过 HttpOnly Cookie 自动携带，无需在请求体中传递。
+ * 新的 refresh_token 通过 Set-Cookie 下发，JS 不可见。
  *
  * @returns 新的令牌数据
  */
 export const refreshToken = (): Promise<ApiResponse<RefreshTokenResponse>> => {
-  const rtk = localStorage.getItem('refresh_token')
-  return request.post<ApiResponse<RefreshTokenResponse>>('/auth/refresh', {
-    refresh_token: rtk || '',
-  })
+  return request.post<ApiResponse<RefreshTokenResponse>>('/auth/refresh')
 }
 
 /**
- * 登出（服务端撤销 refresh token）
+ * 登出（服务端清除 Cookie + 撤销 Refresh Token）
  *
- * @param refreshTokenStr 要撤销的 refresh token
+ * Cookie 自动携带，无需请求体传参。
+ *
  * @returns 操作结果
  */
-export const logoutApi = (refreshTokenStr: string): Promise<ApiResponse> => {
-  return request.post<ApiResponse>('/auth/logout', {
-    refresh_token: refreshTokenStr,
+export const logoutApi = (): Promise<ApiResponse> => {
+  return request.post<ApiResponse>('/auth/logout')
+}
+
+/**
+ * 用户搜索
+ *
+ * @param keyword - 搜索关键词（匹配用户名/昵称）
+ * @param page - 页码，默认 1
+ * @param pageSize - 每页数量，默认 10
+ * @returns 用户搜索结果
+ */
+export const searchUsers = (
+  keyword: string,
+  page = 1,
+  pageSize = 10,
+): Promise<ApiResponse<SearchUsersResponse>> => {
+  return request.get<ApiResponse<SearchUsersResponse>>('/users/search', {
+    keyword,
+    page,
+    page_size: pageSize,
   })
 }

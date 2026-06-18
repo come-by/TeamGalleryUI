@@ -60,15 +60,14 @@ describe('useAuth', () => {
     expect(auth.isAdmin.value).toBe(true)
   })
 
-  it('should expose isAccessTokenExpired and isRefreshTokenValid', () => {
+  it('should expose isAccessTokenExpired', () => {
     const auth = useAuth()
     expect(auth.isAccessTokenExpired.value).toBe(false)
-    expect(auth.isRefreshTokenValid.value).toBe(false)
   })
 
   it('checkTokenValidity should delegate to userStore', () => {
     const auth = useAuth()
-    expect(auth.checkTokenValidity()).toBe('invalid')
+    expect(auth.checkTokenValidity()).toBe('missing')
   })
 
   it('should require auth when not logged in', () => {

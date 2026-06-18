@@ -73,25 +73,25 @@
 
 **存储策略：**
 
-| 存储方式       | 项目          | 用途                | 安全性                                          |
-| -------------- | ------------- | ------------------- | ----------------------------------------------- |
-| `localStorage` | Access Token  | API 鉴权            | 中（XSS 可读取，但配合 CSP + XSS 防护降低风险） |
-| `localStorage` | Refresh Token | 换发新 Access Token | 中（同上）                                      |
+| 存储方式        | 项目          | 用途                | 安全性                                          |
+| --------------- | ------------- | ------------------- | ----------------------------------------------- |
+| `localStorage`  | Access Token  | API 鉴权            | 中（XSS 可读取，但配合 CSP + XSS 防护降低风险） |
+| HttpOnly Cookie | Refresh Token | 换发新 Access Token | 高（JS 不可读，SameSite=Strict，防 XSS 窃取）   |
 
 **生命周期管理：**
 
-| 阶段         | 说明                                                                 |
-| ------------ | -------------------------------------------------------------------- |
-| 签发         | 登录成功后由 `/api/login` 返回双 Token                               |
-| 使用         | Access Token 通过 `Authorization: Bearer` 头传递，请求拦截器自动注入 |
-| 自动续期     | Access Token 即将过期时，静默调用 `/api/auth/refresh` 换新           |
-| 主动过期检测 | 路由守卫解码 JWT `exp` 字段，过期则尝试刷新或跳登录                  |
-| 闲置超时     | 30 分钟无操作 → 1 分钟倒计时警告 → 自动登出                          |
-| 可见性校验   | 标签页切回前台时重新校验 token 有效性                                |
-| 定时校验     | 每 60 秒调用 `/api/auth/session` 服务端权威校验                      |
-| 登出撤销     | 调 `/api/auth/logout` 将 Refresh Token 加入黑名单                    |
-| 强制失效     | 修改密码时递增 `token_version`，所有旧 token 立即失效                |
-| 泄漏防护     | 刷新 Token 时旧 Refresh Token 自动撤销（rotation）                   |
+| 阶段         | 说明                                                                              |
+| ------------ | --------------------------------------------------------------------------------- |
+| 签发         | 登录成功后 Access Token 通过 JSON 返回，Refresh Token 通过 `Set-Cookie` 下发      |
+| 使用         | Access Token 通过 `Authorization: Bearer` 头传递，请求拦截器自动注入              |
+| 自动续期     | Access Token 过期时，静默调用 `/api/auth/refresh`（Cookie 自动携带 RefreshToken） |
+| 主动过期检测 | 路由守卫解码 JWT `exp` 字段，过期则尝试刷新或跳登录                               |
+| 闲置超时     | 30 分钟无操作 → 1 分钟倒计时警告 → 自动登出                                       |
+| 可见性校验   | 标签页切回前台时重新校验 token 有效性                                             |
+| 定时校验     | 每 60 秒校验 token 有效期，即将过期时主动刷新                                     |
+| 登出撤销     | 调 `/api/auth/logout` 清除 Cookie + 将 Refresh Token 加入黑名单                   |
+| 强制失效     | 修改密码时递增 `token_version`，所有旧 token 立即失效                             |
+| 泄漏防护     | 刷新 Token 时旧 Refresh Token 自动撤销（rotation）                                |
 
 ### 2.4 输入验证
 

@@ -13,7 +13,6 @@ export function useAuth() {
 
   const isLoggedIn = computed(() => userStore.isLoggedIn)
   const isAccessTokenExpired = computed(() => userStore.isAccessTokenExpired)
-  const isRefreshTokenValid = computed(() => userStore.isRefreshTokenValid)
   const isAdmin = computed(() => userStore.isAdmin)
   const currentUser = computed(() => userStore.user)
   const nickname = computed(() => userStore.nickname)
@@ -35,7 +34,7 @@ export function useAuth() {
   /**
    * 校验 token 有效期。
    *
-   * @returns 校验结果：valid / refresh / expired / invalid
+   * @returns 校验结果：valid / expired / missing
    */
   function checkTokenValidity() {
     return userStore.checkTokenValidity()
@@ -44,7 +43,7 @@ export function useAuth() {
   /**
    * 强制登出（会话过期）。
    *
-   * @param reason - 登出原因
+   * @param reason - 登出原因，默认为"登录已过期，请重新登录"
    */
   function forceLogout(reason?: string) {
     userStore.forceLogout(reason)
@@ -53,7 +52,6 @@ export function useAuth() {
   return {
     isLoggedIn,
     isAccessTokenExpired,
-    isRefreshTokenValid,
     isAdmin,
     currentUser,
     nickname,

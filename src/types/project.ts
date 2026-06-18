@@ -46,12 +46,19 @@ export interface ProjectListParams {
   team_id?: number
 }
 
+/** 成员输入（不包含 project_id，由后端自动填入） */
+export interface MemberInput {
+  user_id: number
+  role?: ProjectRole
+}
+
 /** 创建请求 */
 export interface ProjectCreateParams {
   name: string
   description?: string
   cover_image?: string
   team_id?: number
+  members?: MemberInput[]
 }
 
 /** 更新请求 */

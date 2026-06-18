@@ -2,9 +2,11 @@
  * 会话监控
  *
  * 企业安全要求：
- * - 定时校验 token 有效期，过期则自动登出
+ * - 定时校验 token 有效期，过期则尝试刷新
  * - 页面从后台切回前台时重新校验，防止用户离开后 session 过期仍显示旧内容
- * - access token 即将过期时主动静默刷新
+ * - access token 即将过期/已过期时主动静默刷新
+ *
+ * 注：RefreshToken 为 HttpOnly Cookie，前端不可见，刷新请求由浏览器自动携带 Cookie。
  */
 
 import { onMounted, onUnmounted } from 'vue'
@@ -12,6 +14,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { refreshToken } from '@/api/user'
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
+import { willTokenExpireSoon } from '@/utils/token'
 
 /** token 定时校验间隔（毫秒） */
 const CHECK_INTERVAL = 60_000 // 60 秒
@@ -20,20 +23,16 @@ const CHECK_INTERVAL = 60_000 // 60 秒
  * 尝试刷新 token 并更新 store，失败不抛异常。
  *
  * @param userStore - 用户状态 store 实例
- * @param silent - true: 静默失败不登出 / false: 失败后返回 false 由调用方处理登出
- * @returns true 表示刷新成功；silent 模式下失败也返回 true
  */
-async function tryRefresh(userStore: ReturnType<typeof useUserStore>, silent: boolean) {
+async function tryRefresh(userStore: ReturnType<typeof useUserStore>) {
   try {
     const res = await refreshToken()
     if (res.success && res.data?.access_token) {
-      userStore.setTokens(res.data.access_token, res.data.refresh_token || userStore.refreshToken)
-      return true
+      userStore.setAccessToken(res.data.access_token)
     }
   } catch {
-    // 静默刷新失败不登出，等下次 API 401 处理
+    // 静默刷新失败，等待 API 401 处理
   }
-  return !silent
 }
 
 /**
@@ -51,25 +50,18 @@ export function useSessionMonitor() {
 
     const state = userStore.checkTokenValidity()
 
-    if (state === 'valid') return
-
-    if (state === 'refresh') {
-      await tryRefresh(userStore, true)
+    if (state === 'valid' && !willTokenExpireSoon(userStore.token, 300)) {
       return
     }
 
-    if (state === 'expired') {
-      const refreshed = await tryRefresh(userStore, false)
-      if (!refreshed) {
-        userStore.forceLogout()
-        router.push('/login')
-      }
-      return
-    }
+    // 即将过期或已过期 → 尝试刷新
+    await tryRefresh(userStore)
 
-    // invalid
-    userStore.forceLogout()
-    router.push('/login')
+    // 如果刷新后仍无效（expired），强制登出
+    if (userStore.checkTokenValidity() === 'expired') {
+      userStore.forceLogout()
+      router.push('/login')
+    }
   }
 
   /** 页面可见性变化时校验 */

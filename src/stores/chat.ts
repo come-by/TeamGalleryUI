@@ -49,8 +49,8 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 获取会话列表
    *
-   * @param page
-   * @param pageSize
+   * @param page - 页码
+   * @param pageSize - 每页数量
    */
   const fetchConversations = async (page = 1, pageSize = 20) => {
     loading.value = true
@@ -84,7 +84,7 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 打开聊天窗口
    *
-   * @param conversationId
+   * @param conversationId - 会话ID
    */
   const openChat = async (conversationId: number) => {
     activeConversationId.value = conversationId
@@ -111,9 +111,9 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 加载消息列表
    *
-   * @param conversationId
-   * @param page
-   * @param pageSize
+   * @param conversationId - 会话ID（可选，默认使用活跃会话）
+   * @param page - 页码
+   * @param pageSize - 每页数量
    */
   const fetchMessages = async (conversationId?: number, page = 1, pageSize = 30) => {
     const convId = conversationId || activeConversationId.value
@@ -160,7 +160,8 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 发送消息
    *
-   * @param content
+   * @param content - 消息内容
+   * @returns 是否发送成功
    */
   const sendMessage = async (content: string) => {
     const convId = activeConversationId.value
@@ -186,7 +187,8 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 撤回消息
    *
-   * @param messageId
+   * @param messageId - 消息ID
+   * @returns 是否撤回成功
    */
   const recallMessage = async (messageId: number) => {
     try {
@@ -194,7 +196,9 @@ export const useChatStore = defineStore('chat', () => {
       if (res.success) {
         const idx = messages.value.findIndex((m) => m.id === messageId)
         if (idx !== -1) {
+          // eslint-disable-next-line security/detect-object-injection
           messages.value[idx].is_recalled = true
+          // eslint-disable-next-line security/detect-object-injection
           messages.value[idx].content = ''
         }
         ElMessage.success('消息已撤回')
@@ -210,7 +214,8 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 删除本地消息
    *
-   * @param messageId
+   * @param messageId - 消息ID
+   * @returns 是否删除成功
    */
   const deleteLocalMessage = async (messageId: number) => {
     try {
@@ -232,8 +237,9 @@ export const useChatStore = defineStore('chat', () => {
   /**
    * 更新会话设置
    *
-   * @param conversationId
-   * @param params
+   * @param conversationId - 会话ID
+   * @param params - 设置参数（is_pinned / is_muted）
+   * @returns 是否更新成功
    */
   const updateSettings = async (conversationId: number, params: UpdateSettingsParams) => {
     try {

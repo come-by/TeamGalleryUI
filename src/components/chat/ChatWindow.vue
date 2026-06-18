@@ -224,7 +224,7 @@ watch(
   flex-direction: column;
   background: var(--color-bg-white);
   border-radius: 8px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 40px rgb(0 0 0 / 12%);
   overflow: hidden;
   pointer-events: auto;
 }
@@ -294,7 +294,7 @@ watch(
   padding: 8px 12px;
   border-radius: 8px;
   background-color: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
   position: relative;
 }
 
@@ -305,7 +305,8 @@ watch(
 .msg-content {
   font-size: 14px;
   color: var(--color-text-primary);
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: break-word;
   line-height: 1.5;
 }
 

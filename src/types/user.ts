@@ -1,3 +1,5 @@
+import type { UserBrief } from './chat'
+
 export interface User {
   id: number
   username: string
@@ -32,9 +34,20 @@ export interface RegisterParams {
 
 export interface LoginResponse {
   access_token: string
-  refresh_token: string
+  token_type: string
   expires_in: number
   user: User
+  // 注：refresh_token 通过 HttpOnly Cookie 下发，不出现在 JSON body
+}
+
+export interface SearchUsersResponse {
+  data: UserBrief[]
+  pagination: {
+    page: number
+    page_size: number
+    total: number
+    total_pages: number
+  }
 }
 
 export interface ProfileUpdateParams {

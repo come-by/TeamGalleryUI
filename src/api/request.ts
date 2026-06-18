@@ -43,35 +43,27 @@ const processQueue = (error: unknown | null, token: string | null = null): void 
   failedQueue = []
 }
 
-const getRefreshToken = (): string | null => {
-  return localStorage.getItem('refresh_token')
-}
-
 const setAccessToken = (token: string): void => {
   localStorage.setItem('access_token', token)
 }
 
-const clearTokens = (): void => {
+const clearAuth = (): void => {
   localStorage.removeItem('access_token')
-  localStorage.removeItem('refresh_token')
 }
 
+/**
+ * 刷新 Access Token
+ *
+ * RefreshToken 通过 HttpOnly Cookie 自动携带，无需手动管理。
+ *
+ * @returns 新的 AccessToken 字符串
+ */
 const refreshAccessToken = async (): Promise<string> => {
-  const rtk = getRefreshToken()
-  if (!rtk) {
-    throw new Error('No refresh token available')
-  }
-
-  const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/refresh`, {
-    refresh_token: rtk,
-  })
+  const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/refresh`)
 
   if (response.data?.success && response.data.data?.access_token) {
-    const { access_token, refresh_token } = response.data.data
+    const { access_token } = response.data.data
     setAccessToken(access_token)
-    if (refresh_token) {
-      localStorage.setItem('refresh_token', refresh_token)
-    }
     return access_token
   }
 
@@ -148,7 +140,7 @@ axiosInstance.interceptors.response.use(
             return request(originalRequest)
           } catch (refreshError) {
             processQueue(refreshError, null)
-            clearTokens()
+            clearAuth()
             ElMessage.error('登录已过期，请重新登录')
             router.push('/login')
             return Promise.reject(refreshError)

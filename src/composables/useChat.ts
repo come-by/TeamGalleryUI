@@ -19,7 +19,7 @@ export function useChat() {
   /**
    * 开始轮询拉取会话列表和未读数
    *
-   * @param intervalMs
+   * @param intervalMs - 轮询间隔（毫秒），默认 15000
    */
   const startPolling = (intervalMs = 15000) => {
     stopPolling()
@@ -42,7 +42,7 @@ export function useChat() {
   /**
    * 打开聊天窗口
    *
-   * @param conversationId
+   * @param conversationId - 会话ID
    */
   const openChatWindow = async (conversationId: number) => {
     await chatStore.openChat(conversationId)

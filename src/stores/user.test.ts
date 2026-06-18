@@ -30,33 +30,29 @@ describe('useUserStore', () => {
     it('应该初始化为空状态', () => {
       const store = useUserStore()
       expect(store.token).toBe('')
-      expect(store.refreshToken).toBe('')
       expect(store.user).toBeNull()
       expect(store.isLoggedIn).toBe(false)
       expect(store.isAdmin).toBe(false)
       expect(store.isAccessTokenExpired).toBe(false)
-      expect(store.isRefreshTokenValid).toBe(false)
     })
 
-    it('应该从 localStorage 恢复 token', () => {
+    it('应该从 localStorage 恢复 access_token', () => {
       localStorage.setItem('access_token', 'existing-token')
-      localStorage.setItem('refresh_token', 'existing-refresh-token')
       setActivePinia(createPinia())
       const store = useUserStore()
       expect(store.token).toBe('existing-token')
-      expect(store.refreshToken).toBe('existing-refresh-token')
     })
   })
 
   describe('登录', () => {
-    it('应该成功登录并保存双 token', async () => {
+    it('应该成功登录并保存 access_token', async () => {
       const { login } = await import('@/api/user')
       vi.mocked(login).mockResolvedValue({
         success: true,
         data: {
           access_token: 'new-token',
-          refresh_token: 'new-refresh-token',
-          expires_in: 3600,
+          token_type: 'Bearer',
+          expires_in: 900,
           user: {
             id: 1,
             username: 'test',
@@ -73,10 +69,10 @@ describe('useUserStore', () => {
       await store.login({ username: 'test', password: '123456' })
 
       expect(store.token).toBe('new-token')
-      expect(store.refreshToken).toBe('new-refresh-token')
       expect(store.isLoggedIn).toBe(true)
       expect(localStorage.getItem('access_token')).toBe('new-token')
-      expect(localStorage.getItem('refresh_token')).toBe('new-refresh-token')
+      // refresh_token 不再出现在 localStorage（HttpOnly Cookie）
+      expect(localStorage.getItem('refresh_token')).toBeNull()
     })
 
     it('应该处理登录失败', async () => {
@@ -95,14 +91,14 @@ describe('useUserStore', () => {
   })
 
   describe('登出', () => {
-    it('应该清除所有状态和 token', async () => {
+    it('应该清除所有状态', async () => {
       const { login } = await import('@/api/user')
       vi.mocked(login).mockResolvedValue({
         success: true,
         data: {
           access_token: 'test-token',
-          refresh_token: 'test-refresh-token',
-          expires_in: 3600,
+          token_type: 'Bearer',
+          expires_in: 900,
           user: {
             id: 1,
             username: 'test',
@@ -121,23 +117,20 @@ describe('useUserStore', () => {
 
       await store.logout()
       expect(store.token).toBe('')
-      expect(store.refreshToken).toBe('')
       expect(store.user).toBeNull()
       expect(store.isLoggedIn).toBe(false)
       expect(localStorage.getItem('access_token')).toBeNull()
-      expect(localStorage.getItem('refresh_token')).toBeNull()
     })
 
-    it('应该在登出时调用服务端 logoutApi', async () => {
+    it('应该在登出时调用服务端 logoutApi（无参数，Cookie 自动携带）', async () => {
       const { logoutApi } = await import('@/api/user')
       vi.mocked(logoutApi).mockResolvedValue({ success: true })
 
       const store = useUserStore()
       store.token = 'test-token'
-      store.refreshToken = 'test-refresh-token'
 
       await store.logout()
-      expect(logoutApi).toHaveBeenCalledWith('test-refresh-token')
+      expect(logoutApi).toHaveBeenCalledWith(/* 无参数 */)
     })
 
     it('应该在 logoutApi 失败时也清除本地状态', async () => {
@@ -146,11 +139,9 @@ describe('useUserStore', () => {
 
       const store = useUserStore()
       store.token = 'test-token'
-      store.refreshToken = 'test-refresh-token'
 
       await store.logout()
       expect(store.token).toBe('')
-      expect(store.refreshToken).toBe('')
     })
   })
 
@@ -228,44 +219,39 @@ describe('useUserStore', () => {
   })
 
   describe('checkTokenValidity', () => {
-    it('无 token 时应返回 invalid', () => {
+    it('无 token 时应返回 missing', () => {
       const store = useUserStore()
-      expect(store.checkTokenValidity()).toBe('invalid')
+      expect(store.checkTokenValidity()).toBe('missing')
     })
 
     it('token 有效时应返回 valid', () => {
       const store = useUserStore()
       store.token = 'valid-token'
-      store.refreshToken = 'valid-refresh'
       expect(store.checkTokenValidity()).toBe('valid')
     })
   })
 
   describe('forceLogout', () => {
-    it('应该清除 token 并保留 reason', () => {
+    it('应该清除 token', () => {
       const store = useUserStore()
       store.token = 'test-token'
-      store.refreshToken = 'test-refresh'
 
       store.forceLogout('自定义原因')
       expect(store.token).toBe('')
-      expect(store.refreshToken).toBe('')
       expect(localStorage.getItem('access_token')).toBeNull()
     })
   })
 
-  describe('setTokens / clearTokens', () => {
-    it('setTokens 应该更新状态和 storage', () => {
+  describe('setAccessToken / clearTokens', () => {
+    it('setAccessToken 应该更新状态和 storage', () => {
       const store = useUserStore()
-      store.setTokens('acc', 'ref')
+      store.setAccessToken('acc')
       expect(store.token).toBe('acc')
-      expect(store.refreshToken).toBe('ref')
       expect(localStorage.getItem('access_token')).toBe('acc')
     })
 
     it('clearTokens 应该清除状态和 storage', () => {
       localStorage.setItem('access_token', 'acc')
-      localStorage.setItem('refresh_token', 'ref')
       setActivePinia(createPinia())
       const store = useUserStore()
       store.clearTokens()
@@ -379,7 +365,6 @@ describe('useUserStore', () => {
       store.token = 'valid-token'
       await store.fetchProfile()
 
-      // 异常不应抛出，静默处理
       expect(store.user).toBeNull()
     })
 
