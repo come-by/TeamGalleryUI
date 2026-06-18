@@ -5,7 +5,7 @@
 | 项目     | 值         |
 | -------- | ---------- |
 | 适用     | 前端应用   |
-| 最后更新 | 2026-06-16 |
+| 最后更新 | 2026-06-19 |
 
 ## 目录
 
@@ -27,9 +27,17 @@
 
 ## 9. 项目管理
 
-## 10. 管理模块
+## 10. 项目评论模块
 
-## 11. 数据模型
+## 11. 管理模块
+
+## 12. 聊天模块
+
+## 13. 通知模块
+
+## 14. 团队管理
+
+## 15. 数据模型
 
 ## 相关文档
 
@@ -565,9 +573,218 @@ getUsers({ page: 1, page_size: 10 })
 
 ---
 
-## 12. 数据模型
+## 12. 聊天模块
 
-### 12.1 User
+> 对应后端 Chat 模块，提供实时群聊功能。
+
+### 12.1 接口列表
+
+| 方法 | 路径                 | 说明             | 认证 |
+| ---- | -------------------- | ---------------- | ---- |
+| GET  | `/api/chat/messages` | 获取聊天消息列表 | 是   |
+| POST | `/api/chat/messages` | 发送聊天消息     | 是   |
+
+### 12.2 获取聊天消息
+
+```typescript
+// src/api/chat.ts
+import { apiClient } from './request'
+import type { ApiResponse, ChatMessage } from '@/types'
+
+export const getChatMessages = (params?: {
+  limit?: number
+  before?: string // ISO 时间戳，游标分页
+}): Promise<ApiResponse<ChatMessage[]>> => apiClient.get('/chat/messages', { params })
+```
+
+**响应示例：**
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "username": "testuser",
+      "nickname": "测试用户",
+      "avatar": "",
+      "content": "大家好！",
+      "created_at": "2026-06-19T10:00:00Z"
+    }
+  ]
+}
+```
+
+### 12.3 发送聊天消息
+
+```typescript
+export const sendChatMessage = (content: string): Promise<ApiResponse<ChatMessage>> =>
+  apiClient.post('/chat/messages', { content })
+```
+
+**请求体：**
+
+| 字段      | 类型   | 必填 | 说明                     |
+| --------- | ------ | ---- | ------------------------ |
+| `content` | string | 是   | 消息内容，最大 1000 字符 |
+
+### 12.4 前后端对齐
+
+- **消息推送**：当前使用轮询方式（`ChatView.vue` 每 3 秒拉取新消息），后端暂未实现 WebSocket
+- **历史消息**：使用游标分页（`before` 参数），避免传统分页在新消息插入时重复
+- **XSS 防护**：消息内容渲染使用 `sanitizeHtml()` 清洗
+
+---
+
+## 13. 通知模块
+
+> 对应后端 Notification 模块，提供用户通知管理。
+
+### 13.1 接口列表
+
+| 方法 | 路径                              | 说明           | 认证 |
+| ---- | --------------------------------- | -------------- | ---- |
+| GET  | `/api/notifications`              | 获取通知列表   | 是   |
+| GET  | `/api/notifications/unread-count` | 获取未读通知数 | 是   |
+| GET  | `/api/notifications/:id`          | 获取通知详情   | 是   |
+| PUT  | `/api/notifications/:id/read`     | 标记通知已读   | 是   |
+| PUT  | `/api/notifications/read-all`     | 全部标记已读   | 是   |
+
+### 13.2 获取通知列表
+
+```typescript
+// src/api/notification.ts
+import { apiClient } from './request'
+import type { ApiResponse, PaginatedResponse } from '@/types'
+import type { NotificationItem } from '@/types/notification'
+
+export const getNotifications = (params?: {
+  page?: number
+  page_size?: number
+}): Promise<ApiResponse<PaginatedResponse<NotificationItem>>> =>
+  apiClient.get('/notifications', { params })
+```
+
+### 13.3 获取未读通知数
+
+```typescript
+export const getUnreadCount = (): Promise<ApiResponse<{ count: number }>> =>
+  apiClient.get('/notifications/unread-count')
+```
+
+**使用场景：** 导航栏铃铛图标红点徽标，每 30 秒轮询一次。
+
+### 13.4 通知详情
+
+```typescript
+export const getNotification = (id: number): Promise<ApiResponse<NotificationItem>> =>
+  apiClient.get(`/notifications/${id}`)
+```
+
+### 13.5 标记已读
+
+```typescript
+export const markNotificationRead = (id: number): Promise<ApiResponse<void>> =>
+  apiClient.put(`/notifications/${id}/read`)
+
+export const markAllNotificationsRead = (): Promise<ApiResponse<void>> =>
+  apiClient.put('/notifications/read-all')
+```
+
+### 13.6 通知类型
+
+| 类型      | 说明              | 跳转       |
+| --------- | ----------------- | ---------- |
+| `comment` | 文章/项目评论通知 | 评论详情   |
+| `like`    | 点赞通知          | 被点赞内容 |
+| `system`  | 系统通知          | 通知详情页 |
+
+---
+
+## 14. 团队管理
+
+> 对应后端 Team 模块，提供团队创建、成员管理、邀请流程。
+
+### 14.1 接口列表
+
+| 方法   | 路径                                | 说明             | 认证              |
+| ------ | ----------------------------------- | ---------------- | ----------------- |
+| POST   | `/api/teams`                        | 创建团队         | 是                |
+| GET    | `/api/teams`                        | 获取团队列表     | 是                |
+| GET    | `/api/teams/:id`                    | 获取团队详情     | 是                |
+| PUT    | `/api/teams/:id`                    | 更新团队信息     | 是（Owner）       |
+| DELETE | `/api/teams/:id`                    | 删除团队         | 是（Owner）       |
+| POST   | `/api/teams/:id/invite`             | 邀请成员         | 是（Owner/Admin） |
+| GET    | `/api/teams/:id/members`            | 获取团队成员列表 | 是                |
+| PUT    | `/api/teams/:id/members/:member_id` | 更新成员角色     | 是（Owner）       |
+| DELETE | `/api/teams/:id/members/:member_id` | 移除成员         | 是（Owner/Admin） |
+| POST   | `/api/teams/:id/leave`              | 退出团队         | 是                |
+
+### 14.2 创建团队
+
+```typescript
+// src/api/team.ts
+export const createTeam = (data: {
+  name: string
+  description?: string
+}): Promise<ApiResponse<Team>> => apiClient.post('/teams', data)
+```
+
+### 14.3 获取团队列表
+
+```typescript
+export const getTeams = (params?: {
+  page?: number
+  page_size?: number
+}): Promise<ApiResponse<PaginatedResponse<Team>>> => apiClient.get('/teams', { params })
+```
+
+### 14.4 团队成员管理
+
+```typescript
+export const getTeamMembers = (
+  teamId: number,
+  params?: {
+    page?: number
+    page_size?: number
+  },
+): Promise<ApiResponse<PaginatedResponse<TeamMember>>> =>
+  apiClient.get(`/teams/${teamId}/members`, { params })
+
+export const updateMemberRole = (
+  teamId: number,
+  memberId: number,
+  role: 'admin' | 'member',
+): Promise<ApiResponse<void>> => apiClient.put(`/teams/${teamId}/members/${memberId}`, { role })
+
+export const removeMember = (teamId: number, memberId: number): Promise<ApiResponse<void>> =>
+  apiClient.delete(`/teams/${teamId}/members/${memberId}`)
+```
+
+### 14.5 团队邀请
+
+```typescript
+export const inviteMember = (teamId: number, userId: number): Promise<ApiResponse<void>> =>
+  apiClient.post(`/teams/${teamId}/invite`, { user_id: userId })
+```
+
+**限制说明：**
+
+- 仅团队 Owner 或 Admin 可邀请
+- 目标用户需开启 `allow_project_invite`（隐私设置）
+- 被拉黑用户无法邀请
+
+### 14.6 前后端对齐
+
+- **错误码**：`TEAM_NOT_FOUND`、`TEAM_PERMISSION`、`TEAM_MEMBER_EXISTS` 等，详见 [错误码字典](./ERROR_CODES.md)
+- **邀请流程**：前端调用 `/api/teams/:id/invite`，后端生成邀请记录并发送通知
+
+---
+
+## 15. 数据模型
+
+### 15.1 User
 
 ```typescript
 interface User {
@@ -587,7 +804,7 @@ interface User {
 }
 ```
 
-### 12.2 Article
+### 15.2 Article
 
 ```typescript
 interface Article {
@@ -610,7 +827,7 @@ interface Article {
 }
 ```
 
-### 12.3 Comment
+### 15.3 Comment
 
 ```typescript
 interface Comment {
@@ -634,7 +851,7 @@ interface InteractionStatus {
 }
 ```
 
-### 12.5 Project
+### 15.5 Project
 
 ```typescript
 interface Project {
@@ -664,7 +881,7 @@ interface ProjectMember {
 }
 ```
 
-### 12.7 ProjectComment
+### 15.7 ProjectComment
 
 ```typescript
 interface ProjectComment {
@@ -680,7 +897,7 @@ interface ProjectComment {
 }
 ```
 
-### 12.8 代码生成
+### 15.8 代码生成
 
 后端接口变更后，前端运行以下命令自动生成 TypeScript 类型：
 

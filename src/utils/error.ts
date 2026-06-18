@@ -25,6 +25,12 @@ const ERROR_MESSAGES: Record<string, string> = {
   [ErrorCode.TOO_MANY_REQUESTS]: '请求过于频繁，请稍后重试',
   [ErrorCode.LOGIN_LOCKED]: '账户已被锁定，请稍后重试',
   [ErrorCode.LOGIN_DELAY]: '登录过于频繁，请稍后重试',
+  [ErrorCode.PROJECT_MEMBER_INVITE_DISABLED]: '该用户已关闭项目邀请功能',
+  [ErrorCode.PROJECT_MEMBER_BLOCKED]: '无法添加该用户，可能被对方拉黑',
+  [ErrorCode.PROJECT_MEMBER_USER_INACTIVE]: '该用户账号未激活',
+  [ErrorCode.PROJECT_MEMBER_EXISTS]: '该用户已是项目成员',
+  [ErrorCode.REPLAY_NONCE_USED]: '请求重复，请刷新页面后重试',
+  [ErrorCode.REPLAY_TIMESTAMP_EXPIRED]: '请求已过期，请刷新页面后重试',
 }
 
 export const getErrorMessage = (error: ApiError | undefined): string => {

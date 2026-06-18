@@ -22,5 +22,16 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'element-plus': ['element-plus'],
+            'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          },
+        },
+      },
+    },
   }
 })

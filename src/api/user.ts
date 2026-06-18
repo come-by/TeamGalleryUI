@@ -2,6 +2,7 @@ import type {
   ApiResponse,
   LoginParams,
   LoginResponse,
+  PrivacyUpdateParams,
   ProfileUpdateParams,
   RefreshTokenResponse,
   RegisterParams,
@@ -104,4 +105,14 @@ export const searchUsers = (
     page,
     page_size: pageSize,
   })
+}
+
+/**
+ * 更新用户隐私设置
+ *
+ * @param data - 隐私设置参数
+ * @returns 操作结果
+ */
+export const updatePrivacy = (data: PrivacyUpdateParams): Promise<ApiResponse> => {
+  return request.put<ApiResponse>('/user/privacy', data)
 }

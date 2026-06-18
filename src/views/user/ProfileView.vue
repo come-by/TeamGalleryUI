@@ -28,7 +28,7 @@
     </el-card>
 
     <!-- 编辑模式 -->
-    <el-card v-else>
+    <el-card v-else-if="isEditing">
       <template #header>
         <div class="card-header">
           <h2>编辑资料</h2>
@@ -82,6 +82,25 @@
         </el-form-item>
       </el-form>
     </el-card>
+
+    <!-- 隐私设置 -->
+    <el-card v-if="!isEditing" class="privacy-card">
+      <template #header>
+        <div class="card-header">
+          <h2>隐私设置</h2>
+        </div>
+      </template>
+      <el-form label-width="160px" class="privacy-form">
+        <el-form-item label="允许被拉入项目">
+          <el-switch
+            v-model="allowProjectInvite"
+            :loading="privacySaving"
+            @change="handlePrivacyChange"
+          />
+          <span class="form-tip">关闭后，其他用户无法将你添加到项目中</span>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
@@ -92,7 +111,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { deleteUser } from '@/api/user'
+import { deleteUser, updatePrivacy } from '@/api/user'
 import { useUserStore } from '@/stores/user'
 import type { ProfileUpdateParams } from '@/types'
 import { formatDate } from '@/utils/format'
@@ -104,6 +123,10 @@ const user = computed(() => userStore.user)
 const isEditing = ref(false)
 const saving = ref(false)
 const formRef = ref<FormInstance>()
+
+// 隐私设置
+const allowProjectInvite = ref(true)
+const privacySaving = ref(false)
 
 const phonePattern = /^1[3-9]\d{9}$/
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -218,7 +241,38 @@ const handleSave = async () => {
 
 onMounted(async () => {
   await userStore.fetchProfile()
+  // 初始化隐私设置
+  if (user.value?.allow_project_invite !== undefined) {
+    allowProjectInvite.value = user.value.allow_project_invite
+  }
 })
+
+/**
+ * 处理隐私设置变更
+ *
+ * @param value - 新的隐私设置值
+ */
+const handlePrivacyChange = async (value: boolean) => {
+  privacySaving.value = true
+  try {
+    const res = await updatePrivacy({ allow_project_invite: value })
+    if (res.success) {
+      ElMessage.success('隐私设置已更新')
+      // 更新本地用户状态
+      await userStore.fetchProfile()
+    } else {
+      ElMessage.error(res.error?.message || '更新失败')
+      // 恢复原值
+      allowProjectInvite.value = !value
+    }
+  } catch (error) {
+    ElMessage.error('更新失败')
+    // 恢复原值
+    allowProjectInvite.value = !value
+  } finally {
+    privacySaving.value = false
+  }
+}
 
 const handleDeleteAccount = async () => {
   try {
@@ -269,5 +323,13 @@ const handleDeleteAccount = async () => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+}
+
+.privacy-card {
+  margin-top: 24px;
+}
+
+.privacy-form {
+  max-width: 500px;
 }
 </style>

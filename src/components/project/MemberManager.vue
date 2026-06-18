@@ -52,10 +52,30 @@
     </el-table>
 
     <!-- 添加成员对话框 -->
-    <el-dialog v-model="showAddDialog" title="添加成员" width="400px">
+    <el-dialog v-model="showAddDialog" title="添加成员" width="500px">
       <el-form :model="addForm" label-width="80px">
-        <el-form-item label="用户ID">
-          <el-input-number v-model="addForm.user_id" :min="1" style="width: 100%" />
+        <el-form-item label="用户">
+          <el-autocomplete
+            v-model="searchKeyword"
+            :fetch-suggestions="handleSearch"
+            placeholder="输入用户名或昵称搜索"
+            clearable
+            @select="handleSelectUser"
+            style="width: 100%"
+          >
+            <template #default="{ item }">
+              <div class="user-option">
+                <el-avatar v-if="item.avatar" :src="item.avatar" :size="24" />
+                <el-avatar v-else :size="24">
+                  {{ (item.nickname || item.username || '?')[0] }}
+                </el-avatar>
+                <span class="user-info">
+                  <span class="user-nickname">{{ item.nickname || item.username }}</span>
+                  <span class="user-username">@{{ item.username }}</span>
+                </span>
+              </div>
+            </template>
+          </el-autocomplete>
         </el-form-item>
         <el-form-item label="角色">
           <el-select v-model="addForm.role" style="width: 100%">
@@ -77,11 +97,15 @@ defineOptions({ name: 'MemberManager' })
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 
+import { searchUsers } from '@/api/user'
 import { useProject } from '@/composables/useProject'
 import { useProjectStore } from '@/stores/project'
 import { useUserStore } from '@/stores/user'
+import type { ApiError } from '@/types'
+import type { UserBrief } from '@/types/chat'
 import type { Project, ProjectMember } from '@/types/project'
 import { PROJECT_ROLE_LABEL } from '@/utils/constants'
+import { getErrorMessage } from '@/utils/error'
 
 const props = defineProps<{
   project: Project
@@ -99,21 +123,68 @@ const currentUserId = computed(() => userStore.user?.id)
 const showAddDialog = ref(false)
 const adding = ref(false)
 const addForm = reactive({
-  user_id: 1,
+  user_id: 0,
   role: 'member' as 'admin' | 'member',
 })
+
+// 用户搜索相关
+const searchKeyword = ref('')
+const searchResults = ref<UserBrief[]>([])
+const searchLoading = ref(false)
+let searchTimer: ReturnType<typeof setTimeout> | null = null
 
 onMounted(async () => {
   await projectStore.fetchMembers(props.project.id)
 })
+
+/**
+ * 搜索用户（防抖）
+ *
+ * @param keyword - 搜索关键词
+ */
+const handleSearch = (keyword: string) => {
+  if (searchTimer) {
+    clearTimeout(searchTimer)
+  }
+
+  if (!keyword.trim()) {
+    searchResults.value = []
+    return
+  }
+
+  searchTimer = setTimeout(async () => {
+    searchLoading.value = true
+    try {
+      const res = await searchUsers(keyword, 1, 10)
+      if (res.success && res.data) {
+        searchResults.value = res.data.data
+      }
+    } catch (error) {
+      console.error('搜索用户失败:', error)
+    } finally {
+      searchLoading.value = false
+    }
+  }, 300)
+}
+
+/**
+ * 选择用户
+ *
+ * @param user - 选中的用户信息
+ */
+const handleSelectUser = (user: UserBrief) => {
+  addForm.user_id = user.id
+  searchKeyword.value = user.nickname || user.username
+  searchResults.value = []
+}
 
 const handleRoleChange = async (row: ProjectMember) => {
   try {
     await projectStore.updateMemberRole(props.project.id, row.user_id, { role: row.role })
     await projectStore.fetchMembers(props.project.id)
   } catch (error: unknown) {
-    const err = error as { message?: string }
-    ElMessage.error(err.message || '更新角色失败')
+    const apiError = error as ApiError
+    ElMessage.error(getErrorMessage(apiError))
     await projectStore.fetchMembers(props.project.id)
   }
 }
@@ -129,15 +200,15 @@ const handleRemove = async (row: ProjectMember) => {
     await projectStore.fetchMembers(props.project.id)
   } catch (error: unknown) {
     if ((error as { reason?: string })?.reason !== 'cancel') {
-      const err = error as { message?: string }
-      ElMessage.error(err.message || '移除成员失败')
+      const apiError = error as ApiError
+      ElMessage.error(getErrorMessage(apiError))
     }
   }
 }
 
 const handleAdd = async () => {
   if (!addForm.user_id) {
-    ElMessage.warning('请输入用户ID')
+    ElMessage.warning('请选择用户')
     return
   }
   adding.value = true
@@ -147,12 +218,14 @@ const handleAdd = async () => {
       role: addForm.role,
     })
     showAddDialog.value = false
-    addForm.user_id = 1
+    addForm.user_id = 0
     addForm.role = 'member'
+    searchKeyword.value = ''
+    searchResults.value = []
     await projectStore.fetchMembers(props.project.id)
   } catch (error: unknown) {
-    const err = error as { message?: string }
-    ElMessage.error(err.message || '添加成员失败')
+    const apiError = error as ApiError
+    ElMessage.error(getErrorMessage(apiError))
   } finally {
     adding.value = false
   }
@@ -177,5 +250,27 @@ const handleAdd = async () => {
 
 .loading {
   padding: 16px 0;
+}
+
+.user-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.4;
+}
+
+.user-nickname {
+  font-size: 14px;
+  color: #303133;
+}
+
+.user-username {
+  font-size: 12px;
+  color: #909399;
 }
 </style>

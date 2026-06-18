@@ -5,11 +5,23 @@
 | 项目     | 值         |
 | -------- | ---------- |
 | 适用     | 前端应用   |
-| 最后更新 | 2026-06-08 |
+| 最后更新 | 2026-06-19 |
 
 ## 目录
 
 ## [1.7.0] - 未发布
+
+### 新增
+
+- **聊天模块**：新增 ChatView（`/chat`），支持群聊消息发送和查看
+  - `api/chat.ts`：`getChatMessages()`、`sendChatMessage()` API 方法
+  - 消息轮询间隔 3 秒，支持游标分页加载历史消息
+- **通知模块**：新增 NotificationListView 和 NotificationDetailView
+  - `api/notification.ts`：通知列表、未读数、已读标记 API
+  - 导航栏铃铛图标 + 红点未读徽标
+- **操作手册**：新增 ManualListView 和 ManualDetailView（`/manuals`）
+- **首页重定向**：`/` 自动重定向到 `/projects`
+- **导航栏重构**：移除文章链接，增加手册入口和铃铛通知图标
 
 ### 变更
 
@@ -22,12 +34,6 @@
   - `composables/useSessionMonitor.ts`：会话监控适配 Cookie 刷新流程
 - **新增用户搜索**：`api/user.ts` 新增 `searchUsers()` 方法（`GET /api/users/search`）
 - **类型更新**：`LoginResponse` 去除 `refresh_token`，`api.ts` 新增 `token_type`，`user.ts` 新增 `SearchUsersResponse`
-
-### 规划
-
-- 文章体系重构：首页重定向到 `/projects`，导航栏增加手册入口和铃铛通知图标
-- 操作手册模块：ManualListView + ManualDetailView（/manuals）
-- 通知模块：NotificationListView + NotificationDetailView（/notifications）
 - 铃铛红点提示：基于未读通知数的 el-badge 徽标
 - 未读数轮询：每 30 秒轮询 `/api/notifications/unread-count`
 

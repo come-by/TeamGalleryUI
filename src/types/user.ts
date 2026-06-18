@@ -17,6 +17,18 @@ export interface User {
   location?: string
   birthday?: string
   updated_at?: string
+  // 隐私设置字段
+  allow_project_invite?: boolean
+}
+
+/** 隐私设置更新参数 */
+export interface PrivacyUpdateParams {
+  allow_project_invite: boolean
+}
+
+/** 隐私设置响应 */
+export interface PrivacyResponse {
+  allow_project_invite: boolean
 }
 
 export interface LoginParams {

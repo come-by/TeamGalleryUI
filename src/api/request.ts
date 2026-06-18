@@ -74,12 +74,56 @@ const refreshAccessToken = async (): Promise<string> => {
 const MAX_RETRIES = 2
 const RETRY_DELAY = 1000
 
+/**
+ * 生成 UUID v4
+ *
+ * @returns UUID v4 字符串
+ */
+const generateUUID = (): string => {
+  // 优先使用 crypto.randomUUID（现代浏览器支持）
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  // 降级方案
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
+/**
+ * 判断是否为敏感接口（需要防重放保护）
+ * 包括：POST/PUT/DELETE 成员管理接口
+ *
+ * @param config - Axios 请求配置
+ * @returns 是否为敏感接口
+ */
+const isSensitiveRequest = (config: AxiosRequestConfig): boolean => {
+  if (!config.method || !config.url) return false
+  const method = String(config.method).toUpperCase()
+  // 仅对 POST/PUT/DELETE 方法进行保护
+  if (!['POST', 'PUT', 'DELETE'].includes(method)) return false
+  // 成员管理相关接口
+  const sensitivePatterns = [/\/projects\/\d+\/members/, /\/user\/privacy/]
+  return sensitivePatterns.some((pattern) => pattern.test(config.url || ''))
+}
+
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+    // 防重放保护：为敏感接口添加 nonce 和 timestamp
+    if (isSensitiveRequest(config)) {
+      const nonce = generateUUID()
+      const timestamp = Math.floor(Date.now() / 1000).toString()
+      config.headers['X-Request-Nonce'] = nonce
+      config.headers['X-Request-Timestamp'] = timestamp
+    }
+
     return config
   },
   (error) => {
