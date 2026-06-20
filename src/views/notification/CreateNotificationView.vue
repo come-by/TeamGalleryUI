@@ -73,6 +73,19 @@
             <el-radio value="urgent">紧急</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="定时发布" prop="scheduled_at">
+          <el-date-picker
+            v-model="form.scheduled_at"
+            type="datetime"
+            placeholder="选择定时发布时间（留空则立即发布）"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DDTHH:mm:ss"
+            :disabled-date="disabledDate"
+            clearable
+            style="width: 100%"
+          />
+          <div class="schedule-tip">留空则立即发布，设置为未来时间将定时自动发布</div>
+        </el-form-item>
         <el-form-item label="通知摘要" prop="summary">
           <el-input
             v-model="form.summary"
@@ -124,6 +137,7 @@ const form = reactive<NotificationCreateParams>({
   summary: '',
   category: 'system',
   urgency: 'normal',
+  scheduled_at: undefined,
 })
 
 const rules = {
@@ -166,6 +180,11 @@ const applyTemplate = (id: number | '') => {
   form.summary = tpl.summary || ''
   if (tpl.category) form.category = tpl.category as NotificationCreateParams['category']
   if (tpl.urgency) form.urgency = tpl.urgency as NotificationCreateParams['urgency']
+}
+
+// 禁用今天之前的日期（定时发布不能选过去的时间）
+const disabledDate = (time: Date) => {
+  return time.getTime() < Date.now() - 8.64e7 // 允许选今天
 }
 
 const handleSubmit = async () => {
@@ -253,5 +272,11 @@ onMounted(() => {
 
 .manage-link {
   margin-left: auto;
+}
+
+.schedule-tip {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
 }
 </style>

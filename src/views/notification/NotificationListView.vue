@@ -26,6 +26,22 @@
           <div class="item-left">
             <span v-if="!item.is_read" class="unread-dot"></span>
             <span class="item-title">{{ item.title }}</span>
+            <el-tag
+              v-if="item.notif_category"
+              size="small"
+              :type="categoryType(item.notif_category)"
+              class="item-tag"
+            >
+              {{ categoryLabel(item.notif_category) }}
+            </el-tag>
+            <el-tag
+              v-if="item.urgency"
+              size="small"
+              :type="urgencyType(item.urgency)"
+              class="item-tag"
+            >
+              {{ urgencyLabel(item.urgency) }}
+            </el-tag>
           </div>
           <div class="item-right">
             <span class="item-date">{{ formatDate(item.published_at || item.created_at) }}</span>
@@ -100,6 +116,34 @@ const handleMarkAllRead = async () => {
 const handlePageChange = (page: number) => {
   currentPage.value = page
   fetchNotifications()
+}
+
+const categoryType = (cat: string): string => {
+  const map: Record<string, string> = {
+    system: 'info',
+    project: 'success',
+    announcement: 'warning',
+  }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, cat) ? map[cat] : 'info'
+}
+
+const categoryLabel = (cat: string): string => {
+  const map: Record<string, string> = { system: '系统', project: '项目', announcement: '公告' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, cat) ? map[cat] : cat
+}
+
+const urgencyType = (urg: string): string => {
+  const map: Record<string, string> = { normal: 'info', important: 'warning', urgent: 'danger' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, urg) ? map[urg] : 'info'
+}
+
+const urgencyLabel = (urg: string): string => {
+  const map: Record<string, string> = { normal: '普通', important: '重要', urgent: '紧急' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, urg) ? map[urg] : urg
 }
 
 const goToNotification = (id: number) => {

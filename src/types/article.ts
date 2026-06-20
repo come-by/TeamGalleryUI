@@ -10,6 +10,9 @@ export interface Article {
   user_id: number
   user?: User
   category_id?: number
+  category?: string
+  notif_category?: string
+  urgency?: string
   view_count: number
   like_count: number
   comment_count: number

@@ -16,6 +16,20 @@
               <el-icon><calendar /></el-icon>
               {{ formatDate(notification.published_at || notification.created_at) }}
             </span>
+            <el-tag
+              v-if="notification.notif_category"
+              size="small"
+              :type="categoryType(notification.notif_category)"
+            >
+              {{ categoryLabel(notification.notif_category) }}
+            </el-tag>
+            <el-tag
+              v-if="notification.urgency"
+              size="small"
+              :type="urgencyType(notification.urgency)"
+            >
+              {{ urgencyLabel(notification.urgency) }}
+            </el-tag>
           </div>
         </div>
       </template>
@@ -62,6 +76,34 @@ onMounted(async () => {
 
 const renderContent = (content: string): string => {
   return sanitizeHtml(content)
+}
+
+const categoryType = (cat: string): string => {
+  const map: Record<string, string> = {
+    system: 'info',
+    project: 'success',
+    announcement: 'warning',
+  }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, cat) ? map[cat] : 'info'
+}
+
+const categoryLabel = (cat: string): string => {
+  const map: Record<string, string> = { system: '系统', project: '项目', announcement: '公告' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, cat) ? map[cat] : cat
+}
+
+const urgencyType = (urg: string): string => {
+  const map: Record<string, string> = { normal: 'info', important: 'warning', urgent: 'danger' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, urg) ? map[urg] : 'info'
+}
+
+const urgencyLabel = (urg: string): string => {
+  const map: Record<string, string> = { normal: '普通', important: '重要', urgent: '紧急' }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return Object.hasOwn(map, urg) ? map[urg] : urg
 }
 </script>
 
