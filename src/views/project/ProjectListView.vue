@@ -12,9 +12,6 @@
               @keyup.enter="handleSearch"
             />
             <el-button @click="handleSearch">搜索</el-button>
-            <el-button v-if="isLoggedIn" type="primary" @click="$router.push('/projects/create')">
-              创建项目
-            </el-button>
           </div>
         </div>
         <div class="tabs">
@@ -63,12 +60,10 @@ import { useRouter } from 'vue-router'
 
 import ProjectCard from '@/components/project/ProjectCard.vue'
 import { useProjectStore } from '@/stores/project'
-import { useUserStore } from '@/stores/user'
 import type { Project, ProjectStatus } from '@/types/project'
 
 const router = useRouter()
 const projectStore = useProjectStore()
-const userStore = useUserStore()
 
 const currentPage = ref(1)
 const pageSize = ref(12)
@@ -78,7 +73,6 @@ const statusFilter = ref<ProjectStatus | ''>('')
 const projects = computed(() => projectStore.projects)
 const total = computed(() => projectStore.total)
 const loading = computed(() => projectStore.loading)
-const isLoggedIn = computed(() => userStore.isLoggedIn)
 
 onMounted(async () => {
   await fetchProjects()

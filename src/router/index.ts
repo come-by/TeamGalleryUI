@@ -99,6 +99,18 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true, keepAlive: true },
       },
       {
+        path: 'notifications/create',
+        name: 'CreateNotification',
+        component: () => import('@/views/notification/CreateNotificationView.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
+      {
+        path: 'notifications/templates',
+        name: 'TemplateManage',
+        component: () => import('@/views/notification/TemplateManageView.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
+      {
         path: 'notifications/:id',
         name: 'NotificationDetail',
         component: () => import('@/views/notification/NotificationDetailView.vue'),

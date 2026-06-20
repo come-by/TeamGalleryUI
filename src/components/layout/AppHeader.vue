@@ -11,6 +11,21 @@
         <el-button type="primary" size="small" @click="$router.push('/register')"> 注册 </el-button>
       </template>
       <template v-else>
+        <!-- 加号下拉菜单（悬停触发，创建项目/发布通知） -->
+        <el-dropdown trigger="hover" @command="handlePlusCommand">
+          <span class="plus-action">
+            <el-icon :size="20"><Plus /></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="createProject">创建项目</el-dropdown-item>
+              <el-dropdown-item v-if="isAdmin" command="publishNotification"
+                >发布通知</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
         <!-- 铃铛下拉菜单（悬停触发，统一入口） -->
         <el-dropdown
           trigger="hover"
@@ -68,7 +83,7 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'AppHeader' })
-import { ArrowDown, Bell, UserFilled } from '@element-plus/icons-vue'
+import { ArrowDown, Bell, Plus, UserFilled } from '@element-plus/icons-vue'
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -129,6 +144,22 @@ const handleBellCommand = (command: string) => {
       break
     case 'notification':
       router.push('/notifications')
+      break
+  }
+}
+
+/**
+ * 加号菜单命令处理
+ *
+ * @param command - 菜单命令标识
+ */
+const handlePlusCommand = (command: string) => {
+  switch (command) {
+    case 'createProject':
+      router.push('/projects/create')
+      break
+    case 'publishNotification':
+      router.push('/notifications/create')
       break
   }
 }
@@ -203,6 +234,21 @@ const handleCommand = (command: DropdownCommand) => {
 
 .notification-bell:hover {
   color: #409eff;
+}
+
+.plus-action {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  color: var(--color-text-primary);
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.plus-action:hover {
+  color: #409eff;
+  background-color: var(--el-fill-color-light);
 }
 
 .bell-item {
