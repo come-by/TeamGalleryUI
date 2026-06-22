@@ -2,6 +2,8 @@ import type { Article } from './article'
 
 export interface NotificationItem extends Article {
   is_read: boolean
+  notif_target_type?: string
+  notif_target_data?: string
 }
 
 export interface UnreadCountResponse {
@@ -15,6 +17,28 @@ export interface NotificationCreateParams {
   category?: 'system' | 'project' | 'announcement'
   urgency?: 'normal' | 'important' | 'urgent'
   scheduled_at?: string
+}
+
+// 批量通知目标
+export interface BatchTarget {
+  type: 'all' | 'specific_users' | 'by_role' | 'by_project' | 'by_team'
+  user_ids?: number[]
+  roles?: string[]
+  project_ids?: number[]
+  team_ids?: number[]
+}
+
+// 批量通知创建参数
+export interface BatchNotificationCreateParams extends NotificationCreateParams {
+  targets: BatchTarget
+}
+
+// 批量创建结果
+export interface BatchCreateResult {
+  notification: NotificationItem
+  target_type: string
+  target_summary: string
+  resolved_count: number
 }
 
 // 通知模板

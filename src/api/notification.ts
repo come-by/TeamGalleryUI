@@ -1,5 +1,7 @@
 import type { ApiResponse, PaginatedResponse } from '@/types'
 import type {
+  BatchCreateResult,
+  BatchNotificationCreateParams,
   NotificationCreateParams,
   NotificationItem,
   NotificationTemplate,
@@ -72,6 +74,18 @@ export const createNotification = (
   data: NotificationCreateParams,
 ): Promise<ApiResponse<NotificationItem>> => {
   return request.post('/notifications', data)
+}
+
+/**
+ * 批量创建通知
+ *
+ * @param data - 批量通知创建参数（含目标规则）
+ * @returns 批量创建结果
+ */
+export const createBatchNotification = (
+  data: BatchNotificationCreateParams,
+): Promise<ApiResponse<BatchCreateResult>> => {
+  return request.post('/notifications/batch', data)
 }
 
 // ============================

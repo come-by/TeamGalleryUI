@@ -104,30 +104,84 @@
             placeholder="请输入通知内容（支持 Markdown）"
           />
         </el-form-item>
+
+        <el-divider content-position="left">目标用户（可选）</el-divider>
+
+        <div class="target-section">
+          <el-radio-group v-model="targetType">
+            <el-radio value="all">所有人（默认）</el-radio>
+            <el-radio value="specific_users">指定用户</el-radio>
+            <el-radio value="by_role">按角色</el-radio>
+            <el-radio value="by_project">按项目</el-radio>
+            <el-radio value="by_team">按团队</el-radio>
+          </el-radio-group>
+
+          <div v-if="targetType !== 'all'" class="target-selector-wrapper">
+            <UserSelector v-if="targetType === 'specific_users'" v-model="selectedUserIDs" />
+            <RoleSelector v-if="targetType === 'by_role'" v-model="selectedRoles" />
+            <ProjectSelector v-if="targetType === 'by_project'" v-model="selectedProjectIDs" />
+            <TeamSelector v-if="targetType === 'by_team'" v-model="selectedTeamIDs" />
+
+            <div class="resolve-info">
+              <el-tag type="info"> 将向所选目标范围内的用户发送此通知 </el-tag>
+            </div>
+          </div>
+        </div>
+
         <el-form-item>
           <el-button type="primary" @click="handleSubmit" :loading="loading">发布通知</el-button>
+          <el-button type="warning" plain @click="showPreview = true" :disabled="!isFormValid">
+            <el-icon><View /></el-icon> 预览
+          </el-button>
           <el-button @click="$router.back()">取消</el-button>
         </el-form-item>
       </el-form>
     </el-card>
+
+    <NotificationPreview
+      v-model:visible="showPreview"
+      :title="form.title"
+      :content="form.content"
+      :summary="form.summary"
+      :category="form.category"
+      :urgency="form.urgency"
+      :author-name="currentUserName"
+      :scheduled-at="form.scheduled_at"
+      @confirm-publish="handleSubmit"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 defineOptions({ name: 'CreateNotificationView' })
+import { View } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { createNotification, getTemplates } from '@/api/notification'
-import type { NotificationCreateParams, NotificationTemplate } from '@/types/notification'
+import { createBatchNotification, createNotification, getTemplates } from '@/api/notification'
+import ProjectSelector from '@/components/notification/ProjectSelector.vue'
+import RoleSelector from '@/components/notification/RoleSelector.vue'
+import TeamSelector from '@/components/notification/TeamSelector.vue'
+import UserSelector from '@/components/notification/UserSelector.vue'
+import { useUserStore } from '@/stores/user'
+import type {
+  BatchNotificationCreateParams,
+  BatchTarget,
+  NotificationCreateParams,
+  NotificationTemplate,
+} from '@/types/notification'
+
+import NotificationPreview from './NotificationPreview.vue'
 
 const router = useRouter()
 const route = useRoute()
+const userStore = useUserStore()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 const showTemplatePicker = ref(false)
+const showPreview = ref(false)
 const selectedTemplateId = ref<number | ''>('')
 const templates = ref<NotificationTemplate[]>([])
 
@@ -139,6 +193,13 @@ const form = reactive<NotificationCreateParams>({
   urgency: 'normal',
   scheduled_at: undefined,
 })
+
+// 目标选择相关状态
+const targetType = ref<string>('all')
+const selectedUserIDs = ref<number[]>([])
+const selectedRoles = ref<string[]>([])
+const selectedProjectIDs = ref<number[]>([])
+const selectedTeamIDs = ref<number[]>([])
 
 const rules = {
   title: [{ required: true, message: '请输入通知标题', trigger: 'blur' }],
@@ -187,14 +248,46 @@ const disabledDate = (time: Date) => {
   return time.getTime() < Date.now() - 8.64e7 // 允许选今天
 }
 
+const currentUserName = computed(() => userStore.nickname || userStore.username || '未知')
+
+const isFormValid = computed(() => !!form.title.trim() && !!form.content.trim())
+
+const buildTargets = (): BatchTarget => {
+  switch (targetType.value) {
+    case 'specific_users':
+      return { type: 'specific_users', user_ids: selectedUserIDs.value }
+    case 'by_role':
+      return { type: 'by_role', roles: selectedRoles.value }
+    case 'by_project':
+      return { type: 'by_project', project_ids: selectedProjectIDs.value }
+    case 'by_team':
+      return { type: 'by_team', team_ids: selectedTeamIDs.value }
+    default:
+      return { type: 'all' }
+  }
+}
+
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate().catch(() => false)
   if (!valid) return
 
   loading.value = true
   try {
-    await createNotification(form)
-    ElMessage.success('通知发布成功')
+    if (targetType.value === 'all') {
+      // 原有接口：全员可见
+      await createNotification(form)
+      ElMessage.success('通知发布成功')
+    } else {
+      // 新接口：定向批量
+      const batchData: BatchNotificationCreateParams = {
+        ...form,
+        targets: buildTargets(),
+      }
+      const result = await createBatchNotification(batchData)
+      if (result.success && result.data) {
+        ElMessage.success(`批量通知发布成功！已覆盖 ${result.data.resolved_count} 位用户`)
+      }
+    }
     router.push('/notifications')
   } catch (error: unknown) {
     const err = error as { message?: string }
@@ -278,5 +371,20 @@ onMounted(() => {
   font-size: 12px;
   color: #999;
   margin-top: 4px;
+}
+
+.target-section {
+  margin-bottom: 20px;
+}
+
+.target-selector-wrapper {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.resolve-info {
+  margin-top: 12px;
 }
 </style>

@@ -42,6 +42,9 @@
             >
               {{ urgencyLabel(item.urgency) }}
             </el-tag>
+            <el-tag size="small" :type="targetTypeTag(item.notif_target_type)" class="item-tag">
+              {{ targetTypeLabel(item.notif_target_type) }}
+            </el-tag>
           </div>
           <div class="item-right">
             <span class="item-date">{{ formatDate(item.published_at || item.created_at) }}</span>
@@ -148,6 +151,24 @@ const urgencyLabel = (urg: string): string => {
 
 const goToNotification = (id: number) => {
   router.push(`/notifications/${id}`)
+}
+
+const targetTypeLabel = (t: string | undefined): string => {
+  const map: Record<string, string> = {
+    specific_users: '指定用户',
+    by_role: '指定角色',
+    by_project: '项目成员',
+    by_team: '团队成员',
+    all: '全员可见',
+  }
+  // eslint-disable-next-line security/detect-object-injection -- safe literal key lookup
+  return t && Object.hasOwn(map, t) ? map[t] : '全员可见'
+}
+
+const targetTypeTag = (t: string | undefined): string => {
+  if (!t || t === 'all') return ''
+  if (t === 'by_project' || t === 'by_team') return 'success'
+  return 'info'
 }
 </script>
 
