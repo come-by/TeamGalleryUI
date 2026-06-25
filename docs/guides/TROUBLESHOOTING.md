@@ -2,20 +2,27 @@
 
 > 本文档记录 TeamGallery 前端应用常见问题和解决方案。
 
-| 项目 | 值 |
-|------|-----|
-| 适用 | 前端应用 |
+| 项目     | 值         |
+| -------- | ---------- |
+| 适用     | 前端应用   |
 | 最后更新 | 2026-06-08 |
 
 ## 目录
 
 ## 1. 开发环境问题
+
 ## 2. 构建问题
+
 ## 3. 运行时问题
+
 ## 4. 测试问题
+
 ## 5. 性能问题
+
 ## 6. Git 问题
+
 ## 7. 其他资源
+
 ## 相关文档
 
 ---
@@ -27,6 +34,7 @@
 **问题**: `npm install` 报错
 
 **解决方案**:
+
 ```bash
 # 清除缓存
 npm cache clean --force
@@ -43,6 +51,7 @@ npm install
 **问题**: `npm run dev` 报错
 
 **排查步骤**:
+
 1. 检查 Node.js 版本（需要 >= 18）
 2. 检查端口是否被占用
 3. 查看错误日志
@@ -60,6 +69,7 @@ netstat -ano | findstr :5173
 **问题**: IDE 显示类型错误但代码能运行
 
 **解决方案**:
+
 ```bash
 # 运行类型检查
 npx vue-tsc --noEmit
@@ -71,11 +81,11 @@ npm run dev
 
 ### 1.4 常见类型错误
 
-| 错误 | 原因 | 修复 |
-|------|------|------|
-| `'_emit' is declared but its value is never read` | `defineEmits()` 返回值赋给变量但未使用 | 改为 `defineEmits()` 直接调用，不赋值 |
-| `Generic type 'HttpResponse<BodyType>' requires 1 type argument(s)` | MSW v2 `HttpResponse` 需要泛型参数 | 移除显式返回类型注解，让 TypeScript 自动推断 |
-| 组件导入路径报错 | 路径别名未配置或 tsconfig 未更新 | 检查 `@/` 别名在 `tsconfig.json` 中是否配置 |
+| 错误                                                                | 原因                                   | 修复                                         |
+| ------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------- |
+| `'_emit' is declared but its value is never read`                   | `defineEmits()` 返回值赋给变量但未使用 | 改为 `defineEmits()` 直接调用，不赋值        |
+| `Generic type 'HttpResponse<BodyType>' requires 1 type argument(s)` | MSW v2 `HttpResponse` 需要泛型参数     | 移除显式返回类型注解，让 TypeScript 自动推断 |
+| 组件导入路径报错                                                    | 路径别名未配置或 tsconfig 未更新       | 检查 `@/` 别名在 `tsconfig.json` 中是否配置  |
 
 ## 2. 构建问题
 
@@ -84,6 +94,7 @@ npm run dev
 **问题**: `npm run build` 报错
 
 **排查步骤**:
+
 1. 运行类型检查
 2. 运行 lint 检查
 3. 查看详细错误信息
@@ -99,6 +110,7 @@ npm run build
 **问题**: 打包后文件过大
 
 **优化方案**:
+
 1. 检查依赖是否按需引入
 2. 使用动态导入分割代码
 3. 启用 Gzip 压缩
@@ -125,6 +137,7 @@ npm run build -- --report
 **问题**: 网络请求报错
 
 **排查步骤**:
+
 1. 检查 `VITE_API_BASE_URL` 配置
 2. 检查网络连接
 3. 查看浏览器 Network 面板
@@ -140,6 +153,7 @@ console.log(import.meta.env.VITE_API_BASE_URL)
 **问题**: 请求返回 401
 
 **解决方案**:
+
 1. 自动刷新 Token（已实现）
 2. 刷新失败跳转登录页
 3. 检查 Token 存储位置
@@ -149,6 +163,7 @@ console.log(import.meta.env.VITE_API_BASE_URL)
 **问题**: 页面加载后显示空白
 
 **排查步骤**:
+
 1. 打开浏览器控制台查看错误
 2. 检查路由配置
 3. 检查组件导入路径
@@ -161,6 +176,7 @@ console.log(import.meta.env.VITE_API_BASE_URL)
 **问题**: `npm run test` 报错
 
 **排查步骤**:
+
 1. 确认 `src/test/setup.ts` 正确引入
 2. 检查测试文件语法
 3. 查看 Vitest 配置
@@ -178,6 +194,7 @@ npm run test:watch
 **问题**: CI 因覆盖率失败
 
 **解决方案**:
+
 1. 补充缺失的测试用例
 2. 检查覆盖率阈值配置
 3. 生成详细覆盖率报告
@@ -191,6 +208,7 @@ npm run test:coverage
 ### 5.1 页面加载慢
 
 **优化方案**:
+
 1. 使用动态导入分割代码
 2. 图片懒加载
 3. 启用 Gzip 压缩
@@ -199,6 +217,7 @@ npm run test:coverage
 ### 5.2 列表渲染慢
 
 **优化方案**:
+
 1. 使用虚拟滚动（超过 100 项）
 2. 分页加载
 3. 避免不必要的响应式更新
@@ -223,6 +242,7 @@ docs: 更新文档
 **问题**: 提交前 lint 检查失败
 
 **解决方案**:
+
 ```bash
 # 运行 lint 修复
 npm run lint
@@ -234,14 +254,14 @@ git commit --no-verify
 
 ## 7. 其他资源
 
-- 查看 [代码规范](./CODING_STANDARDS.md)
-- 查看 [架构文档](./ARCHITECTURE.md)
+- 查看 [代码规范](../project/CODING_STANDARDS.md)
+- 查看 [架构文档](../project/ARCHITECTURE.md)
 - 查看 [测试指南](./TESTING.md)
-- 查看 [安全策略](./SECURITY.md)
+- 查看 [安全策略](../reference/SECURITY.md)
 - 提交 Issue 到项目仓库
 
 ## 相关文档
 
 - [开发指南](./DEVELOPMENT.md)
 - [部署指南](./DEPLOYMENT.md)
-- [架构设计](./ARCHITECTURE.md)
+- [架构设计](../project/ARCHITECTURE.md)

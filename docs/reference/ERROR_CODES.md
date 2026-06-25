@@ -231,4 +231,4 @@ function handleApiError(error: ApiError) {
 
 - [API 接口](./API.md)
 - [安全策略](./SECURITY.md)
-- [开发指南](./DEVELOPMENT.md)
+- [开发指南](../guides/DEVELOPMENT.md)

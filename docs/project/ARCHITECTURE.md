@@ -241,7 +241,7 @@ src/
 
 ## 相关文档
 
-- [API 接口](./API.md)
-- [开发指南](./DEVELOPMENT.md)
-- [安全策略](./SECURITY.md)
+- [开发指南](../guides/DEVELOPMENT.md)
 - [代码规范](./CODING_STANDARDS.md)
+- [测试指南](../guides/TESTING.md)
+- [安全策略](../reference/SECURITY.md)

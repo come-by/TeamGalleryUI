@@ -1,0 +1,113 @@
+name: API Contract Check
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      # 前后端 API 相关文件变更时触发
+      - 'src/api/**'
+      - 'src/types/**'
+      - 'scripts/gen-api.ts'
+      - 'src/types/generated/**'
+      - '../TeamGalleryGo/docs/swagger.json'
+      - '../TeamGalleryGo/docs/swagger.yaml'
+  # 每日定时检查（捕获后端变更后前端未更新的情况）
+  schedule:
+    - cron: '0 2 * * 1-5' # 工作日凌晨 2 点
+  # 手动触发
+  workflow_dispatch:
+
+jobs:
+  contract-check:
+    name: API Contract Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 步骤 1：基于本地 schemas.ts 进行契约验证 ──
+      - name: Contract verify (local schemas.ts)
+        run: |
+          echo "::group::Type check"
+          npx vue-tsc --noEmit
+          echo "::endgroup::"
+
+          echo "::group::Contract tests"
+          npx vitest run src/api/contract.test.ts src/api/contract.typecheck.test.ts --coverage
+          echo "::endgroup::"
+
+          echo "::group::Schema validation"
+          tsx scripts/validate-contract.ts
+          echo "::endgroup::"
+
+      # ── 步骤 2：检出后端仓库，重新生成 Swagger → schemas.ts → 对比 ──
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+          cache: false
+
+      - name: Checkout backend repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/TeamGalleryGo
+          path: ../TeamGalleryGo
+          ref: main
+
+      - name: Install swag CLI
+        run: go install github.com/swaggo/swag/cmd/swag@latest
+
+      - name: Generate Swagger from backend
+        working-directory: ../TeamGalleryGo
+        run: swag init -g cmd/server/main.go -o docs --parseDependency --parseInternal
+
+      - name: Generate frontend API types + client
+        run: npm run gen:api
+        env:
+          SWAGGER_PATH: ../TeamGalleryGo/docs/swagger.json
+
+      - name: Check for uncommitted changes (contract drift detection)
+        run: |
+          if [[ -n $(git status --porcelain src/types/generated/ src/api/contract.ts) ]]; then
+            echo "=========================================="
+            echo "  API CONTRACT DRIFT DETECTED!"
+            echo "=========================================="
+            echo ""
+            echo "  The generated API types/client do not match the committed version."
+            echo "  This means the backend API has changed and the frontend types need updating."
+            echo ""
+            echo "  Changed files:"
+            git diff --stat src/types/generated/ src/api/contract.ts
+            echo ""
+            echo "  To fix:"
+            echo "    1. Run 'npm run gen:api' locally"
+            echo "    2. Review the changes"
+            echo "    3. Commit and push the updated generated files"
+            echo "=========================================="
+            exit 1
+          fi
+
+      - name: Re-verify with regenerated types
+        run: |
+          echo "::group::Type check (regenerated)"
+          npx vue-tsc --noEmit
+          echo "::endgroup::"
+
+          echo "::group::Contract tests (regenerated)"
+          npx vitest run src/api/contract.test.ts src/api/contract.typecheck.test.ts
+          echo "::endgroup::"
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "## Contract Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo ":white_check_mark: **API contract is consistent** — no drift detected." >> $GITHUB_STEP_SUMMARY

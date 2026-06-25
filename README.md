@@ -103,16 +103,16 @@ src/
 环境变量文件 `.env.development`：
 
 ```env
-VITE_API_BASE_URL=http://localhost:8080/api
+VITE_API_BASE_URL=http://localhost:8080/api/v1
 VITE_APP_TITLE=TeamGallery
 VITE_SENTRY_DSN=
 ```
 
-| 变量                | 说明                | 默认值                      |
-| ------------------- | ------------------- | --------------------------- |
-| `VITE_API_BASE_URL` | 后端 API 地址       | `http://localhost:8080/api` |
-| `VITE_APP_TITLE`    | 应用标题            | `TeamGallery`               |
-| `VITE_SENTRY_DSN`   | Sentry 错误监控 DSN | 空（不启用）                |
+| 变量                | 说明                | 默认值                         |
+| ------------------- | ------------------- | ------------------------------ |
+| `VITE_API_BASE_URL` | 后端 API 地址       | `http://localhost:8080/api/v1` |
+| `VITE_APP_TITLE`    | 应用标题            | `TeamGallery`                  |
+| `VITE_SENTRY_DSN`   | Sentry 错误监控 DSN | 空（不启用）                   |
 
 ## CI/CD
 

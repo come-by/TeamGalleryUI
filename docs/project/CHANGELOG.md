@@ -35,19 +35,13 @@
 - **新增用户搜索**：`api/user.ts` 新增 `searchUsers()` 方法（`GET /api/users/search`）
 - **类型更新**：`LoginResponse` 去除 `refresh_token`，`api.ts` 新增 `token_type`，`user.ts` 新增 `SearchUsersResponse`
 - 铃铛红点提示：基于未读通知数的 el-badge 徽标
-- 未读数轮询：每 30 秒轮询 `/api/notifications/unread-count`
-
-## [Unreleased]
-
-### 待发布
-
-- 初始版本开发中
+- 未读数轮询：每 30 秒轮询 `/api/v1/notifications/unread-count`
 
 ## 相关文档
 
 - [开发路线图](./ROADMAP.md)
-- [开发指南](./DEVELOPMENT.md)
-- [API 接口](./API.md)
+- [开发指南](../guides/DEVELOPMENT.md)
+- [API 接口](../reference/API.md)
 
 ---
 

@@ -57,7 +57,7 @@
 
 **目标**：将文章模块扩展为操作手册和通知系统
 
-**背景**：参见后端 [文章体系重构设计方案](../TeamGalleryGo/docs/DESIGN_ARTICLE_REFACTOR.md)
+**背景**：文章体系重构，将文章模块扩展为操作手册和通知系统
 
 | 优先级 | 任务         | 说明                                         |
 | ------ | ------------ | -------------------------------------------- |
@@ -105,7 +105,7 @@
 ## 五、相关文档
 
 - [架构设计](./ARCHITECTURE.md)
-- [开发指南](./DEVELOPMENT.md)
+- [开发指南](../guides/DEVELOPMENT.md)
 - [代码规范](./CODING_STANDARDS.md)
-- [API 接口](./API.md)
-- [安全策略](./SECURITY.md)
+- [API 接口](../reference/API.md)
+- [安全策略](../reference/SECURITY.md)

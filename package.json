@@ -24,7 +24,12 @@
     "ci:coverage": "npm run lint:check && npm run format:check && npm run test:coverage && npm run build",
     "prepare": "husky",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
-    "gen:api": "tsx scripts/gen-api.ts"
+    "gen:api": "tsx scripts/gen-api.ts",
+    "contract:verify": "npm run contract:typecheck && npm run contract:test && npm run contract:validate",
+    "contract:typecheck": "npx vue-tsc --noEmit",
+    "contract:test": "npx vitest run src/api/contract.test.ts src/api/contract.typecheck.test.ts --coverage",
+    "contract:validate": "tsx scripts/validate-contract.ts",
+    "contract:drift-sim": "tsx scripts/simulate-drift.ts"
   },
   "dependencies": {
     "@sentry/browser": "^10.55.0",

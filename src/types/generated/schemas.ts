@@ -13,7 +13,6 @@ export type paths = {
     }
     /**
      * 获取待审核评论列表
-     *
      * @description 分页获取所有待审核的评论（需要管理员权限）
      */
     get: {
@@ -76,6 +75,504 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/admin/comments/{id}/approve': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 审核通过评论
+     * @description 将评论状态更新为已审核（需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论审核通过 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/comments/{id}/reject': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 拒绝评论
+     * @description 将评论状态更新为已拒绝（需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论已拒绝 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/project-comments/pending': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取待审核项目评论列表
+     * @description 分页获取所有待审核的项目评论（需要管理员权限）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/project-comments/{id}/approve': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 审核通过项目评论
+     * @description 将项目评论状态更新为已审核（需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论审核通过 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/project-comments/{id}/reject': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 拒绝项目评论
+     * @description 将项目评论状态更新为已拒绝（需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论已拒绝 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/security/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 查看登录锁定状态
+     * @description 查看所有被防爆破锁定的记录
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 锁定记录列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/security/unlock': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 解锁登录锁定
+     * @description 清除所有登录防爆破锁定记录，立即恢复正常登录
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 指定 Key 解锁单条记录，为空则清除全部 */
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UnlockRequest']
+        }
+      }
+      responses: {
+        /** @description 解锁成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/users': {
     parameters: {
       query?: never
@@ -85,7 +582,6 @@ export type paths = {
     }
     /**
      * 获取用户列表
-     *
      * @description 分页获取所有用户列表（需要管理员权限）
      */
     get: {
@@ -157,8 +653,7 @@ export type paths = {
     }
     /**
      * 获取文章列表
-     *
-     * @description 获取已发布文章列表，支持分页、分类筛选、关键词搜索
+     * @description 获取已发布文章列表，支持分页、分类筛选、关键词搜索、类型筛选
      */
     get: {
       parameters: {
@@ -169,6 +664,8 @@ export type paths = {
           page_size?: number
           /** @description 文章状态（published/draft） */
           status?: 'published' | 'draft'
+          /** @description 文章类型（article/manual/notification） */
+          type?: 'article' | 'manual' | 'notification'
           /** @description 分类ID */
           category_id?: number
           /** @description 搜索关键词 */
@@ -203,7 +700,6 @@ export type paths = {
     put?: never
     /**
      * 创建文章
-     *
      * @description 创建新文章（需要登录）
      */
     post: {
@@ -216,7 +712,7 @@ export type paths = {
       /** @description 文章创建请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['CreateArticleRequest']
+          'application/json': components['schemas']['CreateRequest']
         }
       }
       responses: {
@@ -273,7 +769,6 @@ export type paths = {
     }
     /**
      * 获取最新文章
-     *
      * @description 获取指定数量的最新已发布文章（首页推荐）
      */
     get: {
@@ -325,7 +820,6 @@ export type paths = {
     }
     /**
      * 获取文章详情
-     *
      * @description 根据 ID 获取文章详细信息
      */
     get: {
@@ -380,7 +874,6 @@ export type paths = {
     }
     /**
      * 更新文章
-     *
      * @description 更新文章信息（需要登录，只能更新自己的文章）
      */
     put: {
@@ -396,7 +889,7 @@ export type paths = {
       /** @description 文章更新请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['CreateArticleRequest']
+          'application/json': components['schemas']['CreateRequest']
         }
       }
       responses: {
@@ -459,7 +952,6 @@ export type paths = {
     post?: never
     /**
      * 删除文章
-     *
      * @description 删除文章（需要登录，只能删除自己的文章）
      */
     delete: {
@@ -542,7 +1034,6 @@ export type paths = {
     }
     /**
      * 获取评论列表
-     *
      * @description 获取指定文章的评论列表（树形结构）
      */
     get: {
@@ -594,7 +1085,6 @@ export type paths = {
     put?: never
     /**
      * 创建评论
-     *
      * @description 为指定文章创建评论（需要登录）
      */
     post: {
@@ -610,7 +1100,7 @@ export type paths = {
       /** @description 评论创建请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['CreateCommentRequest']
+          'application/json': components['schemas']['CreateRequest']
         }
       }
       responses: {
@@ -667,7 +1157,6 @@ export type paths = {
     }
     /**
      * 获取评论统计
-     *
      * @description 获取指定文章的评论统计信息（各状态数量）
      */
     get: {
@@ -732,7 +1221,6 @@ export type paths = {
     put?: never
     /**
      * 收藏文章
-     *
      * @description 收藏指定文章（需要登录）
      */
     post: {
@@ -796,7 +1284,6 @@ export type paths = {
     }
     /**
      * 取消收藏文章
-     *
      * @description 取消收藏指定文章（需要登录）
      */
     delete: {
@@ -872,7 +1359,6 @@ export type paths = {
     }
     /**
      * 检查文章互动状态
-     *
      * @description 检查当前用户对指定文章的点赞和收藏状态（需要登录）
      */
     get: {
@@ -946,7 +1432,6 @@ export type paths = {
     put?: never
     /**
      * 点赞文章
-     *
      * @description 对指定文章进行点赞（需要登录）
      */
     post: {
@@ -1010,7 +1495,6 @@ export type paths = {
     }
     /**
      * 取消点赞文章
-     *
      * @description 取消对指定文章的点赞（需要登录）
      */
     delete: {
@@ -1077,6 +1561,71 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/articles/{id}/projects': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取文章关联项目
+     * @description 分页获取文章关联的项目列表
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 文章ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 关联项目列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的文章ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/auth/logout': {
     parameters: {
       query?: never
@@ -1088,8 +1637,7 @@ export type paths = {
     put?: never
     /**
      * 用户登出
-     *
-     * @description 撤销 Refresh Token，使其失效
+     * @description 从 HttpOnly Cookie 获取 Refresh Token 并撤销，同时清除 Cookie
      */
     post: {
       parameters: {
@@ -1098,12 +1646,7 @@ export type paths = {
         path?: never
         cookie?: never
       }
-      /** @description 登出请求体 */
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['internal_domain_user.LogoutRequest']
-        }
-      }
+      requestBody?: never
       responses: {
         /** @description 登出成功 */
         200: {
@@ -1114,15 +1657,6 @@ export type paths = {
             'application/json': {
               [key: string]: unknown
             }
-          }
-        }
-        /** @description 请求参数错误 */
-        400: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            'application/json': components['schemas']['APIResponse']
           }
         }
         /** @description 服务器内部错误 */
@@ -1153,8 +1687,7 @@ export type paths = {
     put?: never
     /**
      * 刷新 Token
-     *
-     * @description 使用 Refresh Token 获取新的 Access Token 和 Refresh Token
+     * @description 使用 HttpOnly Cookie 中的 Refresh Token 获取新的 Access Token（JSON）和 Refresh Token（Cookie）
      */
     post: {
       parameters: {
@@ -1163,14 +1696,9 @@ export type paths = {
         path?: never
         cookie?: never
       }
-      /** @description 刷新请求体 */
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['internal_domain_user.RefreshTokenRequest']
-        }
-      }
+      requestBody?: never
       responses: {
-        /** @description 刷新成功，返回新双token */
+        /** @description 刷新成功 */
         200: {
           headers: {
             [name: string]: unknown
@@ -1216,6 +1744,56 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/auth/session': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 校验会话
+     * @description 前端定时调用此接口，由服务端权威校验当前会话是否有效
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 会话状态 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/comments/{comment_id}': {
     parameters: {
       query?: never
@@ -1228,7 +1806,6 @@ export type paths = {
     post?: never
     /**
      * 删除评论
-     *
      * @description 删除指定评论（需要登录，只能删除自己的评论）
      */
     delete: {
@@ -1293,83 +1870,6 @@ export type paths = {
     patch?: never
     trace?: never
   }
-  '/comments/{id}/approve': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * 审核通过评论
-     *
-     * @description 将评论状态更新为已审核（需要管理员权限）
-     */
-    put: {
-      parameters: {
-        query?: never
-        header?: never
-        path: {
-          /** @description 评论ID */
-          id: number
-        }
-        cookie?: never
-      }
-      requestBody?: never
-      responses: {
-        /** @description 评论审核通过 */
-        204: {
-          headers: {
-            [name: string]: unknown
-          }
-          content?: never
-        }
-        /** @description 无效的评论ID */
-        400: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 未授权 */
-        401: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 无权限 */
-        403: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 评论不存在 */
-        404: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-      }
-    }
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/comments/{id}/like': {
     parameters: {
       query?: never
@@ -1381,7 +1881,6 @@ export type paths = {
     put?: never
     /**
      * 点赞评论
-     *
      * @description 对指定评论进行点赞
      */
     post: {
@@ -1429,83 +1928,6 @@ export type paths = {
     patch?: never
     trace?: never
   }
-  '/comments/{id}/reject': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * 拒绝评论
-     *
-     * @description 将评论状态更新为已拒绝（需要管理员权限）
-     */
-    put: {
-      parameters: {
-        query?: never
-        header?: never
-        path: {
-          /** @description 评论ID */
-          id: number
-        }
-        cookie?: never
-      }
-      requestBody?: never
-      responses: {
-        /** @description 评论已拒绝 */
-        204: {
-          headers: {
-            [name: string]: unknown
-          }
-          content?: never
-        }
-        /** @description 无效的评论ID */
-        400: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 未授权 */
-        401: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 无权限 */
-        403: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-        /** @description 评论不存在 */
-        404: {
-          headers: {
-            [name: string]: unknown
-          }
-          content: {
-            '*/*': components['schemas']['APIResponse']
-          }
-        }
-      }
-    }
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/comments/{id}/report': {
     parameters: {
       query?: never
@@ -1517,7 +1939,6 @@ export type paths = {
     put?: never
     /**
      * 举报评论
-     *
      * @description 举报指定评论
      */
     post: {
@@ -1565,6 +1986,435 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/conversations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取会话列表
+     * @description 获取当前用户的私聊会话列表，按最新消息排序，包含未读红点计数
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码 */
+          page?: number
+          /** @description 每页数量 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 获取会话列表成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['ConversationListResponse']
+            }
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建或获取私聊会话
+     * @description 创建或获取与指定用户的私聊会话，仅同一团队成员可互发私信
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 目标用户ID */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateConversationRequest']
+        }
+      }
+      responses: {
+        /** @description 会话已准备就绪 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['Conversation']
+            }
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 非同一团队成员 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 用户不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/conversations/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取会话详情
+     * @description 获取指定会话的详细信息，包含双方用户信息和当前用户的个人设置
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 获取会话成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['ConversationDetail']
+            }
+          }
+        }
+        /** @description 无权访问此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 会话不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/conversations/{id}/messages': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取消息历史
+     * @description 分页获取会话中的消息历史，支持已读/未读标记、撤回提示和本地删除过滤
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码 */
+          page?: number
+          /** @description 每页数量 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 获取消息列表成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['MessageListResponse']
+            }
+          }
+        }
+        /** @description 无权访问此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 发送消息
+     * @description 在指定会话中发送一条消息，仅会话参与者可发送
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 消息内容 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['SendMessageRequest']
+        }
+      }
+      responses: {
+        /** @description 发送成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['Message']
+            }
+          }
+        }
+        /** @description 消息内容为空 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权操作此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/conversations/{id}/read-all': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 标记全部已读
+     * @description 将指定会话中所有对方发送的消息标记为已读
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 已标记全部已读 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权操作此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 会话不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/conversations/{id}/settings': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取会话设置
+     * @description 获取当前用户对指定会话的个人设置
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 获取设置成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['ConversationSetting']
+            }
+          }
+        }
+        /** @description 无权操作此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 更新会话设置
+     * @description 更新当前用户对指定会话的个人设置，如置顶、免打扰
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 会话ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 设置参数 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateSettingRequest']
+        }
+      }
+      responses: {
+        /** @description 设置更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse'] & {
+              data?: components['schemas']['ConversationSetting']
+            }
+          }
+        }
+        /** @description 无权操作此会话 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/favorites': {
     parameters: {
       query?: never
@@ -1574,7 +2424,6 @@ export type paths = {
     }
     /**
      * 获取我的收藏列表
-     *
      * @description 分页获取当前用户收藏的文章列表（需要登录）
      */
     get: {
@@ -1637,7 +2486,6 @@ export type paths = {
     }
     /**
      * 健康检查
-     *
      * @description 返回应用整体健康状态，包括所有依赖项检查结果
      */
     get: {
@@ -1655,7 +2503,7 @@ export type paths = {
             [name: string]: unknown
           }
           content: {
-            'application/json': components['schemas']['pkg_health.HealthResponse']
+            'application/json': components['schemas']['HealthResponse']
           }
         }
       }
@@ -1677,7 +2525,6 @@ export type paths = {
     }
     /**
      * 存活检查
-     *
      * @description 检查应用进程是否存活，用于 Kubernetes Liveness Probe
      */
     get: {
@@ -1695,7 +2542,7 @@ export type paths = {
             [name: string]: unknown
           }
           content: {
-            'application/json': components['schemas']['pkg_health.HealthResponse']
+            'application/json': components['schemas']['HealthResponse']
           }
         }
       }
@@ -1717,7 +2564,6 @@ export type paths = {
     }
     /**
      * 就绪检查
-     *
      * @description 检查应用是否就绪（所有依赖项可用），用于 Kubernetes Readiness Probe
      */
     get: {
@@ -1735,7 +2581,7 @@ export type paths = {
             [name: string]: unknown
           }
           content: {
-            'application/json': components['schemas']['pkg_health.HealthResponse']
+            'application/json': components['schemas']['HealthResponse']
           }
         }
       }
@@ -1757,7 +2603,6 @@ export type paths = {
     }
     /**
      * 获取我的点赞列表
-     *
      * @description 分页获取当前用户点赞的文章列表（需要登录）
      */
     get: {
@@ -1822,8 +2667,7 @@ export type paths = {
     put?: never
     /**
      * 用户登录
-     *
-     * @description 使用用户名和密码登录，返回 Access Token 和 Refresh Token
+     * @description 使用用户名和密码登录，返回 Access Token（JSON），Refresh Token 通过 HttpOnly Cookie 下发
      */
     post: {
       parameters: {
@@ -1839,7 +2683,7 @@ export type paths = {
         }
       }
       responses: {
-        /** @description 登录成功，返回双token */
+        /** @description 登录成功 */
         200: {
           headers: {
             [name: string]: unknown
@@ -1885,6 +2729,909 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/messages/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * 删除消息
+     * @description 删除自己的消息记录，仅自己不可见，对方仍能看到
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 消息ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 消息已删除 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 消息已删除 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权操作 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 消息不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/messages/{id}/recall': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 撤回消息
+     * @description 撤回自己发送的消息，仅发送者可在发送后5分钟内撤回
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 消息ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 消息已撤回 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 超过撤回时限 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权撤回 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 消息不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notification-templates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取通知模板列表
+     * @description 获取所有可用的通知模板（含系统预置和自定义模板）
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 模板列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建通知模板
+     * @description 创建自定义通知模板（需要管理员权限）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 模板创建请求 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateTemplateRequest']
+        }
+      }
+      responses: {
+        /** @description 模板创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notification-templates/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取通知模板详情
+     * @description 获取指定模板的详细信息
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 模板ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 模板详情 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 模板不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 更新通知模板
+     * @description 更新自定义通知模板（系统预置模板不可编辑，需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 模板ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 模板更新请求 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateTemplateRequest']
+        }
+      }
+      responses: {
+        /** @description 模板更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 系统模板不可修改 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    /**
+     * 删除通知模板
+     * @description 删除自定义通知模板（系统预置模板不可删除，需要管理员权限）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 模板ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 模板删除成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 系统模板不可删除 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取通知列表
+     * @description 获取已发布通知列表，支持分页，含已读/未读状态标记
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 通知列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建通知
+     * @description 创建新通知（需要管理员权限）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 通知创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateNotificationRequest']
+        }
+      }
+      responses: {
+        /** @description 通知创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['Article']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/audit-logs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 查询通知审计日志
+     * @description 分页查询通知操作审计日志（需要管理员权限）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 通知ID，不传则查询全部 */
+          notification_id?: number
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认20 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 审计日志列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/batch': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 批量创建通知
+     * @description 创建批量通知，支持按用户/角色/项目/团队定向发送（需要管理员权限）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 批量通知创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['BatchCreateNotificationRequest']
+        }
+      }
+      responses: {
+        /** @description 批量通知创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['BatchCreateResult']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/read-all': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 全部标记为已读
+     * @description 标记当前用户所有未读通知为已读
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 全部已读成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/unread-count': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取未读通知数
+     * @description 获取当前登录用户的未读通知数量
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 未读通知数 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取通知详情
+     * @description 获取通知详情，打开时自动标记为已读
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 通知ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 通知详情 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 通知不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 更新通知
+     * @description 更新已发布的通知（需要管理员权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 通知ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 通知更新请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateNotificationRequest']
+        }
+      }
+      responses: {
+        /** @description 通知更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['Article']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 通知不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    /**
+     * 删除通知
+     * @description 删除通知（需要管理员权限）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 通知ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 通知删除成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的通知ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 通知不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/notifications/{id}/read': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 标记通知为已读
+     * @description 标记指定通知为已读状态
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 通知ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 已读成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 通知已读或不存在 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/profile': {
     parameters: {
       query?: never
@@ -1894,7 +3641,6 @@ export type paths = {
     }
     /**
      * 获取用户资料
-     *
      * @description 获取当前登录用户的详细信息
      */
     get: {
@@ -1937,9 +3683,928 @@ export type paths = {
         }
       }
     }
+    /**
+     * 更新用户资料
+     * @description 更新当前登录用户的基本信息和扩展资料
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 更新资料请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateProfileRequest']
+        }
+      }
+      responses: {
+        /** @description 更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 邮箱已被使用 */
+        409: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-categories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取项目分类列表
+     * @description 获取所有项目分类
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 分类列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectCategory'][]
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建项目分类
+     * @description 创建新的项目分类（需要登录，admin 可操作）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 分类创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateCategoryRequest']
+        }
+      }
+      responses: {
+        /** @description 分类创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectCategory']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-categories/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 更新项目分类
+     * @description 更新项目分类信息（需要登录，admin 可操作）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 分类ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 分类更新请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateCategoryRequest']
+        }
+      }
+      responses: {
+        /** @description 分类更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectCategory']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 分类不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    /**
+     * 删除项目分类
+     * @description 删除项目分类（需要登录，admin 可操作，有关联项目的分类不可删除）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 分类ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 分类删除成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的分类ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 分类不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-comments/{comment_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * 删除项目评论
+     * @description 删除指定项目评论（需要登录，只能删除自己的评论）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          comment_id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论删除成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-comments/{id}/like': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 点赞项目评论
+     * @description 对指定项目评论进行点赞
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 点赞成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-comments/{id}/report': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 举报项目评论
+     * @description 举报指定项目评论
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 评论ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 举报成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的评论ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 评论不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-favorites': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取我收藏的项目列表
+     * @description 分页获取当前用户收藏的项目列表（需要登录）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 收藏列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
     put?: never
     post?: never
     delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-likes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取我点赞的项目列表
+     * @description 分页获取当前用户点赞的项目列表（需要登录）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 点赞列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-tags': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取项目标签列表
+     * @description 获取所有项目标签
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 标签列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectTag'][]
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建项目标签
+     * @description 创建新的项目标签（需要登录，admin 可操作）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 标签创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CreateTagRequest']
+        }
+      }
+      responses: {
+        /** @description 标签创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectTag']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/project-tags/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 更新项目标签
+     * @description 更新项目标签信息（需要登录，admin 可操作）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 标签ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 标签更新请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateTagRequest']
+        }
+      }
+      responses: {
+        /** @description 标签更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectTag']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 标签不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    /**
+     * 删除项目标签
+     * @description 删除项目标签（需要登录，admin 可操作，有关联项目的标签不可删除）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 标签ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 标签删除成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的标签ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 标签不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
     options?: never
     head?: never
     patch?: never
@@ -1954,7 +4619,6 @@ export type paths = {
     }
     /**
      * 获取项目列表
-     *
      * @description 获取项目列表，支持分页、状态筛选、关键词搜索
      */
     get: {
@@ -1998,7 +4662,6 @@ export type paths = {
     put?: never
     /**
      * 创建项目
-     *
      * @description 创建新项目，创建者自动成为项目 owner（需要登录）
      */
     post: {
@@ -2011,7 +4674,7 @@ export type paths = {
       /** @description 项目创建请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['CreateProjectRequest']
+          'application/json': components['schemas']['CreateRequest']
         }
       }
       responses: {
@@ -2068,7 +4731,6 @@ export type paths = {
     }
     /**
      * 获取项目详情
-     *
      * @description 根据 ID 获取项目详细信息
      */
     get: {
@@ -2123,7 +4785,6 @@ export type paths = {
     }
     /**
      * 更新项目
-     *
      * @description 更新项目信息（需要登录，只有 owner 或 admin 可编辑）
      */
     put: {
@@ -2139,7 +4800,7 @@ export type paths = {
       /** @description 项目更新请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['UpdateProjectRequest']
+          'application/json': components['schemas']['UpdateRequest']
         }
       }
       responses: {
@@ -2202,7 +4863,6 @@ export type paths = {
     post?: never
     /**
      * 删除项目
-     *
      * @description 删除项目（需要登录，只有 owner 可删除）
      */
     delete: {
@@ -2276,6 +4936,970 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/projects/{id}/articles': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取项目关联文章列表
+     * @description 获取项目关联的文章列表，支持分页
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 关联文章列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 关联文章到项目
+     * @description 将文章关联到项目（需要登录，owner/admin 可操作）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 关联文章请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['AddArticleRequest']
+        }
+      }
+      responses: {
+        /** @description 关联成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectArticle']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目已关联该文章 */
+        409: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/articles/{article_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * 取消项目文章关联
+     * @description 取消项目与文章的关联（需要登录，owner/admin 可操作）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 文章ID */
+          article_id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 取消关联成功 */
+        204: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 无效的ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 关联不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            '*/*': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/articles/{article_id}/sort': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 更新项目关联文章排序
+     * @description 更新项目关联文章的排序权重（需要登录，owner/admin 可操作）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 文章ID */
+          article_id: number
+        }
+        cookie?: never
+      }
+      /** @description 更新排序请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdateArticleSortRequest']
+        }
+      }
+      responses: {
+        /** @description 排序更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 关联不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/category': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 设置项目分类
+     * @description 为项目设置分类（需要登录，owner/admin 可操作）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 设置分类请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['SetProjectCategoryRequest']
+        }
+      }
+      responses: {
+        /** @description 分类设置成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目或分类不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/comments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取评论列表
+     * @description 获取指定项目的评论列表（树形结构）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建项目评论
+     * @description 为指定项目创建评论（需要登录，需为项目成员）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 评论创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['CommentCreateRequest']
+        }
+      }
+      responses: {
+        /** @description 评论创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectComment']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 非项目成员 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/comments/statistics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取评论统计
+     * @description 获取指定项目的评论统计信息（各状态数量）
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论统计信息 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/favorite': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 收藏项目
+     * @description 收藏指定项目（需要登录）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 收藏成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 取消收藏项目
+     * @description 取消收藏指定项目（需要登录）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 取消收藏成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 收藏记录不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/interaction/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 检查项目互动状态
+     * @description 检查当前用户对指定项目的点赞和收藏状态（需要登录）
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 互动状态 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/like': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * 点赞项目
+     * @description 对指定项目进行点赞（需要登录）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 点赞成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 取消点赞项目
+     * @description 取消对指定项目的点赞（需要登录）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 取消点赞成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 点赞记录不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/projects/{id}/members': {
     parameters: {
       query?: never
@@ -2285,7 +5909,6 @@ export type paths = {
     }
     /**
      * 获取项目成员列表
-     *
      * @description 获取项目成员列表，支持分页
      */
     get: {
@@ -2346,7 +5969,6 @@ export type paths = {
     put?: never
     /**
      * 添加项目成员
-     *
      * @description 添加成员到项目（需要登录，owner/admin 可操作）
      */
     post: {
@@ -2362,7 +5984,7 @@ export type paths = {
       /** @description 添加成员请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['AddProjectMemberRequest']
+          'application/json': components['schemas']['AddMemberRequest']
         }
       }
       responses: {
@@ -2449,7 +6071,6 @@ export type paths = {
     post?: never
     /**
      * 移除项目成员
-     *
      * @description 从项目中移除成员（需要登录，owner/admin 可操作）
      */
     delete: {
@@ -2535,7 +6156,6 @@ export type paths = {
     get?: never
     /**
      * 更新成员角色
-     *
      * @description 更新项目成员角色（需要登录，只有 owner 可操作）
      */
     put: {
@@ -2553,7 +6173,7 @@ export type paths = {
       /** @description 更新角色请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['UpdateProjectMemberRoleRequest']
+          'application/json': components['schemas']['UpdateMemberRoleRequest']
         }
       }
       responses: {
@@ -2618,6 +6238,728 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/projects/{id}/milestones': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取里程碑列表
+     * @description 获取指定项目的里程碑列表（分页）
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 状态筛选（逗号分隔多状态） */
+          status?: string
+          /** @description 排序字段（sort_order/due_date/created_at） */
+          sort_by?: string
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认20，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 里程碑列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 创建里程碑
+     * @description 为指定项目创建里程碑（需要登录，需为项目成员且有编辑权限）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 里程碑创建请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['MilestoneCreateRequest']
+        }
+      }
+      responses: {
+        /** @description 里程碑创建成功 */
+        201: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectMilestone']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/milestones/summary': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取里程碑摘要
+     * @description 获取指定项目的里程碑统计摘要（各状态数量、完成率、下一个截止里程碑）
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 里程碑摘要统计 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['MilestoneSummary']
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/milestones/{mid}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取里程碑详情
+     * @description 获取指定里程碑的详细信息
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 里程碑ID */
+          mid: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 里程碑详情 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectMilestone']
+          }
+        }
+        /** @description 里程碑不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 更新里程碑
+     * @description 更新指定里程碑信息（需要登录，需为项目成员且有编辑权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 里程碑ID */
+          mid: number
+        }
+        cookie?: never
+      }
+      /** @description 里程碑更新请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['MilestoneUpdateRequest']
+        }
+      }
+      responses: {
+        /** @description 里程碑更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectMilestone']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 里程碑不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    /**
+     * 删除里程碑
+     * @description 删除指定里程碑（需要登录，需为项目成员且有编辑权限）
+     */
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 里程碑ID */
+          mid: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 删除成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 里程碑不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/milestones/{mid}/sort': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 调整里程碑排序
+     * @description 调整里程碑的排序位置（需要登录，需为项目成员且有编辑权限）
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 里程碑ID */
+          mid: number
+        }
+        cookie?: never
+      }
+      /** @description 排序调整请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['MilestoneSortRequest']
+        }
+      }
+      responses: {
+        /** @description 排序调整成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 里程碑不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/milestones/{mid}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * 更新里程碑状态
+     * @description 更新里程碑的状态（pending/in_progress/completed），需要登录，需为项目成员且有编辑权限
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+          /** @description 里程碑ID */
+          mid: number
+        }
+        cookie?: never
+      }
+      /** @description 状态更新请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['MilestoneStatusRequest']
+        }
+      }
+      responses: {
+        /** @description 状态更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectMilestone']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 里程碑不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/projects/{id}/tags': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取项目标签列表
+     * @description 获取指定项目的标签列表
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 标签列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['ProjectTag'][]
+          }
+        }
+        /** @description 无效的项目ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    /**
+     * 设置项目标签
+     * @description 为项目批量设置标签（需要登录，owner/admin 可操作）
+     */
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          /** @description 项目ID */
+          id: number
+        }
+        cookie?: never
+      }
+      /** @description 设置标签请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['SetProjectTagsRequest']
+        }
+      }
+      responses: {
+        /** @description 标签设置成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 无权限 */
+        403: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 项目或标签不存在 */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/register': {
     parameters: {
       query?: never
@@ -2629,7 +6971,6 @@ export type paths = {
     put?: never
     /**
      * 用户注册
-     *
      * @description 创建新用户账号
      */
     post: {
@@ -2701,7 +7042,6 @@ export type paths = {
     }
     /**
      * 搜索文章
-     *
      * @description 根据关键词搜索已发布文章，支持高亮显示
      */
     get: {
@@ -2768,7 +7108,6 @@ export type paths = {
     }
     /**
      * 按分类搜索文章
-     *
      * @description 返回指定分类下的所有已发布文章
      */
     get: {
@@ -2825,6 +7164,255 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/search/projects': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 搜索项目
+     * @description 根据关键词搜索活跃项目，支持高亮显示
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 搜索关键词 */
+          q?: string
+          /** @description 是否高亮显示，默认false */
+          highlight?: boolean
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 搜索结果 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/search/projects/categories/:id': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 按分类搜索项目
+     * @description 返回指定分类下的所有活跃项目
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 分类ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 项目列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的分类ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/search/projects/suggestions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取项目搜索建议
+     * @description 根据关键词返回匹配的项目名称列表
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description 搜索关键词 */
+          q: string
+          /** @description 建议数量，默认10 */
+          limit?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 搜索建议列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': string[]
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/search/projects/tags/:id': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 按标签搜索项目
+     * @description 返回指定标签下的所有活跃项目
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 标签ID */
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 项目列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的标签ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/suggestions': {
     parameters: {
       query?: never
@@ -2834,7 +7422,6 @@ export type paths = {
     }
     /**
      * 获取搜索建议
-     *
      * @description 根据关键词返回匹配的文章标题列表
      */
     get: {
@@ -2888,7 +7475,6 @@ export type paths = {
     }
     /**
      * 按标签搜索文章
-     *
      * @description 返回指定标签下的所有已发布文章
      */
     get: {
@@ -2954,7 +7540,6 @@ export type paths = {
     }
     /**
      * 获取团队列表
-     *
      * @description 获取团队列表，支持分页、状态筛选、关键词搜索
      */
     get: {
@@ -2998,7 +7583,6 @@ export type paths = {
     put?: never
     /**
      * 创建团队
-     *
      * @description 创建新团队，创建者自动成为团队 owner（需要登录）
      */
     post: {
@@ -3011,7 +7595,7 @@ export type paths = {
       /** @description 团队创建请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['internal_domain_team.CreateTeamRequest']
+          'application/json': components['schemas']['CreateTeamRequest']
         }
       }
       responses: {
@@ -3070,7 +7654,6 @@ export type paths = {
     put?: never
     /**
      * 接受团队邀请
-     *
      * @description 使用邀请码接受团队邀请（需要登录）
      */
     post: {
@@ -3156,7 +7739,6 @@ export type paths = {
     put?: never
     /**
      * 拒绝团队邀请
-     *
      * @description 使用邀请码拒绝团队邀请（需要登录）
      */
     post: {
@@ -3231,7 +7813,6 @@ export type paths = {
     }
     /**
      * 获取我加入的团队
-     *
      * @description 获取当前用户加入的所有团队（需要登录）
      */
     get: {
@@ -3294,7 +7875,6 @@ export type paths = {
     }
     /**
      * 获取团队详情
-     *
      * @description 根据 ID 获取团队详细信息
      */
     get: {
@@ -3349,7 +7929,6 @@ export type paths = {
     }
     /**
      * 更新团队
-     *
      * @description 更新团队信息（需要登录，只有 owner 或 admin 可编辑）
      */
     put: {
@@ -3365,7 +7944,7 @@ export type paths = {
       /** @description 团队更新请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['internal_domain_team.UpdateTeamRequest']
+          'application/json': components['schemas']['UpdateTeamRequest']
         }
       }
       responses: {
@@ -3428,7 +8007,6 @@ export type paths = {
     post?: never
     /**
      * 删除团队
-     *
      * @description 删除团队（需要登录，只有 owner 可删除）
      */
     delete: {
@@ -3511,7 +8089,6 @@ export type paths = {
     }
     /**
      * 获取团队邀请列表
-     *
      * @description 获取指定团队的邀请列表（需要登录，owner/admin 可查看）
      */
     get: {
@@ -3581,7 +8158,6 @@ export type paths = {
     put?: never
     /**
      * 发送团队邀请
-     *
      * @description 向指定邮箱发送团队邀请（需要登录，owner/admin 可操作）
      */
     post: {
@@ -3597,7 +8173,7 @@ export type paths = {
       /** @description 创建邀请请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['internal_domain_team.CreateInviteRequest']
+          'application/json': components['schemas']['CreateInviteRequest']
         }
       }
       responses: {
@@ -3674,7 +8250,6 @@ export type paths = {
     put?: never
     /**
      * 退出团队
-     *
      * @description 退出指定团队（需要登录，owner 不能退出）
      */
     post: {
@@ -3749,7 +8324,6 @@ export type paths = {
     }
     /**
      * 获取团队成员列表
-     *
      * @description 获取团队成员列表，支持分页
      */
     get: {
@@ -3810,7 +8384,6 @@ export type paths = {
     put?: never
     /**
      * 添加团队成员
-     *
      * @description 添加成员到团队（需要登录，owner/admin 可操作）
      */
     post: {
@@ -3826,7 +8399,7 @@ export type paths = {
       /** @description 添加成员请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['internal_domain_team.AddMemberRequest']
+          'application/json': components['schemas']['AddMemberRequest']
         }
       }
       responses: {
@@ -3912,7 +8485,6 @@ export type paths = {
     put?: never
     /**
      * 加入团队
-     *
      * @description 申请加入指定团队（需要登录）
      */
     post: {
@@ -4001,7 +8573,6 @@ export type paths = {
     post?: never
     /**
      * 移除团队成员
-     *
      * @description 从团队中移除成员（需要登录，owner/admin 可操作）
      */
     delete: {
@@ -4087,7 +8658,6 @@ export type paths = {
     get?: never
     /**
      * 更新成员角色
-     *
      * @description 更新团队成员角色（需要登录，只有 owner 可操作）
      */
     put: {
@@ -4105,7 +8675,7 @@ export type paths = {
       /** @description 更新角色请求体 */
       requestBody: {
         content: {
-          'application/json': components['schemas']['internal_domain_team.UpdateMemberRoleRequest']
+          'application/json': components['schemas']['UpdateMemberRoleRequest']
         }
       }
       responses: {
@@ -4179,7 +8749,6 @@ export type paths = {
     }
     /**
      * 获取团队项目列表
-     *
      * @description 获取指定团队下所有项目的聚合展示，支持分页和状态筛选
      */
     get: {
@@ -4258,7 +8827,6 @@ export type paths = {
     put?: never
     /**
      * 上传文件
-     *
      * @description 上传通用文件（需要登录）
      */
     post: {
@@ -4273,7 +8841,6 @@ export type paths = {
           'multipart/form-data': {
             /**
              * Format: binary
-             *
              * @description 文件
              */
             file: string
@@ -4338,7 +8905,6 @@ export type paths = {
     put?: never
     /**
      * 上传图片
-     *
      * @description 上传图片文件（需要登录）
      */
     post: {
@@ -4353,7 +8919,6 @@ export type paths = {
           'multipart/form-data': {
             /**
              * Format: binary
-             *
              * @description 图片文件
              */
             file: string
@@ -4419,7 +8984,6 @@ export type paths = {
     post?: never
     /**
      * 删除文件
-     *
      * @description 删除已上传的文件（需要登录）
      */
     delete: {
@@ -4496,7 +9060,6 @@ export type paths = {
     post?: never
     /**
      * 用户注销
-     *
      * @description 删除当前登录用户账号（软删除）
      */
     delete: {
@@ -4540,6 +9103,166 @@ export type paths = {
     patch?: never
     trace?: never
   }
+  '/user/privacy': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取隐私设置
+     * @description 获取当前用户的隐私设置
+     */
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 隐私设置 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PrivacyResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    /**
+     * 更新隐私设置
+     * @description 更新当前用户的隐私设置
+     */
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      /** @description 隐私设置请求体 */
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['UpdatePrivacyRequest']
+        }
+      }
+      responses: {
+        /** @description 更新成功 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': {
+              [key: string]: unknown
+            }
+          }
+        }
+        /** @description 请求参数错误 */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/users/search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 搜索用户
+     * @description 按 username / nickname 模糊搜索激活用户，用于成员选择器
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description 搜索关键词 */
+          q: string
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认20，最大50 */
+          page_size?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 用户列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 未授权 */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/users/{user_id}/articles': {
     parameters: {
       query?: never
@@ -4549,7 +9272,6 @@ export type paths = {
     }
     /**
      * 获取用户文章列表
-     *
      * @description 分页获取指定用户发布的文章列表
      */
     get: {
@@ -4615,8 +9337,72 @@ export type paths = {
     }
     /**
      * 获取用户评论列表
-     *
      * @description 分页获取指定用户发表的评论列表
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description 页码，默认1 */
+          page?: number
+          /** @description 每页数量，默认10，最大100 */
+          page_size?: number
+        }
+        header?: never
+        path: {
+          /** @description 用户ID */
+          user_id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description 评论列表 */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['PaginatedResponse']
+          }
+        }
+        /** @description 无效的用户ID */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+        /** @description 服务器内部错误 */
+        500: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'application/json': components['schemas']['APIResponse']
+          }
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/users/{user_id}/project-comments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * 获取用户项目评论列表
+     * @description 分页获取指定用户发表的项目评论列表
      */
     get: {
       parameters: {
@@ -4676,7 +9462,7 @@ export type paths = {
 export type webhooks = Record<string, never>
 export type components = {
   schemas: {
-    Article: {
+    'TeamGalleryGo_internal_model.Article': {
       /** @description 多对一：文章分类 */
       category?: components['schemas']['Category']
       /** @description 分类ID，普通索引 */
@@ -4695,6 +9481,12 @@ export type components = {
       id?: number
       /** @description 点赞数 */
       like_count?: number
+      /** @description 通知分类：system / project / announcement（仅通知类型使用） */
+      notif_category?: string
+      /** @description JSON 目标数据（批量通知用） */
+      notif_target_data?: string
+      /** @description 通知目标类型：all / specific_users / by_role / by_project / by_team */
+      notif_target_type?: string
       /** @description 发布时间（指针类型，草稿时为nil） */
       published_at?: string
       /** @description URL友好的标识符，唯一索引（用于SEO友好链接） */
@@ -4707,8 +9499,12 @@ export type components = {
       tags?: components['schemas']['Tag'][]
       /** @description 文章标题，不可为空，最大200字符，普通索引 */
       title?: string
+      /** @description 文章类型：article（普通文章）、manual（操作手册）、notification（通知公告） */
+      type?: string
       /** @description 更新时间 */
       updated_at?: string
+      /** @description 紧急程度：normal / important / urgent（仅通知类型使用） */
+      urgency?: string
       /** @description 关联关系 */
       user?: components['schemas']['User']
       /** @description 外键 */
@@ -4716,7 +9512,7 @@ export type components = {
       /** @description 浏览次数 */
       view_count?: number
     }
-    Category: {
+    'TeamGalleryGo_internal_model.Category': {
       /** @description 关联关系 */
       articles?: components['schemas']['Article'][]
       /** @description 创建时间 */
@@ -4734,7 +9530,7 @@ export type components = {
       /** @description 更新时间 */
       updated_at?: string
     }
-    Comment: {
+    'TeamGalleryGo_internal_model.Comment': {
       /** @description 关联关系 */
       article?: components['schemas']['Article']
       /** @description 外键 */
@@ -4764,7 +9560,46 @@ export type components = {
       /** @description 评论者ID，普通索引 */
       user_id?: number
     }
-    Project: {
+    'TeamGalleryGo_internal_model.Conversation': {
+      created_at?: string
+      id?: number
+      last_message?: components['schemas']['Message']
+      last_message_at?: string
+      last_message_id?: number
+      messages?: components['schemas']['Message'][]
+      updated_at?: string
+      /** @description 关联关系 */
+      user1?: components['schemas']['User']
+      user1_id?: number
+      user2?: components['schemas']['User']
+      user2_id?: number
+    }
+    'TeamGalleryGo_internal_model.ConversationSetting': {
+      conversation_id?: number
+      is_muted?: boolean
+      is_pinned?: boolean
+      pinned_at?: string
+      user_id?: number
+    }
+    'TeamGalleryGo_internal_model.Message': {
+      content?: string
+      conversation_id?: number
+      created_at?: string
+      id?: number
+      is_recalled?: boolean
+      recalled_at?: string
+      /** @description 关联关系 */
+      sender?: components['schemas']['User']
+      sender_id?: number
+      updated_at?: string
+    }
+    'TeamGalleryGo_internal_model.Project': {
+      /** @description 一对多：关联文章 */
+      articles?: components['schemas']['ProjectArticle'][]
+      /** @description 多对一：项目分类 */
+      category?: components['schemas']['ProjectCategory']
+      /** @description 项目分类ID，可空，普通索引 */
+      category_id?: number
       /** @description 封面图片URL，最大255字符 */
       cover_image?: string
       /** @description 创建时间 */
@@ -4783,6 +9618,8 @@ export type components = {
       owner_id?: number
       /** @description 项目状态：active（活跃）、archived（已归档） */
       status?: string
+      /** @description 多对多：项目标签（通过 project_tag_relations 中间表） */
+      tags?: components['schemas']['ProjectTag'][]
       /** @description 多对一：所属团队 */
       team?: components['schemas']['Team']
       /** @description 所属团队ID，可空，普通索引 */
@@ -4790,7 +9627,73 @@ export type components = {
       /** @description 更新时间 */
       updated_at?: string
     }
-    ProjectMember: {
+    'TeamGalleryGo_internal_model.ProjectArticle': {
+      /** @description 多对一：关联文章 */
+      article?: components['schemas']['Article']
+      /** @description 文章ID，不可为空，联合唯一索引+普通索引 */
+      article_id?: number
+      /** @description 创建时间 */
+      created_at?: string
+      /** @description 关联说明（该文章在项目中的作用） */
+      description?: string
+      /** @description 主键ID，自增 */
+      id?: number
+      /** @description 关联关系 */
+      project?: components['schemas']['Project']
+      /** @description 项目ID，不可为空，联合唯一索引 */
+      project_id?: number
+      /** @description 排序权重，数字越大越靠前 */
+      sort_order?: number
+    }
+    'TeamGalleryGo_internal_model.ProjectCategory': {
+      /** @description 创建时间 */
+      created_at?: string
+      /** @description 分类描述，最大255字符 */
+      description?: string
+      /** @description 主键ID，自增 */
+      id?: number
+      /** @description 分类名称，唯一索引，不可为空 */
+      name?: string
+      /** @description 关联关系 */
+      projects?: components['schemas']['Project'][]
+      /** @description URL友好的标识符，唯一索引 */
+      slug?: string
+      /** @description 排序权重（数字越大越靠前） */
+      sort?: number
+      /** @description 更新时间 */
+      updated_at?: string
+    }
+    'TeamGalleryGo_internal_model.ProjectComment': {
+      /** @description 评论内容，不可为空 */
+      content?: string
+      /** @description 创建时间 */
+      created_at?: string
+      /** @description 主键ID，自增 */
+      id?: number
+      /** @description 点赞数 */
+      like_count?: number
+      /** @description 自关联：父评论（用于回复） */
+      parent?: components['schemas']['ProjectComment']
+      /** @description 父评论ID（指针类型，nil表示根评论） */
+      parent_id?: number
+      /** @description 关联关系 */
+      project?: components['schemas']['Project']
+      /** @description 外键 */
+      project_id?: number
+      /** @description 一对多：子回复（嵌套评论） */
+      replies?: components['schemas']['ProjectComment'][]
+      /** @description 举报数 */
+      report_count?: number
+      /** @description 审核状态：pending（待审核）、approved（已通过）、rejected（已拒绝） */
+      status?: string
+      /** @description 更新时间 */
+      updated_at?: string
+      /** @description 多对一：评论者 */
+      user?: components['schemas']['User']
+      /** @description 评论者ID，普通索引 */
+      user_id?: number
+    }
+    'TeamGalleryGo_internal_model.ProjectMember': {
       /** @description 加入时间 */
       created_at?: string
       /** @description 多对一：所属项目 */
@@ -4804,7 +9707,43 @@ export type components = {
       /** @description 用户ID，联合主键，普通索引 */
       user_id?: number
     }
-    Tag: {
+    'TeamGalleryGo_internal_model.ProjectMilestone': {
+      /** @description 完成时间 */
+      completed_at?: string
+      /** @description 创建时间 */
+      created_at?: string
+      /** @description 里程碑描述 */
+      description?: string
+      /** @description 截止日期（可选） */
+      due_date?: string
+      /** @description 主键ID，自增 */
+      id?: number
+      /** @description 里程碑名称，不可为空，最大100字符 */
+      name?: string
+      /** @description 关联关系 */
+      project?: components['schemas']['Project']
+      /** @description 所属项目ID，不可为空，组合索引 */
+      project_id?: number
+      /** @description 排序权重，越小越靠前 */
+      sort_order?: number
+      /** @description 状态：pending/in_progress/completed */
+      status?: string
+      /** @description 更新时间 */
+      updated_at?: string
+    }
+    'TeamGalleryGo_internal_model.ProjectTag': {
+      /** @description 创建时间 */
+      created_at?: string
+      /** @description 主键ID，自增 */
+      id?: number
+      /** @description 标签名称，唯一索引，不可为空 */
+      name?: string
+      /** @description 关联关系 */
+      projects?: components['schemas']['Project'][]
+      /** @description URL友好的标识符，唯一索引 */
+      slug?: string
+    }
+    'TeamGalleryGo_internal_model.Tag': {
       /** @description 关联关系 */
       articles?: components['schemas']['Article'][]
       /** @description 创建时间 */
@@ -4816,7 +9755,7 @@ export type components = {
       /** @description URL友好的标识符，唯一索引 */
       slug?: string
     }
-    Team: {
+    'TeamGalleryGo_internal_model.Team': {
       /** @description 团队头像URL，最大255字符 */
       avatar?: string
       /** @description 创建时间 */
@@ -4838,7 +9777,7 @@ export type components = {
       /** @description 更新时间 */
       updated_at?: string
     }
-    TeamInvite: {
+    'TeamGalleryGo_internal_model.TeamInvite': {
       /** @description 创建时间 */
       created_at?: string
       /** @description 过期时间 */
@@ -4860,7 +9799,7 @@ export type components = {
       /** @description 团队ID，不可为空，普通索引 */
       team_id?: number
     }
-    TeamMember: {
+    'TeamGalleryGo_internal_model.TeamMember': {
       /** @description 加入时间 */
       created_at?: string
       /** @description 成员角色：owner（创建者）、admin（管理员）、member（普通成员） */
@@ -4874,7 +9813,7 @@ export type components = {
       /** @description 用户ID，联合主键，普通索引 */
       user_id?: number
     }
-    User: {
+    'TeamGalleryGo_internal_model.User': {
       /** @description 一对多：用户发布的文章 */
       articles?: components['schemas']['Article'][]
       /** @description 头像URL，最大255字符 */
@@ -4889,18 +9828,16 @@ export type components = {
       id?: number
       /** @description 昵称，最大50字符 */
       nickname?: string
+      /** @description 手机号，最大20字符 */
+      phone?: string
       /** @description 关联关系 */
       profile?: components['schemas']['UserProfile']
-      /** @description 角色：admin（管理员）或 user（普通用户） */
-      role?: string
-      /** @description 状态：active（激活）或 inactive（未激活） */
-      status?: string
       /** @description 更新时间（GORM自动管理） */
       updated_at?: string
       /** @description 用户名，唯一索引，不可为空，最大50字符 */
       username?: string
     }
-    UserProfile: {
+    'TeamGalleryGo_internal_model.UserProfile': {
       /** @description 个人简介，最大500字符 */
       bio?: string
       /** @description 生日（指针类型，允许为空） */
@@ -4924,15 +9861,29 @@ export type components = {
       /** @description 个人网站URL */
       website?: string
     }
-    APIError: {
+    'TeamGalleryGo_pkg_database.PoolMetrics': {
+      /** @description 空闲连接数 */
+      idle?: number
+      /** @description 正在使用的连接数 */
+      in_use?: number
+      /** @description 最大打开连接数 */
+      max_open?: number
+      /** @description 当前打开的连接数 */
+      open_connections?: number
+      /** @description 等待连接的请求数 */
+      wait_count?: number
+      /** @description 等待连接的总时间 */
+      wait_duration?: components['schemas']['Duration']
+    }
+    'TeamGalleryGo_pkg_errors.APIError': {
       /** @description 错误码 */
-      code?: components['schemas']['TeamGalleryGo_pkg_errors.ErrorCode']
+      code?: components['schemas']['ErrorCode']
       /** @description 错误详情列表（可选） */
       details?: string[]
       /** @description 用户友好的错误消息 */
       message?: string
     }
-    APIResponse: {
+    'TeamGalleryGo_pkg_errors.APIResponse': {
       /** @description 响应数据 */
       data?: unknown
       /** @description 错误信息（失败时） */
@@ -4944,6 +9895,7 @@ export type components = {
       /** @description 请求是否成功 */
       success?: boolean
     }
+    /** @enum {string} */
     'TeamGalleryGo_pkg_errors.ErrorCode':
       | 'OK'
       | 'NOT_FOUND'
@@ -4962,6 +9914,7 @@ export type components = {
       | 'LOGIN_DELAY'
       | 'ARTICLE_NOT_FOUND'
       | 'ARTICLE_PERMISSION'
+      | 'ARTICLE_TYPE_PERMISSION'
       | 'COMMENT_NOT_FOUND'
       | 'COMMENT_PERMISSION'
       | 'FILE_UPLOAD_FAILED'
@@ -4972,6 +9925,23 @@ export type components = {
       | 'PROJECT_PERMISSION'
       | 'PROJECT_MEMBER_EXISTS'
       | 'PROJECT_MEMBER_NOT_FOUND'
+      | 'PROJECT_MEMBER_USER_INACTIVE'
+      | 'PROJECT_MEMBER_CANNOT_SELF'
+      | 'PROJECT_ARTICLE_EXISTS'
+      | 'PROJECT_ARTICLE_NOT_FOUND'
+      | 'PROJECT_ARTICLE_LIMIT_REACHED'
+      | 'PROJECT_CATEGORY_NOT_FOUND'
+      | 'PROJECT_CATEGORY_HAS_PROJECTS'
+      | 'PROJECT_TAG_NOT_FOUND'
+      | 'PROJECT_TAG_HAS_PROJECTS'
+      | 'PROJECT_ALREADY_LIKED'
+      | 'PROJECT_NOT_LIKED'
+      | 'PROJECT_ALREADY_FAVORITED'
+      | 'PROJECT_NOT_FAVORITED'
+      | 'PROJECT_COMMENT_NOT_FOUND'
+      | 'PROJECT_COMMENT_PERMISSION'
+      | 'MILESTONE_NOT_FOUND'
+      | 'MILESTONE_PERMISSION'
       | 'TEAM_NOT_FOUND'
       | 'TEAM_PERMISSION'
       | 'TEAM_MEMBER_EXISTS'
@@ -4980,12 +9950,27 @@ export type components = {
       | 'TEAM_INVITE_EXPIRED'
       | 'TEAM_INVITE_INVALID'
       | 'TEAM_CANNOT_LEAVE'
+      | 'NOTIFICATION_NOT_FOUND'
+      | 'NOTIFICATION_ALREADY_READ'
+      | 'NOTIFICATION_TEMPLATE_NOT_FOUND'
+      | 'NOTIFICATION_TEMPLATE_LOCKED'
+      | 'CONVERSATION_NOT_FOUND'
+      | 'CONVERSATION_PERMISSION'
+      | 'NOT_TEAM_MEMBER'
+      | 'MESSAGE_NOT_FOUND'
+      | 'MESSAGE_RECALL_EXPIRED'
+      | 'MESSAGE_NOT_SENDER'
+      | 'MESSAGE_RECALL_DENIED'
+      | 'REPLAY_NONCE_USED'
+      | 'REPLAY_TIMESTAMP_EXPIRED'
+      | 'PROJECT_MEMBER_INVITE_DISABLED'
+      | 'PROJECT_MEMBER_BLOCKED'
       | 'DATABASE_ERROR'
-    PaginatedResponse: {
+    'TeamGalleryGo_pkg_utils.PaginatedResponse': {
       /** @description 数据列表 */
       data?: unknown
       /** @description 分页信息 */
-      pagination?: components['schemas']['TeamGalleryGo_pkg_utils.Pagination']
+      pagination?: components['schemas']['Pagination']
     }
     'TeamGalleryGo_pkg_utils.Pagination': {
       /** @description 当前页码（从 1 开始） */
@@ -4997,7 +9982,55 @@ export type components = {
       /** @description 总页数 */
       total_pages?: number
     }
-    CreateArticleRequest: {
+    'internal_domain_article.BatchCreateNotificationRequest': {
+      /** @description 分类 */
+      category?: string
+      /** @description 通知内容 */
+      content?: string
+      /** @description 定时发布 */
+      scheduled_at?: string
+      /** @description 通知摘要 */
+      summary?: string
+      /** @description 批量目标 */
+      targets?: components['schemas']['BatchTarget']
+      /** @description 通知标题 */
+      title?: string
+      /** @description 紧急程度 */
+      urgency?: string
+    }
+    'internal_domain_article.BatchCreateResult': {
+      notification?: components['schemas']['Article']
+      resolved_count?: number
+      target_summary?: string
+      target_type?: string
+    }
+    'internal_domain_article.BatchTarget': {
+      /** @description type=by_project 时使用 */
+      project_ids?: number[]
+      /** @description type=by_role 时使用 */
+      roles?: string[]
+      /** @description type=by_team 时使用 */
+      team_ids?: number[]
+      /** @description all / specific_users / by_role / by_project / by_team */
+      type?: string
+      /** @description type=specific_users 时使用 */
+      user_ids?: number[]
+    }
+    'internal_domain_article.CreateNotificationRequest': {
+      /** @description 通知分类（system/project/announcement），可选 */
+      category?: string
+      /** @description 通知内容，必填 */
+      content?: string
+      /** @description 定时发布时间，可选 */
+      scheduled_at?: string
+      /** @description 通知摘要，可选 */
+      summary?: string
+      /** @description 通知标题，必填 */
+      title?: string
+      /** @description 紧急程度（normal/important/urgent），可选 */
+      urgency?: string
+    }
+    'internal_domain_article.CreateRequest': {
       /** @description 分类ID，可选 */
       category_id?: number
       /** @description 文章内容，必填 */
@@ -5008,8 +10041,105 @@ export type components = {
       summary?: string
       /** @description 文章标题，必填 */
       title?: string
+      /** @description 文章类型（article/manual/notification），默认article */
+      type?: string
     }
-    CreateCommentRequest: {
+    'internal_domain_article.CreateTemplateRequest': {
+      /** @description 模板分类 */
+      category?: string
+      /** @description 模板内容（支持 {var} 占位符） */
+      content?: string
+      /** @description 模板名称 */
+      name?: string
+      /** @description 模板摘要 */
+      summary?: string
+      /** @description 模板标题（支持 {var} 占位符） */
+      title?: string
+      /** @description 默认紧急程度 */
+      urgency?: string
+    }
+    'internal_domain_article.UpdateNotificationRequest': {
+      /** @description 通知分类，可选 */
+      category?: string
+      /** @description 通知内容，可选 */
+      content?: string
+      /** @description 通知摘要，可选 */
+      summary?: string
+      /** @description 通知标题，可选 */
+      title?: string
+      /** @description 紧急程度，可选 */
+      urgency?: string
+    }
+    'internal_domain_article.UpdateTemplateRequest': {
+      /** @description 模板分类 */
+      category?: string
+      /** @description 模板内容 */
+      content?: string
+      /** @description 模板名称 */
+      name?: string
+      /** @description 排序权重 */
+      sort_order?: number
+      /** @description 模板摘要 */
+      summary?: string
+      /** @description 模板标题 */
+      title?: string
+      /** @description 默认紧急程度 */
+      urgency?: string
+    }
+    'internal_domain_chat.ConversationDetail': {
+      conversation_id?: number
+      setting?: components['schemas']['ConversationSetting']
+      user1?: components['schemas']['UserBrief']
+      user2?: components['schemas']['UserBrief']
+    }
+    'internal_domain_chat.ConversationItem': {
+      conversation_id?: number
+      is_muted?: boolean
+      is_pinned?: boolean
+      last_message?: string
+      last_message_at?: string
+      target_user?: components['schemas']['UserBrief']
+      unread_count?: number
+    }
+    'internal_domain_chat.ConversationListResponse': {
+      conversations?: components['schemas']['ConversationItem'][]
+      page?: number
+      page_size?: number
+      total?: number
+    }
+    'internal_domain_chat.CreateConversationRequest': {
+      target_user_id: number
+    }
+    'internal_domain_chat.MessageItem': {
+      content?: string
+      conversation_id?: number
+      created_at?: string
+      id?: number
+      is_read?: boolean
+      is_recalled?: boolean
+      sender?: components['schemas']['UserBrief']
+      sender_id?: number
+    }
+    'internal_domain_chat.MessageListResponse': {
+      messages?: components['schemas']['MessageItem'][]
+      page?: number
+      page_size?: number
+      total?: number
+    }
+    'internal_domain_chat.SendMessageRequest': {
+      content: string
+    }
+    'internal_domain_chat.UpdateSettingRequest': {
+      is_muted?: boolean
+      is_pinned?: boolean
+    }
+    'internal_domain_chat.UserBrief': {
+      avatar?: string
+      id?: number
+      nickname?: string
+      username?: string
+    }
+    'internal_domain_comment.CreateRequest': {
       /**
        * @description 评论内容，必填
        * @example 这是一条评论
@@ -5021,25 +10151,129 @@ export type components = {
        */
       parent_id?: number
     }
-    AddProjectMemberRequest: {
+    'internal_domain_project.AddArticleRequest': {
+      /** @description 文章ID，必填，必须大于0 */
+      article_id?: number
+      /** @description 关联说明，可选 */
+      description?: string
+      /** @description 排序权重，可选 */
+      sort_order?: number
+    }
+    'internal_domain_project.AddMemberRequest': {
       /** @description 成员角色（owner/admin/member），可选，默认member */
       role?: string
       /** @description 用户ID，必填，必须大于0 */
       user_id?: number
     }
-    CreateProjectRequest: {
+    'internal_domain_project.CommentCreateRequest': {
+      /** @description 评论内容，必填 */
+      content?: string
+      /** @description 父评论ID（回复评论时使用） */
+      parent_id?: number
+    }
+    'internal_domain_project.CreateCategoryRequest': {
+      /** @description 分类描述，可选 */
+      description?: string
+      /** @description 分类名称，必填 */
+      name?: string
+      /** @description URL友好标识，必填 */
+      slug?: string
+      /** @description 排序权重，可选 */
+      sort?: number
+    }
+    'internal_domain_project.CreateRequest': {
       /** @description 封面图片URL，可选 */
       cover_image?: string
       /** @description 项目描述，可选 */
       description?: string
+      /** @description 初始成员列表（可选） */
+      members?: components['schemas']['MemberInput'][]
       /** @description 项目名称，必填 */
       name?: string
     }
-    UpdateProjectMemberRoleRequest: {
+    'internal_domain_project.CreateTagRequest': {
+      /** @description 标签名称，必填 */
+      name?: string
+      /** @description URL友好标识，必填 */
+      slug?: string
+    }
+    'internal_domain_project.MemberInput': {
+      /** @description 成员角色，默认 member */
+      role?: string
+      /** @description 用户ID */
+      user_id?: number
+    }
+    'internal_domain_project.MilestoneCreateRequest': {
+      /** @description 里程碑描述，可选 */
+      description?: string
+      /** @description 截止日期（YYYY-MM-DD），可选 */
+      due_date?: string
+      /** @description 里程碑名称，必填 */
+      name?: string
+      /** @description 排序权重，可选 */
+      sort_order?: number
+    }
+    'internal_domain_project.MilestoneNextDue': {
+      due_date?: string
+      id?: number
+      name?: string
+    }
+    'internal_domain_project.MilestoneSortRequest': {
+      /** @description 插入到该里程碑之前 */
+      before_id?: number
+      /** @description 排序权重 */
+      sort_order?: number
+    }
+    'internal_domain_project.MilestoneStatusRequest': {
+      /** @description 里程碑状态，必填 */
+      status?: string
+    }
+    'internal_domain_project.MilestoneSummary': {
+      completed?: number
+      completion_rate?: number
+      in_progress?: number
+      next_due?: components['schemas']['MilestoneNextDue']
+      overdue?: number
+      pending?: number
+      total?: number
+    }
+    'internal_domain_project.MilestoneUpdateRequest': {
+      /** @description 里程碑描述，可选 */
+      description?: string
+      /** @description 截止日期（YYYY-MM-DD），可选 */
+      due_date?: string
+      /** @description 里程碑名称，可选 */
+      name?: string
+      /** @description 排序权重，可选 */
+      sort_order?: number
+    }
+    'internal_domain_project.SetProjectCategoryRequest': {
+      /** @description 分类ID，传 null 可移除分类 */
+      category_id?: number
+    }
+    'internal_domain_project.SetProjectTagsRequest': {
+      /** @description 标签ID列表 */
+      tag_ids?: number[]
+    }
+    'internal_domain_project.UpdateArticleSortRequest': {
+      /** @description 排序权重，必填 */
+      sort_order?: number
+    }
+    'internal_domain_project.UpdateCategoryRequest': {
+      /** @description 分类描述，可选 */
+      description?: string
+      /** @description 分类名称，可选 */
+      name?: string
+      /** @description URL友好标识，可选 */
+      slug?: string
+      /** @description 排序权重，可选 */
+      sort?: number
+    }
+    'internal_domain_project.UpdateMemberRoleRequest': {
       /** @description 成员角色，必填 */
       role?: string
     }
-    UpdateProjectRequest: {
+    'internal_domain_project.UpdateRequest': {
       /** @description 封面图片URL，可选 */
       cover_image?: string
       /** @description 项目描述，可选 */
@@ -5048,6 +10282,12 @@ export type components = {
       name?: string
       /** @description 项目状态（active/archived），可选 */
       status?: string
+    }
+    'internal_domain_project.UpdateTagRequest': {
+      /** @description 标签名称，可选 */
+      name?: string
+      /** @description URL友好标识，可选 */
+      slug?: string
     }
     'internal_domain_team.AddMemberRequest': {
       /** @description 成员角色，可选，默认member */
@@ -5081,44 +10321,87 @@ export type components = {
       /** @description 团队状态（active/archived），可选 */
       status?: string
     }
-    LoginRequest: {
+    'internal_domain_user.LoginRequest': {
       /** @description 密码，必填且最少8字符 */
       password: string
       /** @description 用户名，必填 */
       username: string
     }
-    'internal_domain_user.LogoutRequest': {
-      /** @description 要撤销的 Refresh Token */
-      refresh_token: string
+    'internal_domain_user.PrivacyResponse': {
+      /** @description 是否允许被邀请加入项目 */
+      allow_project_invite?: boolean
     }
-    'internal_domain_user.RefreshTokenRequest': {
-      /** @description Refresh Token */
-      refresh_token: string
-    }
-    RegisterRequest: {
+    'internal_domain_user.RegisterRequest': {
       /** @description 邮箱，必填且格式必须为邮箱 */
       email: string
       /** @description 昵称，可选 */
       nickname?: string
       /** @description 密码，必填且最少8字符 */
       password: string
+      /** @description 手机号，可选 */
+      phone?: string
       /** @description 用户名，必填 */
       username: string
+    }
+    'internal_domain_user.UnlockRequest': {
+      /** @description 指定解锁的 Key（IP 或用户名），为空则清除全部 */
+      key?: string
+    }
+    'internal_domain_user.UpdatePrivacyRequest': {
+      /** @description 是否允许被邀请加入项目 */
+      allow_project_invite?: boolean
+    }
+    'internal_domain_user.UpdateProfileRequest': {
+      /** @description 头像URL */
+      avatar?: string
+      /** @description 个人简介 */
+      bio?: string
+      /** @description 生日 */
+      birthday?: string
+      /** @description 邮箱（需验证唯一性） */
+      email?: string
+      /** @description GitHub用户名 */
+      github?: string
+      /** @description 所在地 */
+      location?: string
+      /** @description 昵称 */
+      nickname?: string
+      /** @description 手机号 */
+      phone?: string
+      /** @description Twitter用户名 */
+      twitter?: string
+      /** @description 个人网站 */
+      website?: string
     }
     'pkg_health.CheckResult': {
       error?: string
       latency_ms?: number
-      status?: components['schemas']['pkg_health.HealthStatus']
+      status?: components['schemas']['HealthStatus']
     }
     'pkg_health.HealthResponse': {
       checks?: {
-        [key: string]: components['schemas']['pkg_health.CheckResult']
+        [key: string]: components['schemas']['CheckResult']
       }
-      status?: components['schemas']['pkg_health.HealthStatus']
+      pool_metrics?: components['schemas']['PoolMetrics']
+      status?: components['schemas']['HealthStatus']
       timestamp?: string
       version?: string
     }
+    /** @enum {string} */
     'pkg_health.HealthStatus': 'ok' | 'error'
+    /**
+     * Format: int64
+     * @enum {integer}
+     */
+    'time.Duration':
+      | -9223372036854776000
+      | 9223372036854776000
+      | 1
+      | 1000
+      | 1000000
+      | 1000000000
+      | 60000000000
+      | 3600000000000
   }
   responses: never
   parameters: never

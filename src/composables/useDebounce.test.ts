@@ -128,7 +128,9 @@ describe('useSearch', () => {
   })
 
   it('应该导出搜索相关的状态', async () => {
+    vi.useRealTimers()
     const { useSearch } = await import('@/composables/useSearch')
+    vi.useFakeTimers()
     const search = useSearch()
 
     expect(search.searchQuery).toBeDefined()
@@ -143,7 +145,9 @@ describe('useSearch', () => {
   })
 
   it('clearSuggestions 应该清空搜索状态', async () => {
+    vi.useRealTimers()
     const { useSearch } = await import('@/composables/useSearch')
+    vi.useFakeTimers()
     const search = useSearch()
 
     search.searchQuery.value = 'test'

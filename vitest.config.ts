@@ -18,6 +18,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: ['src/**/*.{ts,tsx,vue}'],
       exclude: [
         'node_modules/',
         'src/test/',
@@ -28,10 +29,10 @@ export default defineConfig({
         'src/mocks/',
       ],
       thresholds: {
-        lines: 40,
-        functions: 25,
-        branches: 25,
-        statements: 40,
+        lines: 55,
+        functions: 40,
+        branches: 35,
+        statements: 55,
       },
     },
   },

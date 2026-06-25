@@ -6,38 +6,141 @@ on:
   pull_request:
     branches: [main, master]
 
+# 取消同一 PR 上的旧运行，节省资源
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  check:
+  # ── 并行组 1：静态检查 ──
+  lint:
+    name: Lint & Format
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20]
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Type check
-        run: npx vue-tsc --noEmit
+      - name: ESLint
+        run: npx eslint .
 
-      - name: Style lint check
+      - name: Stylelint
         run: npm run lint:style:check
 
-      - name: CI check (lint + format + test + coverage + build)
-        run: npm run ci:coverage
+      - name: Prettier format check
+        run: npm run format:check
 
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: vue-tsc
+        run: npx vue-tsc --noEmit
+
+  # ── 并行组 2：测试 ──
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  # ── 并行组 3：构建验证 ──
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Vite build
+        run: npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  # ── 综合检查门 ──
+  ci-gate:
+    name: CI Gate
+    needs: [lint, typecheck, test, build]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check results
+        run: |
+          echo "## CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+
+          declare -A results
+          results[lint]="${{ needs.lint.result }}"
+          results[typecheck]="${{ needs.typecheck.result }}"
+          results[test]="${{ needs.test.result }}"
+          results[build]="${{ needs.build.result }}"
+
+          failed=0
+          for job in lint typecheck test build; do
+            status="${results[$job]}"
+            echo "| $job | $status |" >> $GITHUB_STEP_SUMMARY
+            if [[ "$status" != "success" ]]; then
+              failed=1
+            fi
+          done
+
+          if [[ $failed -eq 1 ]]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo ":x: **CI Failed** — check individual job logs for details." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo ":white_check_mark: **All checks passed**" >> $GITHUB_STEP_SUMMARY
+
+  # ── 部署（仅 master push） ──
   deploy:
     name: Deploy to GitHub Pages
-    needs: check
+    needs: [ci-gate]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     permissions:

@@ -14,7 +14,7 @@ import { reportApiError } from '@/utils/error-report'
 export type { ApiResponse, PaginatedResponse, User }
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   timeout: 10000,
 })
 
@@ -59,7 +59,9 @@ const clearAuth = (): void => {
  * @returns 新的 AccessToken 字符串
  */
 const refreshAccessToken = async (): Promise<string> => {
-  const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL || '/api'}/auth/refresh`)
+  const response = await axios.post(
+    `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/auth/refresh`,
+  )
 
   if (response.data?.success && response.data.data?.access_token) {
     const { access_token } = response.data.data

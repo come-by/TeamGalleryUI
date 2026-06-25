@@ -11,7 +11,41 @@ fi
 
 echo "🔍 Running pre-push checks..."
 
-# Run full CI pipeline locally before pushing
+# --- API Contract Check ---
+BACKEND_REPO="../TeamGalleryGo"
+SWAGGER_FILE="$BACKEND_REPO/docs/swagger.json"
+
+if [ -f "$SWAGGER_FILE" ]; then
+  echo "  API contract: Found backend swagger, checking for drift..."
+  SWAGGER_BEFORE=$(md5sum "$SWAGGER_FILE" 2>/dev/null || md5 -q "$SWAGGER_FILE" 2>/dev/null)
+
+  npm run gen:api -- "$SWAGGER_FILE" 2>/dev/null
+
+  if [ -n "$(git diff --name-only src/types/generated/ src/api/contract.ts 2>/dev/null)" ]; then
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  ⚠️  API CONTRACT DRIFT DETECTED!"
+    echo ""
+    echo "  The backend API has changed. Frontend types have been"
+    echo "  regenerated but are not committed."
+    echo ""
+    echo "  Changed files:"
+    git diff --name-only src/types/generated/ src/api/contract.ts
+    echo ""
+    echo "  Please review the changes and stage them:"
+    echo "    git add src/types/generated/ src/api/contract.ts"
+    echo "    git commit -m \"chore: sync API types with backend\""
+    echo ""
+    echo "  Then push again."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    exit 1
+  else
+    echo "  API contract: Up to date"
+  fi
+else
+  echo "  API contract: Backend repo not found at $BACKEND_REPO, skipping"
+fi
+
+# --- Standard Checks ---
 npm run lint:check || { echo "❌ Lint check failed"; exit 1; }
 npm run format:check || { echo " Format check failed"; exit 1; }
 npm run test:run || { echo " Tests failed"; exit 1; }

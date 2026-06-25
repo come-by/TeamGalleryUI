@@ -2,33 +2,41 @@
 
 > 本文档描述 TeamGallery 前端应用的测试规范和最佳实践。
 
-| 项目 | 值 |
-|------|-----|
-| 适用 | 前端应用 |
+| 项目     | 值         |
+| -------- | ---------- |
+| 适用     | 前端应用   |
 | 最后更新 | 2026-06-08 |
 
 ## 目录
 
 ## 1. 测试框架
+
 ## 2. 测试配置
+
 ## 3. 测试文件组织
+
 ## 4. 单元测试
+
 ## 5. 组件测试
+
 ## 6. API Mock
+
 ## 7. 运行测试
+
 ## 8. 测试最佳实践
+
 ## 相关文档
 
 ---
 
 ## 1. 测试框架
 
-| 工具 | 版本 | 用途 |
-|------|------|------|
-| Vitest | 3.x | 单元测试框架 |
-| Vue Test Utils | 2.x | Vue 组件测试 |
-| MSW | 2.x | API Mock |
-| Happy DOM | - | DOM 环境 |
+| 工具           | 版本 | 用途         |
+| -------------- | ---- | ------------ |
+| Vitest         | 3.x  | 单元测试框架 |
+| Vue Test Utils | 2.x  | Vue 组件测试 |
+| MSW            | 2.x  | API Mock     |
+| Happy DOM      | -    | DOM 环境     |
 
 ## 2. 测试配置
 
@@ -48,10 +56,10 @@ export default defineConfig({
         statements: 65,
         lines: 65,
         functions: 60,
-        branches: 55
-      }
-    }
-  }
+        branches: 55,
+      },
+    },
+  },
 })
 ```
 
@@ -65,13 +73,13 @@ import { config } from '@vue/test-utils'
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
-  disconnect: vi.fn()
+  disconnect: vi.fn(),
 }))
 
 // Mock Vue Router
 config.global.mocks = {
   $router: { push: vi.fn() },
-  $route: { params: {}, query: {} }
+  $route: { params: {}, query: {} },
 }
 ```
 
@@ -130,10 +138,10 @@ import { useAuth } from './useAuth'
 describe('useAuth', () => {
   it('应该正确登录', async () => {
     const { login, user } = useAuth()
-    
+
     vi.spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve({ user: { id: '1', username: 'test' } })
+      json: () => Promise.resolve({ user: { id: '1', username: 'test' } }),
     } as Response)
 
     await login('test', 'password')
@@ -187,11 +195,11 @@ it('点击登录按钮应该跳转登录页', async () => {
   const wrapper = mount(AppHeader, {
     global: {
       mocks: {
-        $router: { push: vi.fn() }
-      }
-    }
+        $router: { push: vi.fn() },
+      },
+    },
   })
-  
+
   await wrapper.find('.login-btn').trigger('click')
   expect(wrapper.global.$router.push).toHaveBeenCalledWith('/login')
 })
@@ -210,13 +218,11 @@ export const articleHandlers = [
     return HttpResponse.json({
       code: 0,
       data: {
-        items: [
-          { id: '1', title: 'Test Article' }
-        ],
-        total: 1
-      }
+        items: [{ id: '1', title: 'Test Article' }],
+        total: 1,
+      },
     })
-  })
+  }),
 ]
 ```
 
@@ -237,12 +243,12 @@ afterAll(() => server.close())
 
 ### 7.1 常用命令
 
-| 命令 | 说明 |
-|------|------|
-| `npm run test` | 运行所有测试 |
-| `npm run test:watch` | 监听模式 |
+| 命令                    | 说明           |
+| ----------------------- | -------------- |
+| `npm run test`          | 运行所有测试   |
+| `npm run test:watch`    | 监听模式       |
 | `npm run test:coverage` | 生成覆盖率报告 |
-| `npm run test:ui` | 打开 UI 界面 |
+| `npm run test:ui`       | 打开 UI 界面   |
 
 ### 7.2 CI 中的测试
 
@@ -261,12 +267,12 @@ afterAll(() => server.close())
 
 ### 8.2 覆盖率要求
 
-| 指标 | 阈值 |
-|------|------|
+| 指标       | 阈值  |
+| ---------- | ----- |
 | Statements | ≥ 65% |
-| Lines | ≥ 65% |
-| Functions | ≥ 60% |
-| Branches | ≥ 55% |
+| Lines      | ≥ 65% |
+| Functions  | ≥ 60% |
+| Branches   | ≥ 55% |
 
 ### 8.3 常见陷阱
 
@@ -277,6 +283,6 @@ afterAll(() => server.close())
 
 ## 相关文档
 
-- [代码规范](./CODING_STANDARDS.md)
+- [代码规范](../project/CODING_STANDARDS.md)
 - [开发指南](./DEVELOPMENT.md)
-- [架构设计](./ARCHITECTURE.md)
+- [架构设计](../project/ARCHITECTURE.md)

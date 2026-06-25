@@ -1,5 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+vi.mock('@/router', () => ({
+  default: {
+    push: vi.fn(),
+    replace: vi.fn(),
+    go: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    currentRoute: { value: { path: '/', query: {}, params: {}, meta: {} } },
+  },
+}))
+
 const mockAxiosInstance = {
   interceptors: {
     request: { use: vi.fn() },
@@ -70,6 +81,7 @@ describe('request 模块', () => {
 
   describe('请求方法导出', () => {
     it('应该导出所有 HTTP 方法', async () => {
+      vi.resetModules()
       const { default: request } = await import('@/api/request')
       expect(request.get).toBeDefined()
       expect(request.post).toBeDefined()

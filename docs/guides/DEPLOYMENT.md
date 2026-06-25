@@ -90,7 +90,7 @@ server {
     }
 
     # API 代理（开发环境）
-    location /v1/ {
+    location /api/v1/ {
         proxy_pass http://backend:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -318,7 +318,7 @@ server {
     }
 
     # 后端 API 代理
-    location /api/ {
+    location /api/v1/ {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -380,6 +380,6 @@ nginx -s reload
 
 ## 相关文档
 
-- [架构设计](./ARCHITECTURE.md)
-- [安全策略](./SECURITY.md)
-- [常见问题](./TROUBLESHOOTING.md)
+- [架构设计](../project/ARCHITECTURE.md)
+- [安全策略](../reference/SECURITY.md)
+- [常见问题排查](./TROUBLESHOOTING.md)

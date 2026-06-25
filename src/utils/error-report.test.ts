@@ -136,7 +136,7 @@ describe('错误上报工具', () => {
 
       reportApiError(
         { code: 'ARTICLE_NOT_FOUND', message: '文章不存在', status: 404 },
-        { url: '/api/articles/1', method: 'get' },
+        { url: '/api/v1/articles/1', method: 'get' },
       )
 
       expect(Sentry.captureMessage).toHaveBeenCalledWith(

@@ -65,7 +65,7 @@ export function useUpload(options: UploadOptions = {}) {
   const totalProgress = ref(0)
   const abortControllers = new Map<string, AbortController>()
 
-  const apiBase = `${import.meta.env.VITE_API_BASE_URL || '/api'}/v1`
+  const apiBase = `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}`
 
   // 验证文件
   function validateFile(file: File): string | null {
